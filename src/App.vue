@@ -35,7 +35,6 @@ const dateSelected = ref(new Date(getCurrentDate()));
                     class="d-flex flex-column mx-auto"
                     fluid
                 >
-                    {{ typeof getMinDate() }}
                     <v-row justify="center">
                         <v-date-picker
                             v-model="dateSelected"
