@@ -1,7 +1,8 @@
 <script setup>
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { useDate } from 'vuetify';
 import { ru } from 'vuetify/locale';
+
 import {
     mdiWeatherSunsetUp,
     mdiWeatherSunny,
@@ -10,8 +11,12 @@ import {
     mdiDeleteOutline,
     mdiClose,
 } from '@mdi/js';
+
 import SectionBreakfast from './components/SectionBreakfast.vue';
 import GuideProducts from './components/GuideProducts.vue';
+import { useProductStore } from './stores/Products.js';
+
+const productStore = useProductStore();
 
 const tab = ref('1');
 
@@ -26,10 +31,12 @@ const formatDate = new Date();
 const dateSelected = ref(formatDate);
 
 const bb = ref('1');
+
+onBeforeMount(() => productStore.addProducts());
 </script>
 
 <template>
-    <v-sheet class="app-container mx-auto rounded-xl mt-4 border-xl">
+    <v-sheet class="app-container mx-auto rounded-xl">
         <v-tabs
             v-model="tab"
             align-tabs="center"
@@ -44,7 +51,7 @@ const bb = ref('1');
             <!--            </v-tab>-->
             <v-tab
                 :value="3"
-                class="rounded-lg"
+                class="rounded-lg mt-4"
             >
                 Справочник
             </v-tab>

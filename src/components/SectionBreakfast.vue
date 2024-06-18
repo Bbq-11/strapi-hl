@@ -1,7 +1,7 @@
 <script setup>
 import { mdiClose, mdiWeatherSunsetUp } from '@mdi/js';
-import ListFood from './ListFood.vue';
-import CardAddFood from './CardAddFood.vue';
+import ListFood from './ListFoodDay.vue';
+import CardAddFood from './CardAddProduct.vue';
 </script>
 
 <template>
