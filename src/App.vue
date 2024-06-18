@@ -36,7 +36,7 @@ onBeforeMount(() => productStore.addProducts());
 </script>
 
 <template>
-    <v-sheet class="app-container mx-auto rounded-xl">
+    <v-sheet class="app-container mx-auto">
         <v-tabs
             v-model="tab"
             align-tabs="center"
@@ -51,7 +51,7 @@ onBeforeMount(() => productStore.addProducts());
             <!--            </v-tab>-->
             <v-tab
                 :value="3"
-                class="rounded-lg mt-4"
+                class="rounded-lg"
             >
                 Справочник
             </v-tab>

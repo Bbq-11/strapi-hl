@@ -33,17 +33,13 @@ const editProduct = () => {
 </script>
 
 <template>
-    <div
+    <v-btn
         v-if="props.variant === 'add'"
-        class="text-center mb-2"
+        :prepend-icon="mdiPlus"
+        @click="dialog = true"
     >
-        <v-btn
-            class="w-auto mx-auto mb-8"
-            :prepend-icon="mdiPlus"
-            text="Добавить новый продукт"
-            @click="dialog = true"
-        />
-    </div>
+        Добавить новый продукт
+    </v-btn>
     <v-icon
         v-else
         class="mr-2"

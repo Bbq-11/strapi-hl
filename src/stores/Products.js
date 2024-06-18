@@ -36,7 +36,9 @@ export const useProductStore = defineStore('productStore', () => {
     };
 
     const searchProducts = (inputValue) => {
-        return products.value.filter((el) => el.name.toLowerCase().includes(inputValue.toLowerCase()));
+        return inputValue
+            ? products.value.filter((el) => el.name.toLowerCase().includes(inputValue.toLowerCase()))
+            : products.value;
     };
 
     const removeProduct = (id) => {
