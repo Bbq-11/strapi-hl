@@ -10,55 +10,48 @@ const productStore = useProductStore();
 const inputSearchProduct = ref('');
 
 const headers = ref([
-    {
-        title: 'ID',
-        key: 'id',
-    },
+    // {
+    //     title: 'ID',
+    //     key: 'id',
+    // },
     {
         title: 'Dessert (100g serving)',
         align: 'start',
         key: 'name',
+        width: '50%',
     },
     {
-        title: 'Каллории (Ккал)',
+        title: 'Каллории',
+        align: 'start',
+        paddingX: '240px',
         key: 'calories',
-        align: 'center',
     },
     {
         title: 'Белки (гр)',
+        align: 'start',
         key: 'proteins',
-        align: 'center',
     },
     {
         title: 'Жиры (гр)',
+        align: 'start',
         key: 'fats',
-        align: 'center',
     },
     {
         title: 'Углеводы (гр)',
+        align: 'start',
         key: 'carbs',
-        align: 'center',
     },
     {
-        title: 'Редактирование',
         key: 'actions',
-        align: 'center',
         sortable: false,
     },
 ]);
-
-const defaultItem = ref({
-    name: '',
-    calories: 0,
-    proteins: 0,
-    fats: 0,
-    carbs: 0,
-});
 </script>
 
 <template>
     <v-data-table
         class="mt-8 overflow-y-auto"
+        lang="ru"
         height="500px"
         :headers="headers"
         :items="productStore.searchProducts(inputSearchProduct)"
@@ -82,9 +75,8 @@ const defaultItem = ref({
                     </v-col>
                     <v-col cols="auto">
                         <ActionsNewProducts
-                            :product="defaultItem"
                             :text="'Добавить новый продукт'"
-                            :variant="'add'"
+                            :isAdd="true"
                         />
                     </v-col>
                 </v-row>
@@ -92,11 +84,10 @@ const defaultItem = ref({
         </template>
         <template v-slot:item.actions="{ item }">
             <div v-if="item.id > db.length - 1">
-                <!--                <EditProduct :product="item" />-->
                 <ActionsNewProducts
                     :product="item"
                     :text="item.name"
-                    :variant="'edit'"
+                    :isAdd="false"
                 />
                 <v-icon
                     size="small"

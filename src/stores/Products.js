@@ -7,7 +7,7 @@ export const useProductStore = defineStore('productStore', () => {
 
     const addProducts = () => {
         const productsLS = localStorage.getItem('myLibrary');
-        if (productsLS !== null) products.value = JSON.parse(productsLS);
+        if (productsLS) products.value = JSON.parse(productsLS);
         for (let i in db) {
             products.value.push({
                 id: i,
@@ -46,13 +46,13 @@ export const useProductStore = defineStore('productStore', () => {
         const productsLS = JSON.parse(localStorage.getItem('myLibrary'));
         localStorage.setItem('myLibrary', JSON.stringify(productsLS.filter((item) => item?.id !== id)));
     };
-    const editProduct = (newItem, lastItem) => {
+    const editProduct = (newIItem, lastItem) => {
         const item = products.value.findIndex((el) => el.id === lastItem.id);
-        products.value[item] = Object.assign(products.value[item], newItem);
+        products.value[item] = Object.assign(products.value[item], newIItem);
 
         const productsLS = JSON.parse(localStorage.getItem('myLibrary'));
         const itemLS = productsLS.findIndex((el) => el.id === lastItem.id);
-        productsLS[itemLS] = Object.assign(productsLS[itemLS], newItem);
+        productsLS[itemLS] = Object.assign(productsLS[itemLS], newIItem);
         localStorage.setItem('myLibrary', JSON.stringify(productsLS));
     };
 
