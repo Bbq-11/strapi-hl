@@ -36,7 +36,7 @@ export const useProductStore = defineStore('productStore', () => {
     };
 
     const searchProducts = (inputValue) => {
-        return inputValue
+        return inputValue.value
             ? products.value.filter((el) => el.name.toLowerCase().includes(inputValue.toLowerCase()))
             : products.value;
     };

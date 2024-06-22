@@ -11,12 +11,15 @@ const props = defineProps({
 </script>
 
 <template>
-    <v-container v-for="item in calendarStore.getMeal(day, type)">
+    <div
+        v-for="item in calendarStore.getMeal(day, type)"
+        class="pb-2 mb-4 border-b"
+    >
         <v-row
-            class="gc-16 mb-4 align-center"
+            class="gc-16 mb-2 align-center"
             no-gutters
         >
-            <v-col class="text-h5 border-lg"> {{ item.name }}</v-col>
+            <v-col class="text-h5 border-sm rounded-xl py-2 px-4"> {{ item.name }}</v-col>
             <v-col cols="auto">
                 <v-text-field
                     width="100px"
@@ -39,15 +42,16 @@ const props = defineProps({
             </v-col>
         </v-row>
         <v-row
-            class="mr-10"
+            class="text-center"
             no-gutters
         >
-            <v-col>{{ item.proteins }}</v-col>
-            <v-col>{{ item.fats }}</v-col>
-            <v-col class="mr-4">{{ item.carbs }}</v-col>
-            <v-col>{{ item.calories }}</v-col>
+            <v-col>{{ +(item.proteins * (item.weight / 100)).toFixed(2) }}</v-col>
+            <v-col>{{ +(item.fats * (item.weight / 100)).toFixed(2) }}</v-col>
+            <v-col>{{ +(item.carbs * (item.weight / 100)).toFixed(2) }}</v-col>
+            <v-spacer />
+            <v-col>{{ +(item.calories * (item.weight / 100)).toFixed(2) }}</v-col>
         </v-row>
-    </v-container>
+    </div>
 </template>
 
 <style scoped></style>

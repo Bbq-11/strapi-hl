@@ -10,19 +10,19 @@ export const useCalendarStore = defineStore('calendarStore', () => {
                     id: 1,
                     name: 'Творог',
                     weight: 90,
-                    calories: 42,
                     proteins: 2,
                     fats: 5,
                     carbs: 12,
+                    calories: 42,
                 },
                 {
                     id: 2,
                     name: 'Йогурт',
                     weight: 100,
-                    calories: 10,
                     proteins: 10,
                     fats: 5,
                     carbs: 2,
+                    calories: 10,
                 },
             ],
             lunch: [],
@@ -70,26 +70,62 @@ export const useCalendarStore = defineStore('calendarStore', () => {
         } else return [];
     });
 
-    const summaryMeal = computed(() => (day, meal) => {
-        const currentDate = formatCurrentDate(day);
-        const defaultSummary = {
-            calories: 0,
-            proteins: 0,
-            fats: 0,
-            carbs: 0,
-        };
-        if (calendar.value.find((item) => item.date === currentDate)) {
-            const dayIndex = calendar.value.findIndex((item) => item.date === currentDate);
-            const items = calendar.value[dayIndex][meal];
-            return items.reduce((acc, curItem) => {
-                acc.calories += curItem.calories;
-                acc.proteins += curItem.proteins;
-                acc.fats += curItem.fats;
-                acc.carbs += curItem.carbs;
+    const summaryMeal = (day, meal) =>
+        computed(() => {
+            const currentDate = formatCurrentDate(day);
+            const defaultSummary = {
+                proteins: 0,
+                fats: 0,
+                carbs: 0,
+                calories: 0,
+            };
+            if (calendar.value.find((item) => item.date === currentDate)) {
+                const dayIndex = calendar.value.findIndex((item) => item.date === currentDate);
+                const items = calendar.value[dayIndex][meal];
+                const res = items.reduce((acc, curItem) => {
+                    acc.calories += curItem.calories * (curItem.weight / 100);
+                    acc.proteins += curItem.proteins * (curItem.weight / 100);
+                    acc.fats += curItem.fats * (curItem.weight / 100);
+                    acc.carbs += curItem.carbs * (curItem.weight / 100);
+                    return acc;
+                }, defaultSummary);
+                return {
+                    proteins: res.proteins.toFixed(2),
+                    fats: res.fats.toFixed(2),
+                    carbs: res.carbs.toFixed(2),
+                    calories: res.calories.toFixed(2),
+                };
+            } else return defaultSummary;
+        });
+
+    const summaryAllMeal = (day) =>
+        computed(() => {
+            const listMeal = [
+                summaryMeal(day, 'breakfast').value,
+                summaryMeal(day, 'lunch').value,
+                summaryMeal(day, 'dinner').value,
+            ];
+            const defaultSummary = {
+                proteins: 0,
+                fats: 0,
+                carbs: 0,
+                calories: 0,
+            };
+            const res = listMeal.reduce((acc, curItem) => {
+                acc.calories += +curItem.calories;
+                acc.proteins += +curItem.proteins;
+                acc.fats += +curItem.fats;
+                acc.carbs += +curItem.carbs;
                 return acc;
             }, defaultSummary);
-        } else return defaultSummary;
-    });
+
+            return {
+                proteins: res.proteins.toFixed(2),
+                fats: res.fats.toFixed(2),
+                carbs: res.carbs.toFixed(2),
+                calories: res.calories.toFixed(2),
+            };
+        });
 
     const removeMeal = (day, meal, id) => {
         const currentDate = formatCurrentDate(day);
@@ -110,5 +146,6 @@ export const useCalendarStore = defineStore('calendarStore', () => {
         getMeal,
         summaryMeal,
         removeMeal,
+        summaryAllMeal,
     };
 });

@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import SectionMeals from '../components/SectionMeals.vue';
 import { mdiWeatherSunny, mdiWeatherSunsetDown, mdiWeatherSunsetUp } from '@mdi/js';
+import { useCalendarStore } from '../stores/Calendar.js';
 
 const formatCurrentDate = (currentDate) => {
     const dtYear = currentDate.getFullYear();
@@ -12,6 +13,8 @@ const formatCurrentDate = (currentDate) => {
 
 const formatDate = new Date();
 const dateSelected = ref(formatDate);
+
+const calendarStore = useCalendarStore();
 
 const weekdays = [
     {
@@ -34,11 +37,35 @@ const weekdays = [
 
 <template>
     <v-date-picker
-        class="mx-auto"
+        class="mx-auto mb-6"
+        title=""
         v-model="dateSelected"
         :max="formatDate"
         :min="(formatDate.getFullYear() - 2).toString()"
     />
+    <v-card class="mx-auto w-75 mb-16 text-center">
+        <v-card-title class="mb-4 border-b">Общие показатели</v-card-title>
+        <v-card-text class="pa-0 mb-4 mx-6">
+            <v-row
+                class="mb-2"
+                no-gutters
+            >
+                <v-col> Белки</v-col>
+                <v-col> Жиры</v-col>
+                <v-col> Углеводы</v-col>
+                <v-spacer />
+                <v-col> Каллории</v-col>
+            </v-row>
+            <v-row no-gutters>
+                <template v-for="(key, value, index) in calendarStore.summaryAllMeal(dateSelected).value">
+                    <v-col>
+                        {{ key }}
+                    </v-col>
+                    <v-spacer v-if="index === 2" />
+                </template>
+            </v-row>
+        </v-card-text>
+    </v-card>
     <SectionMeals
         v-for="weekday in weekdays"
         :day="dateSelected"
@@ -46,16 +73,6 @@ const weekdays = [
         :type="weekday.field"
         :icon="weekday.icon"
     />
-    <!--    <SectionMeals-->
-    <!--        :day="dateSelected"-->
-    <!--        type="Обед"-->
-    <!--        :bb="mdiWeatherSunny"-->
-    <!--    />-->
-    <!--    <SectionMeals-->
-    <!--        :day="dateSelected"-->
-    <!--        type="Ужин"-->
-    <!--        :bb="mdiWeatherSunsetDown"-->
-    <!--    />-->
 </template>
 
 <style scoped></style>
