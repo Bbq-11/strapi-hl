@@ -2,8 +2,8 @@
 import { ref } from 'vue';
 import { useProductStore } from '../stores/Products.js';
 import db from '../../db';
-import { mdiClose, mdiPencil } from '@mdi/js';
-import ActionsNewProducts from './ActionsNewProducts.vue';
+import { mdiClose } from '@mdi/js';
+import ActionsNewProducts from '../components/ActionsWithNewProducts.vue';
 
 const productStore = useProductStore();
 
@@ -51,7 +51,6 @@ const headers = ref([
 <template>
     <v-data-table
         class="mt-8 overflow-y-auto"
-        lang="ru"
         height="500px"
         :headers="headers"
         :items="productStore.searchProducts(inputSearchProduct)"

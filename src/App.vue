@@ -1,7 +1,5 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue';
-import { useDate } from 'vuetify';
-import { ru } from 'vuetify/locale';
 
 import {
     mdiWeatherSunsetUp,
@@ -12,25 +10,13 @@ import {
     mdiClose,
 } from '@mdi/js';
 
-import SectionBreakfast from './components/SectionBreakfast.vue';
-import GuideProducts from './components/GuideProducts.vue';
 import { useProductStore } from './stores/Products.js';
+import Guide from './pages/Guide.vue';
+import Home from './pages/Home.vue';
 
 const productStore = useProductStore();
 
-const tab = ref('1');
-
-const formatCurrentDate = (currentDate) => {
-    const dtYear = currentDate.getFullYear();
-    const dtMonth = currentDate.getMonth() + 1 >= 10 ? new Date().getMonth() + 1 : `0${new Date().getMonth() + 1}`;
-    const dtDay = currentDate.getDate() >= 10 ? new Date().getDate() : `0${new Date().getDate()}`;
-    return `${dtYear}-${dtMonth}-${dtDay}`;
-};
-
-const formatDate = new Date();
-const dateSelected = ref(formatDate);
-
-const bb = ref('1');
+const tab = ref(1);
 
 onBeforeMount(() => productStore.addProducts());
 </script>
@@ -43,36 +29,28 @@ onBeforeMount(() => productStore.addProducts());
             class="rounded-xl"
             color="deep-purple-accent-4"
         >
-            <!--            <v-tab-->
-            <!--                :value="1"-->
-            <!--                class="rounded-lg"-->
-            <!--            >-->
-            <!--                Главная-->
-            <!--            </v-tab>-->
             <v-tab
-                :value="3"
+                :value="1"
+                class="rounded-lg"
+            >
+                Главная
+            </v-tab>
+            <v-tab
+                :value="2"
                 class="rounded-lg"
             >
                 Справочник
             </v-tab>
         </v-tabs>
 
-        <!--        <v-tabs-window v-model="tab">-->
-        <!--            <v-tabs-window-item :value="1">-->
-        <!--                <v-date-picker-->
-        <!--                    class="mx-auto"-->
-        <!--                    :locale="ru"-->
-        <!--                    title=""-->
-        <!--                    v-model="dateSelected"-->
-        <!--                    :max="formatDate"-->
-        <!--                    :min="(formatDate.getFullYear() - 2).toString()"-->
-        <!--                />-->
-        <!--                <SectionBreakfast />-->
-        <!--            </v-tabs-window-item>-->
-        <!--        </v-tabs-window>-->
         <v-tabs-window v-model="tab">
-            <v-tabs-window-item :value="3">
-                <GuideProducts />
+            <v-tabs-window-item :value="1">
+                <Home />
+            </v-tabs-window-item>
+        </v-tabs-window>
+        <v-tabs-window v-model="tab">
+            <v-tabs-window-item :value="2">
+                <Guide />
             </v-tabs-window-item>
         </v-tabs-window>
     </v-sheet>
