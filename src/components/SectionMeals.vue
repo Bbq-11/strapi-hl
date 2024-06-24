@@ -41,7 +41,7 @@ const props = defineProps({
                         </v-row>
                         <template v-slot:actions />
                     </v-expansion-panel-title>
-                    <v-expansion-panel-text class="border-t pt-2">
+                    <v-expansion-panel-text class="">
                         <ListFoodDay
                             :day="day"
                             :type="type"

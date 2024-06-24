@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useProductStore } from '../stores/Products.js';
 import db from '../../db';
-import { mdiClose } from '@mdi/js';
+import { mdiBedEmpty, mdiClose, mdiFlaskEmpty } from '@mdi/js';
 import ActionsNewProducts from '../components/ActionsWithUserLibrary.vue';
 
 const productStore = useProductStore();
@@ -11,30 +11,30 @@ const inputSearchProduct = ref('');
 
 const headers = ref([
     {
-        title: 'Еда',
+        title: 'Продукты',
         align: 'start',
         key: 'name',
-        width: '50%',
+        width: '40%',
     },
     {
         title: 'Каллории',
-        align: 'start',
+        align: 'center',
         paddingX: '240px',
         key: 'calories',
     },
     {
         title: 'Белки (гр)',
-        align: 'start',
+        align: 'center',
         key: 'proteins',
     },
     {
         title: 'Жиры (гр)',
-        align: 'start',
+        align: 'center',
         key: 'fats',
     },
     {
         title: 'Углеводы (гр)',
-        align: 'start',
+        align: 'center',
         key: 'carbs',
     },
     {
@@ -48,9 +48,13 @@ const headers = ref([
     <v-card class="mt-4 border-sm">
         <v-data-table
             class="mt-8 overflow-y-auto"
-            height="500px"
+            height="400px"
+            density="compact"
+            fixed-footer
+            fixed-header
+            :search.lazy="inputSearchProduct"
             :headers="headers"
-            :items="productStore.searchProducts(inputSearchProduct)"
+            :items="productStore.products"
         >
             <template v-slot:top>
                 <v-container>
@@ -68,6 +72,7 @@ const headers = ref([
                                 label="Поиск"
                                 v-model="inputSearchProduct"
                             />
+                            {{ inputSearchProduct }}
                         </v-col>
                         <v-col cols="auto">
                             <ActionsNewProducts
@@ -94,12 +99,17 @@ const headers = ref([
                 </div>
             </template>
             <template v-slot:no-data>
-                <v-btn
-                    color="primary"
-                    @click="productStore.addProducts()"
+                <v-card
+                    class="mt-4 mx-auto"
+                    width="content"
                 >
-                    Reset
-                </v-btn>
+                    <v-card-title>
+                        <v-icon>
+                            {{ mdiBedEmpty }}
+                        </v-icon>
+                    </v-card-title>
+                    <v-card-text> Пусто</v-card-text>
+                </v-card>
             </template>
         </v-data-table>
     </v-card>

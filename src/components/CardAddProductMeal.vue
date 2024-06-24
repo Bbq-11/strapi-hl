@@ -1,6 +1,6 @@
 <script setup>
 import { mdiPlusCircleOutline, mdiWeatherSunsetUp } from '@mdi/js';
-import { onBeforeMount, ref, onMounted, onUpdated, watch } from 'vue';
+import { onBeforeMount, ref, onMounted, onUpdated, watch, computed } from 'vue';
 import { useCalendarStore } from '../stores/Calendar.js';
 import { useProductStore } from '../stores/Products.js';
 import { mdiWeatherSunset } from '@mdi/js';
@@ -25,25 +25,6 @@ const headers = ref([
         width: '80%',
         key: 'name',
     },
-    // {
-    //     paddingX: '240px',
-    //     key: 'calories',
-    // },
-    //
-    // {
-    //     paddingX: '240px',
-    //     key: 'proteins',
-    // },
-    //
-    // {
-    //     paddingX: '240px',
-    //     key: 'fats',
-    // },
-    //
-    // {
-    //     paddingX: '240px',
-    //     key: 'carbs',
-    // },
     {
         key: 'weight',
         sortable: false,
@@ -61,21 +42,42 @@ const switchDialog = () => {
     dialog.value = !dialog.value;
 };
 const adding = () => {
-    calendarStore.addMeal(props.day, props.type, listProducts.value);
+    calendarStore.addMeal(props.day, props.type, listProducts);
     listProducts.value.length = 0;
-    initialize();
+    // initialize();
     dialog.value = false;
 };
+
+const initialize = () => {
+    const actualInfo = [...productStore.searchProducts(inputSearchProduct)];
+    actualInfo.map((item) => (item.weight = '100'));
+    items.value = actualInfo;
+};
+
+const checkValidNumValues = (value) => {
+    return /^([1-9][0-9]{0,4}(\.[0-9]{0,2})?|0\.[0-9]{0,3})$/.test(value);
+};
+
+const checkValidData = computed(() => {
+    return listProducts.value.length > 0 && listProducts.value.every((item) => checkValidNumValues(item?.weight));
+});
 
 onBeforeMount(() => {
     initialize();
 });
 
-const initialize = () => {
-    let bb = [...productStore.searchProducts(inputSearchProduct)];
-    bb.map((item) => (item.weight = '100'));
-    items.value = bb;
-};
+watch(
+    () => inputSearchProduct.value,
+    () => {
+        initialize();
+    },
+);
+watch(
+    () => calendarStore.calendar,
+    () => {
+        initialize();
+    },
+);
 </script>
 
 <template>
@@ -123,12 +125,12 @@ const initialize = () => {
                     <template v-slot:item.weight="{ item }">
                         <v-text-field
                             width="100px"
-                            variant="outlined"
-                            hideDetails="auto"
-                            density="compact"
-                            autocomplete="off"
                             suffix="г."
+                            density="compact"
                             v-model="item.weight"
+                            :rules="[checkValidNumValues]"
+                            maxlength="5"
+                            hide-details
                         >
                         </v-text-field>
                     </template>
@@ -155,6 +157,13 @@ const initialize = () => {
                         @click="switchDialog"
                     />
                     <v-btn
+                        v-if="checkValidData"
+                        text="Добавить продукты)"
+                        @click="adding"
+                    />
+                    <v-btn
+                        v-else
+                        disabled
                         text="Добавить продукты)"
                         @click="adding"
                     />

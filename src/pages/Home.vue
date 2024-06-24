@@ -37,9 +37,11 @@ const weekdays = [
 
 <template>
     <v-date-picker
-        class="mx-auto mb-6"
-        title=""
+        class="mx-auto mb-6 rounded-xl px-4 py-4"
+        width="40%"
+        hide-header
         v-model="dateSelected"
+        :mode-icon="mdiWeatherSunny"
         :max="formatDate"
         :min="(formatDate.getFullYear() - 2).toString()"
     />

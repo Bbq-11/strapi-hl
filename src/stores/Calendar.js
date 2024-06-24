@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
+import { it } from 'vuetify/locale';
 
 export const useCalendarStore = defineStore('calendarStore', () => {
     const calendar = ref([
@@ -43,21 +44,20 @@ export const useCalendarStore = defineStore('calendarStore', () => {
 
     const addMeal = (day, meal, listFoods) => {
         const currentDate = formatCurrentDate(day);
+        console.log(listFoods.value);
+        const defaultItem = {
+            date: currentDate,
+            breakfast: [],
+            lunch: [],
+            dinner: [],
+        };
         if (calendar.value.find((item) => item.date === currentDate)) {
             const dayIndex = calendar.value.findIndex((item) => item.date === currentDate);
-            listFoods.forEach((food) => {
-                calendar.value[dayIndex][meal].push(food);
-            });
+            listFoods.value.forEach((food) => calendar.value[dayIndex][meal].push(food));
         } else {
-            const item = {
-                date: currentDate,
-                breakfast: [],
-                lunch: [],
-                dinner: [],
-            };
             calendar.value.push({
-                ...item,
-                [meal]: [...listFoods],
+                ...defaultItem,
+                [meal]: [...listFoods.value],
             });
         }
     };
@@ -127,11 +127,47 @@ export const useCalendarStore = defineStore('calendarStore', () => {
             };
         });
 
+    const summaryAllMealAllDays = (listDates) =>
+        computed(() => {
+            if ([...listDates.value].length === 1) return summaryAllMeal([...listDates.value][0]).value;
+            const defaultSummary = {
+                proteins: 0,
+                fats: 0,
+                carbs: 0,
+                calories: 0,
+            };
+            return [...listDates.value].reduce((acc, curItem) => {
+                const infoItem = summaryAllMeal(curItem).value;
+                acc.calories += +infoItem.calories;
+                acc.proteins += +infoItem.proteins;
+                acc.fats += +infoItem.fats;
+                acc.carbs += +infoItem.carbs;
+                return acc;
+            }, defaultSummary);
+            // const currentStartDate = formatCurrentDate(startDay);
+            // const currentLastDate = formatCurrentDate(lastDay);
+            // const dayIndex = calendar.value.findIndex((item) => item.date === currentStartDate);
+        });
+
     const removeMeal = (day, meal, id) => {
         const currentDate = formatCurrentDate(day);
         const dayIndex = calendar.value.findIndex((item) => item.date === currentDate);
         calendar.value[dayIndex][meal] = calendar.value[dayIndex][meal].filter((item) => item.id !== id);
     };
+
+    const getListActualDays = (listDates) =>
+        computed(() => {
+            if ([...listDates].length === 1)
+                return { date: formatCurrentDate(listDates[0]), ...summaryAllMeal(listDates[0]).value };
+            const res = [];
+            [...listDates].forEach((item) => {
+                res.push({
+                    date: formatCurrentDate(item),
+                    ...summaryAllMeal(item).value,
+                });
+            });
+            return res;
+        });
 
     watch(
         () => calendar,
@@ -147,5 +183,7 @@ export const useCalendarStore = defineStore('calendarStore', () => {
         summaryMeal,
         removeMeal,
         summaryAllMeal,
+        summaryAllMealAllDays,
+        getListActualDays,
     };
 });
