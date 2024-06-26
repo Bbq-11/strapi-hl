@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
-import { it } from 'vuetify/locale';
+import { eachWeekOfInterval, getYear } from 'date-fns';
+import { startOfWeek, getWeek, startOfMonth, getMonth, format } from 'date-fns';
+
+import { ru } from 'date-fns/locale';
 
 export const useCalendarStore = defineStore('calendarStore', () => {
     const calendar = ref([
@@ -30,40 +33,74 @@ export const useCalendarStore = defineStore('calendarStore', () => {
             dinner: [],
         },
     ]);
-    const defaultItem = {
-        proteins: 0,
-        fats: 0,
-        carbs: 0,
-        calories: 0,
-    };
 
     const calendarLS = localStorage.getItem('calendar');
     if (calendarLS) calendar.value = JSON.parse(calendarLS)._value;
 
-    const formatCurrentDate = (currentDate) => {
-        const dtYear = currentDate.getFullYear();
-        const dtMonth =
-            currentDate.getMonth() + 1 >= 10 ? currentDate.getMonth() + 1 : `0${currentDate.getMonth() + 1}`;
-        const dtDay = currentDate.getDate() >= 10 ? currentDate.getDate() : `0${currentDate.getDate()}`;
-        return `${dtYear}-${dtMonth}-${dtDay}`;
+    const groupByWeek = (listDates) => {
+        return listDates.reduce((result, date) => {
+            const weekStart = startOfWeek(date, { weekStartsOn: 1 });
+            const weekNumber = getWeek(weekStart, { weekStartsOn: 1 });
+            const weekKey = `${format(weekStart, 'dd-MM-yyyy')}`;
+
+            if (!result[weekKey]) {
+                result[weekKey] = [];
+            }
+
+            result[weekKey].push(format(date, 'yyyy-MM-dd')); // Форматируем дату в виде 'yyyy-MM-dd'
+            return result;
+        }, {});
+    };
+    const groupByMonth = (listDates) => {
+        return listDates.reduce((result, date) => {
+            const monthStart = startOfMonth(date); // Установите первый день недели на понедельник
+            const monthNumber = getMonth(monthStart) + 1;
+            const yearNumber = getYear(date);
+            const monthName =
+                format(monthStart, 'LLLLL', { locale: ru }) + format(monthStart, 'LLL', { locale: ru }).slice(1);
+            console.log(monthName);
+            const monthKey = `${monthName} - ${yearNumber}`;
+
+            if (!result[monthKey]) {
+                result[monthKey] = [];
+            }
+
+            result[monthKey].push(format(date, 'yyyy-MM-dd')); // Форматируем дату в виде 'yyyy-MM-dd'
+            return result;
+        }, {});
     };
 
+    // const checkEmptyMeal = (day, meal) => computed(() => {
+    //     calendar.value.find((item) => item.date === currentDate)
+    // });
+
     const addToMealList = (day, meal, listFoods) => {
-        const currentDate = formatCurrentDate(day);
-        if (calendar.value.find((item) => item.date === currentDate)) {
-            const dayIndex = calendar.value.findIndex((item) => item.date === currentDate);
-            listFoods.value.forEach((food) => calendar.value[dayIndex][meal].push(food));
-        } else {
+        console.log([...listFoods]);
+        const currentDate = format(day, 'yyyy-MM-dd');
+        const defaultItem = {
+            date: currentDate,
+            breakfast: [],
+            lunch: [],
+            dinner: [],
+        };
+        console.log(calendar.value.findIndex((item) => item.date === currentDate));
+        if (calendar.value.findIndex((item) => item.date === currentDate) === -1) {
+            console.log('2');
             calendar.value.push({
                 ...defaultItem,
-                [meal]: [...listFoods.value],
             });
         }
+        const dayIndex = calendar.value.findIndex((item) => item.date === currentDate);
+        console.log(calendar.value[1]);
+        [...listFoods].forEach((food) => {
+            console.log({ ...food, id: `${food.id}-${Date.now()}` });
+            calendar.value[dayIndex][meal].push({ ...food, id: `${food.id}-${Date.now()}` });
+        });
     };
 
     const getListOneMeal = (day, meal) =>
         computed(() => {
-            const currentDate = formatCurrentDate(day);
+            const currentDate = format(day, 'yyyy-MM-dd');
             if (calendar.value.find((item) => item.date === currentDate)) {
                 const dayIndex = calendar.value.findIndex((item) => item.date === currentDate);
                 return calendar.value[dayIndex][meal];
@@ -73,6 +110,12 @@ export const useCalendarStore = defineStore('calendarStore', () => {
     const getInfoOneMeal = (day, meal) =>
         computed(() => {
             const currentItem = getListOneMeal(day, meal).value;
+            const defaultItem = {
+                proteins: 0,
+                fats: 0,
+                carbs: 0,
+                calories: 0,
+            };
             if (currentItem.length) {
                 const res = currentItem.reduce((acc, curItem) => {
                     acc.calories += curItem.calories * (curItem.weight / 100);
@@ -97,6 +140,12 @@ export const useCalendarStore = defineStore('calendarStore', () => {
                 getInfoOneMeal(day, 'lunch').value,
                 getInfoOneMeal(day, 'dinner').value,
             ];
+            const defaultItem = {
+                proteins: 0,
+                fats: 0,
+                carbs: 0,
+                calories: 0,
+            };
             const res = currentItem.reduce((acc, curItem) => {
                 acc.calories += +curItem.calories;
                 acc.proteins += +curItem.proteins;
@@ -114,8 +163,14 @@ export const useCalendarStore = defineStore('calendarStore', () => {
 
     const getInfoAllMealInGapDays = (listDates) =>
         computed(() => {
-            if ([...listDates.value].length === 1) return getInfoAllMeal([...listDates.value][0]).value;
-            return [...listDates.value].reduce((acc, curItem) => {
+            if ([...listDates].length === 1) return getInfoAllMeal([...listDates][0]).value;
+            const defaultItem = {
+                proteins: 0,
+                fats: 0,
+                carbs: 0,
+                calories: 0,
+            };
+            const res = [...listDates].reduce((acc, curItem) => {
                 const currentItem = getInfoAllMeal(curItem).value;
                 acc.calories += +currentItem.calories;
                 acc.proteins += +currentItem.proteins;
@@ -123,10 +178,16 @@ export const useCalendarStore = defineStore('calendarStore', () => {
                 acc.carbs += +currentItem.carbs;
                 return acc;
             }, defaultItem);
+            return {
+                calories: +(res.calories / listDates.length).toFixed(2),
+                proteins: +(res.proteins / listDates.length).toFixed(2),
+                fats: +(res.fats / listDates.length).toFixed(2),
+                carbs: +(res.carbs / listDates.length).toFixed(2),
+            };
         });
 
     const removeMeal = (day, meal, id) => {
-        const currentDate = formatCurrentDate(day);
+        const currentDate = format(day, 'yyyy-MM-dd');
         const dayIndex = calendar.value.findIndex((item) => item.date === currentDate);
         calendar.value[dayIndex][meal] = calendar.value[dayIndex][meal].filter((item) => item.id !== id);
     };
@@ -134,17 +195,44 @@ export const useCalendarStore = defineStore('calendarStore', () => {
     const getListActualDays = (listDates) =>
         computed(() => {
             if ([...listDates].length === 1)
-                return { date: formatCurrentDate(listDates[0]), ...getInfoAllMeal(listDates[0]).value };
+                return { date: format(listDates[0], 'yyyy-MM-dd'), ...getInfoAllMeal(listDates[0]).value };
             const currentItem = [];
             [...listDates].forEach((item) => {
                 currentItem.push({
-                    date: formatCurrentDate(item),
+                    date: format(item, 'd MMMM', { locale: ru }),
                     ...getInfoAllMeal(item).value,
                 });
             });
             return currentItem;
         });
 
+    const getInfoForWeek = (listDates) =>
+        computed(() => {
+            const listOfWeeks = groupByWeek(listDates);
+            const res = [];
+            for (let key in listOfWeeks) {
+                res.push({
+                    date: key,
+                    ...getInfoAllMealInGapDays(listOfWeeks[key]).value,
+                    count: listOfWeeks[key].length,
+                });
+            }
+            return res;
+        });
+    const getInfoForMonth = (listDates) =>
+        computed(() => {
+            const listOfMoths = groupByMonth(listDates);
+            console.log(listOfMoths);
+            const res = [];
+            for (let key in listOfMoths) {
+                res.push({
+                    date: key,
+                    ...getInfoAllMealInGapDays(listOfMoths[key]).value,
+                    count: listOfMoths[key].length,
+                });
+            }
+            return res;
+        });
     watch(
         () => calendar,
         (state) => localStorage.setItem('calendar', JSON.stringify(state)),
@@ -153,7 +241,6 @@ export const useCalendarStore = defineStore('calendarStore', () => {
 
     return {
         calendar,
-        formatCurrentDate,
         addToMealList,
         getListOneMeal,
         getInfoOneMeal,
@@ -161,5 +248,7 @@ export const useCalendarStore = defineStore('calendarStore', () => {
         getInfoAllMeal,
         getInfoAllMealInGapDays,
         getListActualDays,
+        getInfoForWeek,
+        getInfoForMonth,
     };
 });

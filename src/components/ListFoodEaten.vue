@@ -1,5 +1,5 @@
 <script setup>
-import { mdiClose } from '@mdi/js';
+import { mdiAutorenew, mdiClose, mdiGaugeEmpty, mdiPencil } from '@mdi/js';
 import { useCalendarStore } from '../stores/Calendar.js';
 
 const calendarStore = useCalendarStore();
@@ -8,6 +8,13 @@ const props = defineProps({
     day: Object,
     type: String,
 });
+const checkValidNumValues = (value) => {
+    return /^([1-9][0-9]{0,4}(\.[0-9]{0,2})?|0\.[0-9]{0,3})$/.test(value);
+};
+const pups = (value) => {
+    const NUMERIC_REGEXP = /[-]{0,1}[\d]*[,]?[\d]*[.]{0,1}[\d]+/g;
+    return value.match(NUMERIC_REGEXP).join('');
+};
 </script>
 
 <template>
@@ -17,23 +24,49 @@ const props = defineProps({
         border="primary sm"
     >
         <v-row
-            class="gc-16 align-center border-b-sm mb-2"
+            class="gc-16 align-center mb-2"
             no-gutters
         >
-            <v-col class="text-h5 py-2 px-4"> {{ item.name }}</v-col>
+            <v-col class="text-h5 px-4"> {{ item.name }}</v-col>
             <v-col cols="auto">
-                <v-text-field
-                    class="bg-surface-add px-4 rounded-lg"
-                    hide-details="auto"
-                    base-color="surface-add"
-                    color="surface-add"
-                    variant="underlined"
-                    density="compact"
-                    autocomplete="off"
-                    suffix="г."
-                    v-model="item.weight"
-                >
-                </v-text-field>
+                <!--                <v-text-field-->
+                <!--                    class="text-primary px-4 rounded-lg"-->
+                <!--                    width="80px"-->
+                <!--                    base-color="surface-add"-->
+                <!--                    variant="underlined"-->
+                <!--                    type="number"-->
+                <!--                    min="0"-->
+                <!--                    persistent-placeholder-->
+                <!--                    placeholder="0"-->
+                <!--                    :rules="[checkValidNumValues]"-->
+                <!--                    maxlength="5"-->
+                <!--                    hide-details-->
+                <!--                    hide-spin-buttons-->
+                <!--                    suffix="г."-->
+                <!--                    v-model="item.weight"-->
+                <!--                >-->
+                <!--                </v-text-field>-->
+                <div class="d-flex justify-space-between align-center">
+                    <v-icon
+                        class="mr-2"
+                        size="20"
+                    >
+                        {{ mdiPencil }}
+                    </v-icon>
+                    <v-text-field
+                        variant="underlined"
+                        color="transparent"
+                        base-color="transparent"
+                        bg-color="transparent"
+                        width="60px"
+                        suffix="г"
+                        v-model="item.weight"
+                        @update:model-value="item.weight = pups(item.weight)"
+                        :rules="[pups]"
+                        maxlength="5"
+                        autocomplete="off"
+                    />
+                </div>
             </v-col>
             <v-col cols="auto">
                 <v-btn
@@ -45,6 +78,12 @@ const props = defineProps({
                 />
             </v-col>
         </v-row>
+
+        <v-divider
+            class="mb-2 ml-0"
+            color="primary"
+            opacity="100"
+        />
         <v-row
             class="text-center"
             no-gutters

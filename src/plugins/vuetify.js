@@ -24,7 +24,7 @@ export default createVuetify({
             color: 'primary',
             density: 'compact',
             autocomplete: 'off',
-            class: ['text-subtitle-1', 'text-primary', 'bg-background'],
+            class: ['text-subtitle-1', 'text-primary'],
         },
     },
     components: {

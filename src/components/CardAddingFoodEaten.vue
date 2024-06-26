@@ -1,9 +1,17 @@
 <script setup>
-import { mdiPlusCircleOutline, mdiWeatherSunsetUp } from '@mdi/js';
+import {
+    mdiArrowLeftBoldCircleOutline,
+    mdiArrowRightBoldCircleOutline,
+    mdiBedEmpty,
+    mdiCheckboxBlankCircleOutline,
+    mdiPencil,
+    mdiPlusCircleOutline,
+    mdiWeatherSunsetUp,
+} from '@mdi/js';
 import { onBeforeMount, ref, onMounted, onUpdated, watch, computed } from 'vue';
 import { useCalendarStore } from '../stores/Calendar.js';
 import { useProductStore } from '../stores/Products.js';
-import { mdiWeatherSunset } from '@mdi/js';
+import { mdiWeatherSunset, mdiCheck, mdiCheckboxMarkedCircleOutline } from '@mdi/js';
 
 const calendarStore = useCalendarStore();
 const productStore = useProductStore();
@@ -16,13 +24,12 @@ const props = defineProps({
 });
 
 const dialog = ref(false);
-const listProducts = ref([]);
 const inputSearchProduct = ref('');
 const headers = ref([
     {
         title: 'Продукты',
         align: 'start',
-        width: '80%',
+        width: '85%',
         key: 'name',
     },
     {
@@ -37,19 +44,21 @@ const headers = ref([
 ]);
 
 const items = ref([]);
+const listProducts = ref([]);
 
 const switchDialog = () => {
     dialog.value = !dialog.value;
 };
 const adding = () => {
-    calendarStore.addMeal(props.day, props.type, listProducts);
+    switchDialog();
+    calendarStore.addToMealList(props.day, props.type, listProducts.value);
     listProducts.value.length = 0;
-    // initialize();
-    dialog.value = false;
+    inputSearchProduct.value = '';
+    setTimeout(() => initialize(), 1000);
 };
 
 const initialize = () => {
-    const actualInfo = [...productStore.searchProducts(inputSearchProduct)];
+    const actualInfo = [...productStore.products];
     actualInfo.map((item) => (item.weight = '100'));
     items.value = actualInfo;
 };
@@ -66,18 +75,14 @@ onBeforeMount(() => {
     initialize();
 });
 
-watch(
-    () => inputSearchProduct.value,
-    () => {
-        initialize();
-    },
-);
-watch(
-    () => calendarStore.calendar,
-    () => {
-        initialize();
-    },
-);
+const page = ref(1);
+const onPageChange = (isAdd) => {
+    if (isAdd) {
+        page.value += 1;
+    } else {
+        if (page.value > 1) page.value -= 1;
+    }
+};
 </script>
 
 <template>
@@ -95,92 +100,127 @@ watch(
             elevation="18"
             width="800"
         >
-            <v-card-title class="mt-4 mx-auto">
+            <v-card-title class="mt-4 mx-auto font-weight-bold text-h5">
                 {{ title }}
             </v-card-title>
-            <v-card-text>
+            <v-card-text class="pt-0">
                 <v-data-table
-                    class="element text-primary scroll-container"
+                    class="text-primary scroll-container"
                     height="400px"
+                    :search="inputSearchProduct"
+                    sticky
                     :headers="headers"
-                    :items="productStore.searchProducts(inputSearchProduct)"
+                    :items="items"
+                    :page.sync="page"
+                    @update:page="onPageChange"
+                    :items-per-page="15"
                 >
                     <template v-slot:top>
                         <v-container>
                             <v-text-field
-                                class="opacity-100"
-                                color="primary"
-                                bg-color="background"
                                 clearable
-                                hide-details="auto"
-                                density="compact"
-                                variant="outlined"
+                                autocomplete="off"
                                 label="Поиск"
                                 v-model="inputSearchProduct"
                             />
                         </v-container>
                     </template>
                     <template v-slot:item.name="{ item }">
-                        <div>
+                        <p class="text-subtitle-1">
                             {{ item.name }}
-                        </div>
-                        <small class="text-caption text-medium-emphasis">{{ item.calories }} Ккал.</small>
+                        </p>
+                        <small class="text-caption text-medium-emphasis">{{ item.calories }} ккал</small>
                     </template>
                     <template v-slot:item.weight="{ item }">
-                        <v-text-field
-                            color="primary"
-                            base-color="primary"
-                            bg-color="background"
-                            width="100px"
-                            suffix="г."
-                            density="compact"
-                            v-model="item.weight"
-                            :rules="[checkValidNumValues]"
-                            maxlength="5"
-                            hide-details
-                        >
-                        </v-text-field>
+                        <div class="d-flex justify-space-between align-center">
+                            <v-icon
+                                class="mr-2"
+                                size="20"
+                            >
+                                {{ mdiPencil }}
+                            </v-icon>
+                            <v-text-field
+                                variant="underlined"
+                                color="transparent"
+                                base-color="transparent"
+                                bg-color="transparent"
+                                width="60px"
+                                suffix="г"
+                                v-model="item.weight"
+                                :rules="[checkValidNumValues]"
+                                maxlength="5"
+                                autocomplete="off"
+                            />
+                        </div>
                     </template>
                     <template v-slot:item.actions="{ item }">
                         <v-checkbox
-                            class="h-75"
                             v-model="listProducts"
                             :value="item"
+                            density="compact"
+                            :false-icon="mdiCheckboxBlankCircleOutline"
+                            :true-icon="mdiCheckboxMarkedCircleOutline"
+                            hide-details
                         />
                     </template>
-                    <template v-slot:no-data>
-                        <v-btn
-                            color="primary"
-                            @click="productStore.addProducts()"
+                    <template v-slot:bottom>
+                        <v-row
+                            class="mt-4"
+                            no-gutters
+                            justify="space-between"
+                            align="center"
                         >
-                            Reset
-                        </v-btn>
+                            <v-col cols="auto">
+                                <v-btn
+                                    class="text-surface bg-primary"
+                                    text="Отмена"
+                                    variant="outlined"
+                                    @click="switchDialog"
+                                />
+                            </v-col>
+                            <v-col cols="auto">
+                                <v-btn
+                                    variant="text"
+                                    :icon="mdiArrowLeftBoldCircleOutline"
+                                    @click="onPageChange(false)"
+                                />
+                                <span class="text-subtitle-2 mx-2">{{ page }}</span>
+                                <v-btn
+                                    variant="text"
+                                    :icon="mdiArrowRightBoldCircleOutline"
+                                    @click="onPageChange(true)"
+                                />
+                            </v-col>
+                            <v-col cols="auto">
+                                <v-btn
+                                    v-if="checkValidData"
+                                    class="text-surface bg-primary"
+                                    variant="outlined"
+                                    text="Добавить"
+                                    @click="adding"
+                                />
+                                <v-btn
+                                    v-else
+                                    class="text-surface bg-primary"
+                                    variant="outlined"
+                                    disabled
+                                    text="Добавить"
+                                />
+                            </v-col>
+                        </v-row>
+                    </template>
+                    <template v-slot:no-data>
+                        <v-card elevation="0">
+                            <v-card-title>
+                                <v-icon>
+                                    {{ mdiBedEmpty }}
+                                </v-icon>
+                            </v-card-title>
+                            <v-card-text> Пусто</v-card-text>
+                        </v-card>
                     </template>
                 </v-data-table>
-                <div class="d-flex justify-space-between">
-                    <v-btn
-                        text="Отмена("
-                        @click="switchDialog"
-                    />
-                    <v-btn
-                        v-if="checkValidData"
-                        text="Добавить продукты)"
-                        @click="adding"
-                    />
-                    <v-btn
-                        v-else
-                        disabled
-                        text="Добавить продукты)"
-                        @click="adding"
-                    />
-                </div>
             </v-card-text>
         </v-card>
     </v-dialog>
 </template>
-
-<style scoped>
-::v-deep .v-data-table .v-data-table__wrapper::-webkit-scrollbar {
-    width: 10px;
-}
-</style>

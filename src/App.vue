@@ -35,7 +35,13 @@ onBeforeMount(() => productStore.addProducts());
                         text="Главная"
                     />
                 </router-link>
-                <v-divider vertical />
+                <v-divider
+                    class="mx-1"
+                    vertical
+                    inset
+                    color="primary"
+                    opacity="100"
+                />
                 <router-link
                     class="h-100"
                     to="/guide"
@@ -46,7 +52,13 @@ onBeforeMount(() => productStore.addProducts());
                         text="Справочник"
                     />
                 </router-link>
-                <v-divider vertical />
+                <v-divider
+                    class="mx-1"
+                    vertical
+                    inset
+                    color="primary"
+                    opacity="100"
+                />
                 <router-link
                     class="h-100"
                     to="/charts"
@@ -57,10 +69,10 @@ onBeforeMount(() => productStore.addProducts());
                         text="Статистика"
                     />
                 </router-link>
-                <v-divider vertical />
                 <v-spacer />
                 <v-btn
                     class="h-100 pa-3"
+                    color="primary"
                     @click="toggleTheme"
                 >
                     <v-icon
@@ -70,7 +82,7 @@ onBeforeMount(() => productStore.addProducts());
                     />
                     <v-icon
                         v-else
-                        size="35"
+                        size="40"
                         :icon="mdiWeatherSunsetDown"
                     />
                 </v-btn>

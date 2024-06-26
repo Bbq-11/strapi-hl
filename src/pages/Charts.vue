@@ -1,30 +1,24 @@
 <script setup>
 import { reactive, ref } from 'vue';
 import { useCalendarStore } from '../stores/Calendar.js';
-import BarChartDay from '../components/BarChartDay.vue';
+import BarChart from '../components/BarChart.vue';
 
 const calendarStore = useCalendarStore();
 
 const actualDate = new Date();
 const bb = ref([actualDate]);
-const actualMeals = ref(calendarStore.getInfoAllMealInGapDays(bb).value);
 
-const getStatisticsDays = () => {
-    actualMeals.value = calendarStore.getInfoAllMealInGapDays(bb).value;
-};
+// const actualMeals = ref(calendarStore.getInfoAllMealInGapDays(bb).value);
+//
+// const getStatisticsDays = () => {
+//     actualMeals.value = calendarStore.getInfoAllMealInGapDays(bb).value;
+// };
 
-// function formatDate(dateString) {
-//     const date = new Date(dateString);
-//     return date.toISOString().split('T')[0];
-// }
+// const clickkk = () => {
+//     if (bb.value) getStatisticsDays();
+// };
 
-const clickkk = () => {
-    if (bb.value) getStatisticsDays();
-};
-
-import { Bar } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
-import BarChartWeek from '../components/BarChartWeek.vue';
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 </script>
@@ -80,7 +74,7 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
             </v-row>
             <v-row no-gutters>
                 <template
-                    v-for="(key, value, index) in actualMeals"
+                    v-for="(key, value, index) in calendarStore.getInfoAllMealInGapDays(bb).value"
                     :key="index"
                 >
                     <v-col>
@@ -91,15 +85,18 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
             </v-row>
         </v-card-text>
     </v-card>
-    {{ console.log(calendarStore.getListActualDays(bb).value.length) }}
-    <div v-if="calendarStore.getListActualDays(bb).value.length > 1">
-        <BarChartDay
+    <div v-if="calendarStore.getListActualDays(bb).value.length">
+        <BarChart
             v-if="calendarStore.getListActualDays(bb).value.length < 30"
             :lst="calendarStore.getListActualDays(bb).value"
         />
-        <BarChartWeek
-            v-else-if="calendarStore.getListActualDays(bb).value.length < 90"
-            :lst="calendarStore.getListActualDays(bb).value"
+        <BarChart
+            v-else-if="calendarStore.getListActualDays(bb).value.length < 60"
+            :lst="calendarStore.getInfoForWeek(bb).value"
+        />
+        <BarChart
+            v-else
+            :lst="calendarStore.getInfoForMonth(bb).value"
         />
     </div>
     <div v-else>gecnj cer</div>

@@ -67,6 +67,7 @@ const headers = ref([
                             <v-text-field
                                 clearable
                                 base-color="primary"
+                                autocomplete="off"
                                 label="Поиск"
                                 v-model="inputSearchProduct"
                             />

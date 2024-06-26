@@ -38,6 +38,7 @@ const diet = [
         :min="(formatDate.getFullYear() - 2).toString()"
     />
     <v-card
+        v-if="calendarStore.getInfoAllMeal(dateSelected).value.length === 0"
         class="mx-auto text-primary w-75 mb-16 text-center"
         border="primary sm"
     >

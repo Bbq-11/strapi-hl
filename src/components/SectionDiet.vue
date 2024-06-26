@@ -24,7 +24,10 @@ const props = defineProps({
                 :icon="icon"
             />
         </v-card-title>
-        <v-card-text class="pa-0 mt-0">
+        <v-card-text
+            v-if="calendarStore.getListOneMeal(day, type).value.length"
+            class="pa-0 mt-0"
+        >
             <v-expansion-panels>
                 <v-expansion-panel>
                     <v-expansion-panel-title class="px-6">
