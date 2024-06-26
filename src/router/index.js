@@ -7,8 +7,8 @@ const Charts = () => import('../pages/Charts.vue');
 export const router = createRouter({
     history: createWebHistory('/delim-check/'),
     routes: [
-        { path: '/charts', component: Home },
+        { path: '/', component: Home },
         { path: '/guide', component: Guide },
-        { path: '/', component: Charts },
+        { path: '/charts', component: Charts },
     ],
 });

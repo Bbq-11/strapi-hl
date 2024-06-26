@@ -53,8 +53,9 @@ const diet = [
                 <v-spacer />
                 <v-col> Каллории</v-col>
             </v-row>
+            <!--            {{ console.log(calendarStore.getListOneMeal(dateSelected, 'breakfast').value) }}-->
             <v-row no-gutters>
-                <template v-for="(key, value, index) in calendarStore.summaryAllMeal(dateSelected).value">
+                <template v-for="(key, value, index) in calendarStore.getInfoAllMeal(dateSelected).value">
                     <v-col>
                         {{ key }}
                     </v-col>

@@ -7,10 +7,10 @@ const calendarStore = useCalendarStore();
 
 const actualDate = new Date();
 const bb = ref([actualDate]);
-const actualMeals = ref(calendarStore.summaryAllMealAllDays(bb).value);
+const actualMeals = ref(calendarStore.getInfoAllMealInGapDays(bb).value);
 
 const getStatisticsDays = () => {
-    actualMeals.value = calendarStore.summaryAllMealAllDays(bb).value;
+    actualMeals.value = calendarStore.getInfoAllMealInGapDays(bb).value;
 };
 
 // function formatDate(dateString) {

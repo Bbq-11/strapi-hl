@@ -12,7 +12,7 @@ const props = defineProps({
 
 <template>
     <v-sheet
-        v-for="item in calendarStore.getMeal(day, type)"
+        v-for="item in calendarStore.getListOneMeal(day, type).value"
         class="pa-2 rounded-lg text-primary mb-2 border-opacity-100"
         border="primary sm"
     >

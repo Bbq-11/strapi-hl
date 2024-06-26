@@ -32,7 +32,7 @@ const props = defineProps({
                             class="text-center text-primary"
                             no-gutters
                         >
-                            <template v-for="(key, value, index) in calendarStore.summaryMeal(day, type).value">
+                            <template v-for="(key, value, index) in calendarStore.getInfoOneMeal(day, type).value">
                                 <v-col>
                                     {{ key }}
                                 </v-col>
