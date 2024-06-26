@@ -1,21 +1,16 @@
 <template>
-    <!--    {{ props.lst }}-->
-    <!--    <br />-->
-    <Bar
-        :data="chartData"
-        :options="chartOptions"
-    />
-    <!--    {{ props.lst }}-->
-    <!--    {{ data }}-->
+    <div class="chart-container">
+        <Bar
+            :data="chartData"
+            :options="chartOptions"
+        />
+    </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { Bar } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js/auto';
-import { useCalendarStore } from '../stores/Calendar.js';
-
-const calendarStore = useCalendarStore();
 
 const props = defineProps({
     lst: Object,
@@ -27,11 +22,11 @@ const chartData = computed(() => ({
     labels: props.lst.map((item) => item.date),
     datasets: [
         {
-            label: 'Data',
+            label: 'Циферки',
             data: props.lst.map((item) => item.calories),
-            backgroundColor: 'rgba(75,192,192,0.2)',
+            backgroundColor: 'rgb(56,56,155)',
             borderColor: 'rgba(75,192,192,1)',
-            borderWidth: 1,
+            borderWidth: 2,
             description: props.lst,
         },
     ],

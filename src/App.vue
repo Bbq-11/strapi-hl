@@ -4,7 +4,7 @@ import { useTheme } from 'vuetify';
 import { useProductStore } from './stores/Products.js';
 import Guide from './pages/Guide.vue';
 import Home from './pages/Home.vue';
-import { mdiWeatherSunsetDown, mdiWeatherSunsetUp } from '@mdi/js';
+import { mdiHome, mdiWeatherSunsetDown, mdiWeatherSunsetUp } from '@mdi/js';
 
 const productStore = useProductStore();
 
@@ -25,40 +25,52 @@ onBeforeMount(() => productStore.addProducts());
     <v-app>
         <v-layout class="user-select-hidden">
             <v-app-bar>
-                <router-link to="/">
+                <router-link
+                    class="h-100"
+                    to="/"
+                >
                     <v-btn
-                        class="py-4"
-                        elevation="10"
-                        text="Главная страница"
+                        class="text-primary text-subtitle-1 h-100 px-8"
+                        variant="flat"
+                        text="Главная"
                     />
                 </router-link>
-                <router-link to="/guide">
+                <v-divider vertical />
+                <router-link
+                    class="h-100"
+                    to="/guide"
+                >
                     <v-btn
-                        class="py-4"
-                        elevation="10"
+                        class="text-primary text-subtitle-1 h-100 px-8"
+                        variant="flat"
                         text="Справочник"
                     />
                 </router-link>
-                <router-link to="/charts">
+                <v-divider vertical />
+                <router-link
+                    class="h-100"
+                    to="/charts"
+                >
                     <v-btn
-                        class="py-4"
-                        elevation="10"
+                        class="text-primary text-subtitle-1 h-100 px-8"
+                        variant="flat"
                         text="Статистика"
                     />
                 </router-link>
+                <v-divider vertical />
                 <v-spacer />
                 <v-btn
-                    class="h-auto w-auto rounded-xl pa-3"
+                    class="h-100 pa-3"
                     @click="toggleTheme"
                 >
                     <v-icon
                         v-if="actualTheme === 'dark'"
-                        size="40"
+                        size="35"
                         :icon="mdiWeatherSunsetUp"
                     />
                     <v-icon
                         v-else
-                        size="40"
+                        size="35"
                         :icon="mdiWeatherSunsetDown"
                     />
                 </v-btn>

@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { useProductStore } from '../stores/Products.js';
 import db from '../../db';
 import { mdiBedEmpty, mdiClose, mdiFlaskEmpty } from '@mdi/js';
-import ActionsNewProducts from '../components/ActionsWithUserLibrary.vue';
+import CardActionsWithUserLibrary from '../components/CardActionsWithUserLibrary.vue';
 
 const productStore = useProductStore();
 
@@ -47,15 +47,15 @@ const headers = ref([
 <template>
     <v-card class="mt-4 border-sm">
         <v-data-table
-            class="mt-8 overflow-y-auto"
-            height="400px"
+            class="mt-8 mb-1 text-primary scroll-container"
+            height="500px"
             density="compact"
-            fixed-footer
-            fixed-header
+            items-per-page="-1"
             :search.lazy="inputSearchProduct"
             :headers="headers"
             :items="productStore.products"
         >
+            <!--            fixed-header-->
             <template v-slot:top>
                 <v-container>
                     <v-row
@@ -66,16 +66,14 @@ const headers = ref([
                         <v-col cols="6">
                             <v-text-field
                                 clearable
-                                hide-details="auto"
-                                density="compact"
-                                variant="outlined"
+                                base-color="primary"
                                 label="Поиск"
                                 v-model="inputSearchProduct"
                             />
                             {{ inputSearchProduct }}
                         </v-col>
                         <v-col cols="auto">
-                            <ActionsNewProducts
+                            <CardActionsWithUserLibrary
                                 :text="'Добавить новый продукт'"
                                 :isAdd="true"
                             />
@@ -85,7 +83,7 @@ const headers = ref([
             </template>
             <template v-slot:item.actions="{ item }">
                 <div v-if="item.id > db.length - 1">
-                    <ActionsNewProducts
+                    <CardActionsWithUserLibrary
                         :product="item"
                         :text="item.name"
                         :isAdd="false"
@@ -98,18 +96,21 @@ const headers = ref([
                     </v-icon>
                 </div>
             </template>
+            <template v-slot:bottom />
             <template v-slot:no-data>
-                <v-card
-                    class="mt-4 mx-auto"
-                    width="content"
+                <v-sheet
+                    class="d-flex justify-center align-center"
+                    height="400px"
                 >
-                    <v-card-title>
-                        <v-icon>
-                            {{ mdiBedEmpty }}
-                        </v-icon>
-                    </v-card-title>
-                    <v-card-text> Пусто</v-card-text>
-                </v-card>
+                    <v-card elevation="0">
+                        <v-card-title>
+                            <v-icon>
+                                {{ mdiBedEmpty }}
+                            </v-icon>
+                        </v-card-title>
+                        <v-card-text> Пусто</v-card-text>
+                    </v-card>
+                </v-sheet>
             </template>
         </v-data-table>
     </v-card>

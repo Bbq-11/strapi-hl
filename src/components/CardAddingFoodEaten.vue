@@ -20,7 +20,7 @@ const listProducts = ref([]);
 const inputSearchProduct = ref('');
 const headers = ref([
     {
-        title: 'Dessert (100g serving)',
+        title: 'Продукты',
         align: 'start',
         width: '80%',
         key: 'name',
@@ -82,7 +82,7 @@ watch(
 
 <template>
     <v-btn
-        class="w-100 d-flex justify-space-between text-h4 py-8 px-8"
+        class="w-100 d-flex justify-space-between text-h5 font-weight-bold py-8 px-8"
         :prepend-icon="icon"
         :append-icon="mdiPlusCircleOutline"
         :text="title"
@@ -91,7 +91,8 @@ watch(
     </v-btn>
     <v-dialog v-model="dialog">
         <v-card
-            class="mx-auto"
+            class="mx-auto text-primary"
+            elevation="18"
             width="800"
         >
             <v-card-title class="mt-4 mx-auto">
@@ -99,7 +100,7 @@ watch(
             </v-card-title>
             <v-card-text>
                 <v-data-table
-                    class="overflow-y-auto justify-space-between"
+                    class="element text-primary scroll-container"
                     height="400px"
                     :headers="headers"
                     :items="productStore.searchProducts(inputSearchProduct)"
@@ -107,6 +108,9 @@ watch(
                     <template v-slot:top>
                         <v-container>
                             <v-text-field
+                                class="opacity-100"
+                                color="primary"
+                                bg-color="background"
                                 clearable
                                 hide-details="auto"
                                 density="compact"
@@ -124,6 +128,9 @@ watch(
                     </template>
                     <template v-slot:item.weight="{ item }">
                         <v-text-field
+                            color="primary"
+                            base-color="primary"
+                            bg-color="background"
                             width="100px"
                             suffix="г."
                             density="compact"
@@ -141,7 +148,6 @@ watch(
                             :value="item"
                         />
                     </template>
-
                     <template v-slot:no-data>
                         <v-btn
                             color="primary"
@@ -173,4 +179,8 @@ watch(
     </v-dialog>
 </template>
 
-<style scoped></style>
+<style scoped>
+::v-deep .v-data-table .v-data-table__wrapper::-webkit-scrollbar {
+    width: 10px;
+}
+</style>

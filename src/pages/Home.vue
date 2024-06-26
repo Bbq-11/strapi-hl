@@ -1,22 +1,15 @@
 <script setup>
 import { ref } from 'vue';
-import SectionMeals from '../components/SectionMeals.vue';
+import SectionDiet from '../components/SectionDiet.vue';
 import { mdiWeatherSunny, mdiWeatherSunsetDown, mdiWeatherSunsetUp } from '@mdi/js';
 import { useCalendarStore } from '../stores/Calendar.js';
 
-const formatCurrentDate = (currentDate) => {
-    const dtYear = currentDate.getFullYear();
-    const dtMonth = currentDate.getMonth() + 1 >= 10 ? currentDate.getMonth() + 1 : `0${currentDate.getMonth() + 1}`;
-    const dtDay = currentDate.getDate() >= 10 ? currentDate.getDate() : `0${currentDate.getDate()}`;
-    return `${dtYear}-${dtMonth}-${dtDay}`;
-};
+const calendarStore = useCalendarStore();
 
 const formatDate = new Date();
 const dateSelected = ref(formatDate);
 
-const calendarStore = useCalendarStore();
-
-const weekdays = [
+const diet = [
     {
         title: 'Завтрак',
         field: 'breakfast',
@@ -37,19 +30,21 @@ const weekdays = [
 
 <template>
     <v-date-picker
-        class="mx-auto mb-6 rounded-xl px-4 py-4"
+        class="mx-auto bg-transparent text-primary mb-6 rounded-xl px-4 py-4 scroll-container"
         width="40%"
         hide-header
         v-model="dateSelected"
-        :mode-icon="mdiWeatherSunny"
         :max="formatDate"
         :min="(formatDate.getFullYear() - 2).toString()"
     />
-    <v-card class="mx-auto w-75 mb-16 text-center">
-        <v-card-title class="mb-4 border-b">Общие показатели</v-card-title>
+    <v-card
+        class="mx-auto text-primary w-75 mb-16 text-center"
+        border="primary sm"
+    >
+        <v-card-title class="mb-4 font-weight-bold text-h5 border-b-sm">Общие показатели</v-card-title>
         <v-card-text class="pa-0 mb-4 mx-6">
             <v-row
-                class="mb-2"
+                class="mb-2 text-subtitle-1"
                 no-gutters
             >
                 <v-col> Белки</v-col>
@@ -68,13 +63,11 @@ const weekdays = [
             </v-row>
         </v-card-text>
     </v-card>
-    <SectionMeals
-        v-for="weekday in weekdays"
+    <SectionDiet
+        v-for="item in diet"
         :day="dateSelected"
-        :title="weekday.title"
-        :type="weekday.field"
-        :icon="weekday.icon"
+        :title="item.title"
+        :type="item.field"
+        :icon="item.icon"
     />
 </template>
-
-<style scoped></style>

@@ -1,7 +1,7 @@
 <script setup>
 import { reactive, ref } from 'vue';
 import { useCalendarStore } from '../stores/Calendar.js';
-import acq from '../components/acq.vue';
+import BarChartDay from '../components/BarChartDay.vue';
 
 const calendarStore = useCalendarStore();
 
@@ -24,6 +24,7 @@ const clickkk = () => {
 
 import { Bar } from 'vue-chartjs';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
+import BarChartWeek from '../components/BarChartWeek.vue';
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 </script>
@@ -37,6 +38,11 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
         <v-card-text class="d-flex justify-center">
             <div class="w-50">
                 <v-date-input
+                    class="scroll-container"
+                    color="primary"
+                    base-color="primary"
+                    bg-color="background"
+                    hide-details
                     :max="actualDate"
                     :min="(actualDate.getFullYear() - 2).toString()"
                     variant="outlined"
@@ -85,8 +91,16 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
             </v-row>
         </v-card-text>
     </v-card>
+    {{ console.log(calendarStore.getListActualDays(bb).value.length) }}
     <div v-if="calendarStore.getListActualDays(bb).value.length > 1">
-        <acq :lst="calendarStore.getListActualDays(bb).value" />
+        <BarChartDay
+            v-if="calendarStore.getListActualDays(bb).value.length < 30"
+            :lst="calendarStore.getListActualDays(bb).value"
+        />
+        <BarChartWeek
+            v-else-if="calendarStore.getListActualDays(bb).value.length < 90"
+            :lst="calendarStore.getListActualDays(bb).value"
+        />
     </div>
     <div v-else>gecnj cer</div>
 </template>

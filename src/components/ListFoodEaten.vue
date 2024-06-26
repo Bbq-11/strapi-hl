@@ -11,20 +11,23 @@ const props = defineProps({
 </script>
 
 <template>
-    <div
+    <v-sheet
         v-for="item in calendarStore.getMeal(day, type)"
-        class="pb-2 mb-4 border-b"
+        class="pa-2 rounded-lg text-primary mb-2 border-opacity-100"
+        border="primary sm"
     >
         <v-row
-            class="gc-16 mb-2 align-center"
+            class="gc-16 align-center border-b-sm mb-2"
             no-gutters
         >
-            <v-col class="text-h5 border-sm rounded-xl py-2 px-4"> {{ item.name }}</v-col>
+            <v-col class="text-h5 py-2 px-4"> {{ item.name }}</v-col>
             <v-col cols="auto">
                 <v-text-field
-                    width="100px"
-                    variant="outlined"
-                    hideDetails="auto"
+                    class="bg-surface-add px-4 rounded-lg"
+                    hide-details="auto"
+                    base-color="surface-add"
+                    color="surface-add"
+                    variant="underlined"
                     density="compact"
                     autocomplete="off"
                     suffix="г."
@@ -37,6 +40,7 @@ const props = defineProps({
                     :icon="mdiClose"
                     color="error"
                     variant="tonal"
+                    size="30"
                     @click="calendarStore.removeMeal(day, type, item.id)"
                 />
             </v-col>
@@ -51,7 +55,7 @@ const props = defineProps({
             <v-spacer />
             <v-col>{{ +(item.calories * (item.weight / 100)).toFixed(2) }}</v-col>
         </v-row>
-    </div>
+    </v-sheet>
 </template>
 
 <style scoped></style>

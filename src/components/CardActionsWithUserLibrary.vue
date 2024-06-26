@@ -86,7 +86,7 @@ const checkValidData = computed(() => {
             class="mx-auto"
             width="600"
         >
-            <v-card-title class="mx-auto">
+            <v-card-title class="mx-auto text-primary">
                 {{ props.text }}
             </v-card-title>
             <v-card-text>
@@ -97,10 +97,9 @@ const checkValidData = computed(() => {
                     <v-col>
                         <v-text-field
                             v-model="item.name"
-                            variant="outlined"
                             maxlength="80"
-                            hide-details
                             counter
+                            base-color="primary"
                             label="Название продукта"
                             :rules="[checkValidStringValues]"
                         />
@@ -110,21 +109,18 @@ const checkValidData = computed(() => {
                 <v-row dense>
                     <v-col>
                         <v-text-field
-                            density="compact"
                             v-model="item.calories"
-                            variant="outlined"
+                            base-color="primary"
                             maxlength="5"
                             label="Ккал"
                             :rules="[checkValidNumValues]"
-                            hide-details
                         />
                     </v-col>
                     <v-col>
                         <v-text-field
                             v-model="item.proteins"
                             maxlength="5"
-                            density="compact"
-                            variant="outlined"
+                            base-color="primary"
                             label="Белки"
                             :rules="[checkValidNumValues]"
                         />
@@ -133,8 +129,7 @@ const checkValidData = computed(() => {
                         <v-text-field
                             v-model="item.fats"
                             maxlength="5"
-                            density="compact"
-                            variant="outlined"
+                            base-color="primary"
                             label="Жиры"
                             :rules="[checkValidNumValues]"
                         />
@@ -143,14 +138,13 @@ const checkValidData = computed(() => {
                         <v-text-field
                             v-model="item.carbs"
                             maxlength="5"
-                            density="compact"
-                            variant="outlined"
+                            base-color="primary"
                             label="Углеводы"
                             :rules="[checkValidNumValues]"
                         />
                     </v-col>
                 </v-row>
-                <small class="text-caption text-medium-emphasis">*Показатели для порции в 100гр.</small>
+                <small class="text-caption text-primary text-medium-emphasis">*Показатели для порции в 100гр.</small>
             </v-card-text>
             <v-card-actions>
                 <v-row
@@ -159,7 +153,8 @@ const checkValidData = computed(() => {
                 >
                     <v-col cols="auto">
                         <v-btn
-                            class="ms-auto"
+                            class="text-primary"
+                            variant="tonal"
                             text="Отменить"
                             @click="dialog = false"
                         />
@@ -169,13 +164,15 @@ const checkValidData = computed(() => {
                         <div v-else>
                             <v-btn
                                 v-if="props.isAdd"
-                                class="ms-auto"
+                                class="text-primary"
+                                variant="outlined"
                                 text="Добавить"
                                 @click="addProduct"
                             />
                             <v-btn
                                 v-else
-                                class="ms-auto"
+                                class="text-primary"
+                                variant="outlined"
                                 text="Редактировать"
                                 @click="editProduct"
                             />
