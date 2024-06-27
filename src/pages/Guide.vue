@@ -45,9 +45,9 @@ const headers = ref([
 </script>
 
 <template>
-    <v-card class="mt-4 border-sm">
+    <v-card>
         <v-data-table
-            class="mt-8 mb-1 text-primary scroll-container"
+            class="mt-4 mb-2 text-primary scroll-container"
             height="500px"
             density="compact"
             items-per-page="-1"
@@ -55,27 +55,23 @@ const headers = ref([
             :headers="headers"
             :items="productStore.products"
         >
-            <!--            fixed-header-->
             <template v-slot:top>
                 <v-container>
                     <v-row
+                        class="justify-space-between align-center"
                         no-gutters
-                        justify="space-between"
-                        align="center"
                     >
                         <v-col cols="6">
                             <v-text-field
-                                clearable
                                 base-color="primary"
                                 autocomplete="off"
                                 label="Поиск"
                                 v-model="inputSearchProduct"
                             />
-                            {{ inputSearchProduct }}
                         </v-col>
                         <v-col cols="auto">
                             <CardActionsWithUserLibrary
-                                :text="'Добавить новый продукт'"
+                                text="Добавить новый продукт"
                                 :isAdd="true"
                             />
                         </v-col>
@@ -91,10 +87,9 @@ const headers = ref([
                     />
                     <v-icon
                         size="small"
+                        :icon="mdiClose"
                         @click="productStore.removeProduct(item.id)"
-                    >
-                        {{ mdiClose }}
-                    </v-icon>
+                    />
                 </div>
             </template>
             <template v-slot:bottom />

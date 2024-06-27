@@ -3,8 +3,11 @@ import {
     mdiArrowLeftBoldCircleOutline,
     mdiArrowRightBoldCircleOutline,
     mdiBedEmpty,
+    mdiCheck,
     mdiCheckboxBlankCircleOutline,
     mdiCheckboxMarkedCircleOutline,
+    mdiCheckCircleOutline,
+    mdiClose,
     mdiPencil,
 } from '@mdi/js';
 import { computed, ref } from 'vue';
@@ -30,16 +33,9 @@ const adding = () => {
 </script>
 
 <template>
-    <!--    <v-icon-->
-    <!--        class="mr-2"-->
-    <!--        size="20"-->
-    <!--        @click="switchDialog"-->
-    <!--    >-->
-    <!--        {{ mdiPencil }}-->
-    <!--    </v-icon>-->
     <v-btn
+        class="rounded-lg"
         variant="text"
-        rounded="lg"
         :prepend-icon="mdiPencil"
         :text="`${props.item.weight}`"
         @click="switchDialog"
@@ -50,50 +46,49 @@ const adding = () => {
             elevation="18"
             width="400"
         >
-            <v-card-title class="mt-4 mx-auto font-weight-bold text-h5">
+            <v-card-title class="my-4 mx-auto font-weight-bold text-h5">
                 {{ props.item.name }}
             </v-card-title>
-            <v-card-text class="pt-0">
+            <v-card-text class="pt-0 pb-4 px-4">
                 <v-text-field
                     class="mx-auto"
-                    variant="underlined"
-                    color="transparent"
-                    base-color="transparent"
-                    bg-color="transparent"
-                    width="60px"
+                    base-color="primary"
+                    width="100px"
                     suffix="г"
-                    v-model="currentWeight"
-                    :rules="[checkValidNumValues]"
                     maxlength="6"
                     autocomplete="off"
+                    v-model="currentWeight"
+                    :rules="[checkValidNumValues]"
                 />
                 <v-row
-                    class="mt-4"
+                    class="mt-2 justify-space-between align-center"
                     no-gutters
-                    justify="space-between"
-                    align="center"
                 >
-                    <v-col cols="auto">
+                    <v-col>
                         <v-btn
-                            class="text-surface bg-primary"
-                            text="Отмена"
-                            variant="outlined"
+                            variant="text"
                             @click="switchDialog"
-                        />
+                        >
+                            <v-icon
+                                :icon="mdiClose"
+                                size="30"
+                            />
+                        </v-btn>
                     </v-col>
                     <v-col cols="auto">
                         <v-btn
-                            class="text-surface bg-primary"
-                            variant="outlined"
-                            text="Редактировать"
+                            variant="text"
                             :disabled="!checkValidNumValues(currentWeight)"
                             @click="adding"
-                        />
+                        >
+                            <v-icon
+                                :icon="mdiCheck"
+                                size="30"
+                            />
+                        </v-btn>
                     </v-col>
                 </v-row>
             </v-card-text>
         </v-card>
     </v-dialog>
 </template>
-
-<style scoped></style>

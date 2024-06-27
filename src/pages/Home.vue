@@ -9,7 +9,7 @@ const calendarStore = useCalendarStore();
 const formatDate = new Date();
 const dateSelected = ref(formatDate);
 
-const diet = [
+const listDiet = [
     {
         title: 'Завтрак',
         field: 'breakfast',
@@ -28,23 +28,21 @@ const diet = [
 ];
 </script>
 
-<template class="">
+<template>
     <v-date-picker
-        class="mx-auto bg-transparent text-primary mb-6 rounded-xl px-4 py-4 scroll-container"
-        width="40%"
+        class="mx-auto bg-transparent text-primary mb-6 scroll-container"
+        color="primary"
+        width="400px"
         hide-header
         v-model="dateSelected"
         :max="formatDate"
         :min="(formatDate.getFullYear() - 2).toString()"
     />
-    <v-card
-        class="mx-auto text-primary w-75 mb-16 text-center"
-        border="primary sm"
-    >
+    <v-card class="mx-auto text-primary w-75 mb-12 text-center">
         <v-card-title class="mb-4 font-weight-bold text-h5 border-b-sm">Общие показатели</v-card-title>
         <v-card-text class="pa-0 mb-4 mx-6">
             <v-row
-                class="mb-2 text-subtitle-1"
+                class="mb-1 text-subtitle-1"
                 no-gutters
             >
                 <v-col> Белки</v-col>
@@ -64,7 +62,8 @@ const diet = [
         </v-card-text>
     </v-card>
     <SectionDiet
-        v-for="item in diet"
+        v-for="item in listDiet"
+        :key="item.id"
         :day="dateSelected"
         :title="item.title"
         :type="item.field"

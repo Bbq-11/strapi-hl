@@ -1,15 +1,9 @@
 <script setup>
 import { computed, reactive, ref } from 'vue';
 import { mdiPencil, mdiPlus } from '@mdi/js';
-
 import { useProductStore } from '../stores/Products.js';
 
 const productStore = useProductStore();
-
-const dialog = ref(false);
-const switchDialog = () => {
-    dialog.value = !dialog.value;
-};
 const props = defineProps({
     product: {
         type: Object,
@@ -26,6 +20,7 @@ const props = defineProps({
     isAdd: Boolean,
 });
 
+const dialog = ref(false);
 const item = reactive({
     name: props.product.name,
     calories: props.product.calories,
@@ -33,21 +28,20 @@ const item = reactive({
     fats: props.product.fats,
     carbs: props.product.carbs,
 });
+const listTitleForTextField = ['Название продукта', 'Ккал', 'Белки', 'Жиры', 'Углеводы'];
 
-const addProduct = () => {
-    productStore.addProduct(item);
-    item.name = '';
-    item.calories = 0;
-    item.proteins = 0;
-    item.fats = 0;
-    item.carbs = 0;
-    dialog.value = false;
-};
 const editProduct = () => {
-    productStore.editProduct(item, props.product);
-    dialog.value = false;
+    switchDialog();
+    if (props.isAdd) {
+        productStore.addProduct(item);
+        item.name = '';
+        item.calories = 0;
+        item.proteins = 0;
+        item.fats = 0;
+        item.carbs = 0;
+    } else productStore.editProduct(item, props.product);
 };
-
+const switchDialog = () => (dialog.value = !dialog.value);
 const checkValidStringValues = (value, minLength = 1, maxLength = 80) => {
     const regex = new RegExp(`^.{${minLength},${maxLength}}$`);
     return regex.test(value);
@@ -55,7 +49,6 @@ const checkValidStringValues = (value, minLength = 1, maxLength = 80) => {
 const checkValidNumValues = (value) => {
     return /^(0|[1-9][0-9]{0,3}(\.[0-9]{0,2})?|0\.[0-9]{0,2})$/.test(value);
 };
-
 const checkValidData = computed(() => {
     return (
         checkValidStringValues(item.name) &&
@@ -71,88 +64,47 @@ const checkValidData = computed(() => {
     <v-btn
         v-if="props.isAdd"
         :prepend-icon="mdiPlus"
+        text="Добавить новый продукт"
         @click="dialog = true"
-    >
-        Добавить новый продукт
-    </v-btn>
+    />
     <v-icon
         v-else
         class="mr-2"
+        :icon="mdiPencil"
         @click="dialog = true"
-    >
-        {{ mdiPencil }}
-    </v-icon>
-
+    />
     <v-dialog v-model="dialog">
         <v-card
-            class="mx-auto"
+            class="mx-auto px-4"
             width="600"
         >
-            <v-card-title class="mx-auto text-primary">
+            <v-card-title class="mx-auto text-primary py-2">
                 {{ props.text }}
             </v-card-title>
-            <v-card-text>
+            <v-card-text class="pa-0">
                 <v-row
-                    class="mb-6"
+                    class="mb-0"
                     dense
                 >
-                    <v-col>
-                        <v-text-field
-                            v-model="item.name"
-                            maxlength="80"
-                            counter
-                            base-color="primary"
-                            label="Название продукта"
-                            :rules="[checkValidStringValues]"
-                        />
-                    </v-col>
-                </v-row>
-
-                <v-row dense>
-                    <v-col>
-                        <v-text-field
-                            v-model="item.calories"
-                            base-color="primary"
-                            maxlength="5"
-                            label="Ккал"
-                            suffix="г"
-                            :rules="[checkValidNumValues]"
-                        />
-                    </v-col>
-                    <v-col>
-                        <v-text-field
-                            v-model="item.proteins"
-                            maxlength="5"
-                            base-color="primary"
-                            label="Белки"
-                            suffix="г"
-                            :rules="[checkValidNumValues]"
-                        />
-                    </v-col>
-                    <v-col>
-                        <v-text-field
-                            v-model="item.fats"
-                            maxlength="5"
-                            base-color="primary"
-                            label="Жиры"
-                            suffix="г"
-                            :rules="[checkValidNumValues]"
-                        />
-                    </v-col>
-                    <v-col>
-                        <v-text-field
-                            v-model="item.carbs"
-                            maxlength="5"
-                            base-color="primary"
-                            label="Углеводы"
-                            suffix="г"
-                            :rules="[checkValidNumValues]"
-                        />
-                    </v-col>
+                    <template
+                        v-for="(key, value, index) in item"
+                        :key="index"
+                    >
+                        <v-col :cols="value === 'name' ? 12 : 3">
+                            <v-text-field
+                                v-model="item[value]"
+                                :maxlength="key === 'name' ? 80 : 6"
+                                base-color="primary"
+                                autocomplete="off"
+                                :label="listTitleForTextField[index]"
+                                :rules="value === 'name' ? [checkValidStringValues] : [checkValidNumValues]"
+                            />
+                        </v-col>
+                    </template>
                 </v-row>
                 <small class="text-caption text-primary text-medium-emphasis">*Показатели для порции в 100гр.</small>
             </v-card-text>
-            <v-card-actions>
+            <v-card-actions class="px-0 py-3">
                 <v-row
                     no-gutters
                     justify="space-between"
@@ -160,25 +112,15 @@ const checkValidData = computed(() => {
                     <v-col cols="auto">
                         <v-btn
                             class="text-surface bg-primary"
-                            text="Отмена"
                             variant="outlined"
+                            text="Отмена"
                             @click="switchDialog"
                         />
                     </v-col>
                     <v-col cols="auto">
                         <v-btn
-                            v-if="props.isAdd"
                             class="text-surface bg-primary"
-                            variant="outlined"
-                            text="Добавить"
-                            :disabled="!checkValidData"
-                            @click="addProduct"
-                        />
-                        <v-btn
-                            v-else
-                            class="text-surface bg-primary"
-                            variant="outlined"
-                            text="Редактировать"
+                            :text="props.isAdd ? 'Добавить' : 'Редактировать'"
                             :disabled="!checkValidData"
                             @click="editProduct"
                         />
@@ -188,5 +130,3 @@ const checkValidData = computed(() => {
         </v-card>
     </v-dialog>
 </template>
-
-<style scoped></style>

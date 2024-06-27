@@ -1,8 +1,7 @@
 <script setup>
-import { mdiClose, mdiWeatherSunsetUp } from '@mdi/js';
 import ListFood from './ListFoodEaten.vue';
-import { useCalendarStore } from '../stores/Calendar.js';
 import CardAddingFood from './CardAddingFoodEaten.vue';
+import { useCalendarStore } from '../stores/Calendar.js';
 
 const calendarStore = useCalendarStore();
 
@@ -15,7 +14,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <v-card class="w-75 text-primary h-100 pa-0 my-0 mx-auto rounded-lg mb-6">
+    <v-card class="w-75 text-primary mx-auto rounded-lg mb-6">
         <v-card-title class="pa-0">
             <CardAddingFood
                 :title="title"
@@ -26,11 +25,11 @@ const props = defineProps({
         </v-card-title>
         <v-card-text
             v-if="calendarStore.getListOneMeal(day, type).value.length"
-            class="pa-0 mt-0"
+            class="py-0 mb-4"
         >
             <v-expansion-panels>
-                <v-expansion-panel>
-                    <v-expansion-panel-title class="">
+                <v-expansion-panel class="rounded-t-0 rounded-b-lg">
+                    <v-expansion-panel-title>
                         <v-row
                             class="text-center text-primary"
                             no-gutters
@@ -46,7 +45,7 @@ const props = defineProps({
                     </v-expansion-panel-title>
                     <v-expansion-panel-text>
                         <v-card
-                            class="overflow-y-auto scroll-container elevation-0 py-4"
+                            class="overflow-y-auto scroll-container elevation-0"
                             max-height="300px"
                         >
                             <ListFood

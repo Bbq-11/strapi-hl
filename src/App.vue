@@ -88,7 +88,7 @@ onBeforeMount(() => productStore.addProducts());
                 </v-btn>
             </v-app-bar>
             <v-main>
-                <v-container class="">
+                <v-container class="mt-14">
                     <router-view />
                 </v-container>
             </v-main>

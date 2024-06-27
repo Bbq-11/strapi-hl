@@ -12,23 +12,20 @@ const props = defineProps({
 const checkValidNumValues = (value) => {
     return /^([1-9][0-9]{0,4}(\.[0-9]{0,2})?|0\.[0-9]{0,3})$/.test(value);
 };
-const pups = (value) => {
-    const NUMERIC_REGEXP = /[-]{0,1}[\d]*[,]?[\d]*[.]{0,1}[\d]+/g;
-    return value.match(NUMERIC_REGEXP).join('');
-};
 </script>
 
 <template>
     <v-sheet
         v-for="item in calendarStore.getListOneMeal(day, type).value"
+        :key="item.id"
         class="py-2 rounded-lg text-primary mb-2 border-opacity-100"
         border="primary sm"
     >
         <v-row
-            class="gc-16 align-center mb-2 px-2"
+            class="gc-16 align-center mb-2 px-4"
             no-gutters
         >
-            <v-col class="text-h5 px-4">
+            <v-col class="text-h5">
                 {{ item.name }}
             </v-col>
             <v-col cols="auto">
@@ -36,15 +33,14 @@ const pups = (value) => {
             </v-col>
             <v-col cols="auto">
                 <v-btn
-                    :icon="mdiClose"
                     color="error"
                     variant="tonal"
                     size="30"
+                    :icon="mdiClose"
                     @click="calendarStore.removeMeal(day, type, item.id)"
                 />
             </v-col>
         </v-row>
-
         <v-divider
             class="mb-2 mx-2"
             color="primary"
@@ -62,5 +58,3 @@ const pups = (value) => {
         </v-row>
     </v-sheet>
 </template>
-
-<style scoped></style>

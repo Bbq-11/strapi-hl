@@ -11,7 +11,7 @@ import {
 import { onBeforeMount, ref, onMounted, onUpdated, watch, computed } from 'vue';
 import { useCalendarStore } from '../stores/Calendar.js';
 import { useProductStore } from '../stores/Products.js';
-import { mdiWeatherSunset, mdiCheck, mdiCheckboxMarkedCircleOutline } from '@mdi/js';
+import { mdiCheckboxMarkedCircleOutline } from '@mdi/js';
 
 const calendarStore = useCalendarStore();
 const productStore = useProductStore();
@@ -24,6 +24,7 @@ const props = defineProps({
 });
 
 const dialog = ref(false);
+const page = ref(1);
 const inputSearchProduct = ref('');
 const headers = ref([
     {
@@ -46,12 +47,10 @@ const headers = ref([
 const items = ref([]);
 const listProducts = ref([]);
 
-const switchDialog = () => {
-    dialog.value = !dialog.value;
-};
+const switchDialog = () => (dialog.value = !dialog.value);
 const adding = () => {
-    switchDialog();
     calendarStore.addToMealList(props.day, props.type, listProducts.value);
+    switchDialog();
     listProducts.value.length = 0;
     inputSearchProduct.value = '';
     setTimeout(() => initialize(), 1000);
@@ -75,40 +74,35 @@ onBeforeMount(() => {
     initialize();
 });
 
-const page = ref(1);
 const onPageChange = (isAdd) => {
-    if (isAdd) {
-        page.value += 1;
-    } else {
-        if (page.value > 1) page.value -= 1;
-    }
+    if (isAdd) page.value += 1;
+    else if (page.value > 1) page.value -= 1;
 };
 </script>
 
 <template>
     <v-btn
-        class="w-100 d-flex justify-space-between text-h5 font-weight-bold py-8 px-8"
+        class="w-100 d-flex justify-space-between text-h5 font-weight-bold pa-8"
         :prepend-icon="icon"
         :append-icon="mdiPlusCircleOutline"
         :text="title"
         @click="switchDialog"
-    >
-    </v-btn>
+    />
     <v-dialog v-model="dialog">
         <v-card
             class="mx-auto text-primary"
             elevation="18"
             width="800"
         >
-            <v-card-title class="mt-4 mx-auto font-weight-bold text-h5">
+            <v-card-title class="my-4 mx-auto font-weight-bold text-h5">
                 {{ title }}
             </v-card-title>
             <v-card-text class="pt-0">
                 <v-data-table
                     class="text-primary scroll-container"
                     height="400px"
-                    :search="inputSearchProduct"
                     sticky
+                    :search="inputSearchProduct"
                     :headers="headers"
                     :items="items"
                     :page.sync="page"
@@ -116,14 +110,13 @@ const onPageChange = (isAdd) => {
                     :items-per-page="15"
                 >
                     <template v-slot:top>
-                        <v-container>
-                            <v-text-field
-                                clearable
-                                autocomplete="off"
-                                label="Поиск"
-                                v-model="inputSearchProduct"
-                            />
-                        </v-container>
+                        <v-text-field
+                            class="mb-2"
+                            clearable
+                            autocomplete="off"
+                            label="Поиск"
+                            v-model="inputSearchProduct"
+                        />
                     </template>
                     <template v-slot:item.name="{ item }">
                         <p class="text-subtitle-1">
@@ -136,9 +129,8 @@ const onPageChange = (isAdd) => {
                             <v-icon
                                 class="mr-2"
                                 size="20"
-                            >
-                                {{ mdiPencil }}
-                            </v-icon>
+                                :icon="mdiPencil"
+                            />
                             <v-text-field
                                 variant="underlined"
                                 color="transparent"
@@ -146,29 +138,27 @@ const onPageChange = (isAdd) => {
                                 bg-color="transparent"
                                 width="60px"
                                 suffix="г"
-                                v-model="item.weight"
-                                :rules="[checkValidNumValues]"
                                 maxlength="6"
                                 autocomplete="off"
+                                v-model="item.weight"
+                                :rules="[checkValidNumValues]"
                             />
                         </div>
                     </template>
                     <template v-slot:item.actions="{ item }">
                         <v-checkbox
-                            v-model="listProducts"
-                            :value="item"
                             density="compact"
+                            hide-details
+                            :value="item"
                             :false-icon="mdiCheckboxBlankCircleOutline"
                             :true-icon="mdiCheckboxMarkedCircleOutline"
-                            hide-details
+                            v-model="listProducts"
                         />
                     </template>
                     <template v-slot:bottom>
                         <v-row
-                            class="mt-4"
+                            class="mt-4 justify-space-between align-center"
                             no-gutters
-                            justify="space-between"
-                            align="center"
                         >
                             <v-col cols="auto">
                                 <v-btn
@@ -209,7 +199,7 @@ const onPageChange = (isAdd) => {
                                     {{ mdiBedEmpty }}
                                 </v-icon>
                             </v-card-title>
-                            <v-card-text> Пусто</v-card-text>
+                            <v-card-text>Пусто</v-card-text>
                         </v-card>
                     </template>
                 </v-data-table>

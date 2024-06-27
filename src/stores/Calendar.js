@@ -189,7 +189,7 @@ export const useCalendarStore = defineStore('calendarStore', () => {
             const monthName =
                 format(monthStart, 'LLLLL', { locale: ru }) + format(monthStart, 'LLL', { locale: ru }).slice(1);
             console.log(monthName);
-            const monthKey = `${monthName} - ${year}`;
+            const monthKey = `${monthName} ${year}`;
             if (!acc[monthKey]) acc[monthKey] = [];
             acc[monthKey].push(format(curDate, 'yyyy-MM-dd'));
             return acc;
