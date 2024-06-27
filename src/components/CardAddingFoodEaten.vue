@@ -64,7 +64,7 @@ const initialize = () => {
 };
 
 const checkValidNumValues = (value) => {
-    return /^([1-9][0-9]{0,4}(\.[0-9]{0,2})?|0\.[0-9]{0,3})$/.test(value);
+    return /^([1-9][0-9]{0,3}(\.[0-9]{0,2})?|0\.[0-9]{0,2})$/.test(value);
 };
 
 const checkValidData = computed(() => {
@@ -148,7 +148,7 @@ const onPageChange = (isAdd) => {
                                 suffix="г"
                                 v-model="item.weight"
                                 :rules="[checkValidNumValues]"
-                                maxlength="5"
+                                maxlength="6"
                                 autocomplete="off"
                             />
                         </div>
@@ -193,18 +193,11 @@ const onPageChange = (isAdd) => {
                             </v-col>
                             <v-col cols="auto">
                                 <v-btn
-                                    v-if="checkValidData"
                                     class="text-surface bg-primary"
                                     variant="outlined"
                                     text="Добавить"
+                                    :disabled="!checkValidData"
                                     @click="adding"
-                                />
-                                <v-btn
-                                    v-else
-                                    class="text-surface bg-primary"
-                                    variant="outlined"
-                                    disabled
-                                    text="Добавить"
                                 />
                             </v-col>
                         </v-row>

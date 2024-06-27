@@ -8,16 +8,6 @@ const calendarStore = useCalendarStore();
 const actualDate = new Date();
 const bb = ref([actualDate]);
 
-// const actualMeals = ref(calendarStore.getInfoAllMealInGapDays(bb).value);
-//
-// const getStatisticsDays = () => {
-//     actualMeals.value = calendarStore.getInfoAllMealInGapDays(bb).value;
-// };
-
-// const clickkk = () => {
-//     if (bb.value) getStatisticsDays();
-// };
-
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
@@ -51,16 +41,9 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
                 />
             </div>
         </v-card-text>
-        <v-card-actions>
-            <v-btn
-                block
-                @click="clickkk"
-                text="Считай"
-            />
-        </v-card-actions>
     </v-card>
     <v-card class="mx-auto w-75 mb-8 text-center">
-        <v-card-title class="mb-4 border-b">Общие показатели</v-card-title>
+        <v-card-title class="mb-4 border-b">Средние показатели</v-card-title>
         <v-card-text class="pa-0 mb-4 mx-6">
             <v-row
                 class="mb-2"
@@ -78,7 +61,7 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
                     :key="index"
                 >
                     <v-col>
-                        {{ key }}
+                        {{ key > 0 ? key : '-' }}
                     </v-col>
                     <v-spacer v-if="index === 2" />
                 </template>

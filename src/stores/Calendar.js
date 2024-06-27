@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
-import { eachWeekOfInterval, getYear } from 'date-fns';
-import { startOfWeek, getWeek, startOfMonth, getMonth, format } from 'date-fns';
-
+import { startOfWeek, startOfMonth, getYear, format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
 export const useCalendarStore = defineStore('calendarStore', () => {
@@ -37,45 +35,7 @@ export const useCalendarStore = defineStore('calendarStore', () => {
     const calendarLS = localStorage.getItem('calendar');
     if (calendarLS) calendar.value = JSON.parse(calendarLS)._value;
 
-    const groupByWeek = (listDates) => {
-        return listDates.reduce((result, date) => {
-            const weekStart = startOfWeek(date, { weekStartsOn: 1 });
-            const weekNumber = getWeek(weekStart, { weekStartsOn: 1 });
-            const weekKey = `${format(weekStart, 'dd-MM-yyyy')}`;
-
-            if (!result[weekKey]) {
-                result[weekKey] = [];
-            }
-
-            result[weekKey].push(format(date, 'yyyy-MM-dd')); // Форматируем дату в виде 'yyyy-MM-dd'
-            return result;
-        }, {});
-    };
-    const groupByMonth = (listDates) => {
-        return listDates.reduce((result, date) => {
-            const monthStart = startOfMonth(date); // Установите первый день недели на понедельник
-            const monthNumber = getMonth(monthStart) + 1;
-            const yearNumber = getYear(date);
-            const monthName =
-                format(monthStart, 'LLLLL', { locale: ru }) + format(monthStart, 'LLL', { locale: ru }).slice(1);
-            console.log(monthName);
-            const monthKey = `${monthName} - ${yearNumber}`;
-
-            if (!result[monthKey]) {
-                result[monthKey] = [];
-            }
-
-            result[monthKey].push(format(date, 'yyyy-MM-dd')); // Форматируем дату в виде 'yyyy-MM-dd'
-            return result;
-        }, {});
-    };
-
-    // const checkEmptyMeal = (day, meal) => computed(() => {
-    //     calendar.value.find((item) => item.date === currentDate)
-    // });
-
     const addToMealList = (day, meal, listFoods) => {
-        console.log([...listFoods]);
         const currentDate = format(day, 'yyyy-MM-dd');
         const defaultItem = {
             date: currentDate,
@@ -83,19 +43,20 @@ export const useCalendarStore = defineStore('calendarStore', () => {
             lunch: [],
             dinner: [],
         };
-        console.log(calendar.value.findIndex((item) => item.date === currentDate));
-        if (calendar.value.findIndex((item) => item.date === currentDate) === -1) {
-            console.log('2');
-            calendar.value.push({
-                ...defaultItem,
-            });
-        }
+        if (calendar.value.findIndex((item) => item.date === currentDate) === -1)
+            calendar.value.push({ ...defaultItem });
         const dayIndex = calendar.value.findIndex((item) => item.date === currentDate);
-        console.log(calendar.value[1]);
-        [...listFoods].forEach((food) => {
-            console.log({ ...food, id: `${food.id}-${Date.now()}` });
-            calendar.value[dayIndex][meal].push({ ...food, id: `${food.id}-${Date.now()}` });
-        });
+        [...listFoods].forEach((food) =>
+            calendar.value[dayIndex][meal].push({
+                ...food,
+                id: `${food.id}-${Date.now()}`,
+            }),
+        );
+    };
+    const removeMeal = (day, meal, id) => {
+        const currentDate = format(day, 'yyyy-MM-dd');
+        const dayIndex = calendar.value.findIndex((item) => item.date === currentDate);
+        calendar.value[dayIndex][meal] = calendar.value[dayIndex][meal].filter((item) => item.id !== id);
     };
 
     const getListOneMeal = (day, meal) =>
@@ -125,10 +86,10 @@ export const useCalendarStore = defineStore('calendarStore', () => {
                     return acc;
                 }, defaultItem);
                 return {
-                    proteins: res.proteins.toFixed(2),
-                    fats: res.fats.toFixed(2),
-                    carbs: res.carbs.toFixed(2),
-                    calories: res.calories.toFixed(2),
+                    proteins: res.proteins % 1 ? res.proteins.toFixed(2) : res.proteins,
+                    fats: res.fats % 1 ? res.fats.toFixed(2) : res.fats,
+                    carbs: res.carbs % 1 ? res.carbs.toFixed(2) : res.carbs,
+                    calories: res.calories % 1 ? res.calories.toFixed(2) : res.calories,
                 };
             } else return defaultItem;
         });
@@ -154,10 +115,10 @@ export const useCalendarStore = defineStore('calendarStore', () => {
                 return acc;
             }, defaultItem);
             return {
-                proteins: res.proteins.toFixed(2),
-                fats: res.fats.toFixed(2),
-                carbs: res.carbs.toFixed(2),
-                calories: res.calories.toFixed(2),
+                proteins: res.proteins % 1 ? res.proteins.toFixed(2) : res.proteins,
+                fats: res.fats % 1 ? res.fats.toFixed(2) : res.fats,
+                carbs: res.carbs % 1 ? res.carbs.toFixed(2) : res.carbs,
+                calories: res.calories % 1 ? res.calories.toFixed(2) : res.calories,
             };
         });
 
@@ -179,32 +140,61 @@ export const useCalendarStore = defineStore('calendarStore', () => {
                 return acc;
             }, defaultItem);
             return {
-                calories: +(res.calories / listDates.length).toFixed(2),
-                proteins: +(res.proteins / listDates.length).toFixed(2),
-                fats: +(res.fats / listDates.length).toFixed(2),
-                carbs: +(res.carbs / listDates.length).toFixed(2),
+                proteins:
+                    (res.proteins / listDates.length) % 1
+                        ? (res.proteins / listDates.length).toFixed(2)
+                        : res.proteins / listDates.length,
+                fats:
+                    (res.fats / listDates.length) % 1
+                        ? (res.fats / listDates.length).toFixed(2)
+                        : res.fats / listDates.length,
+                carbs:
+                    (res.carbs / listDates.length) % 1
+                        ? (res.carbs / listDates.length).toFixed(2)
+                        : res.carbs / listDates.length,
+                calories:
+                    (res.calories / listDates.length) % 1
+                        ? (res.calories / listDates.length).toFixed(2)
+                        : res.calories / listDates.length,
             };
         });
-
-    const removeMeal = (day, meal, id) => {
-        const currentDate = format(day, 'yyyy-MM-dd');
-        const dayIndex = calendar.value.findIndex((item) => item.date === currentDate);
-        calendar.value[dayIndex][meal] = calendar.value[dayIndex][meal].filter((item) => item.id !== id);
-    };
 
     const getListActualDays = (listDates) =>
         computed(() => {
             if ([...listDates].length === 1)
                 return { date: format(listDates[0], 'yyyy-MM-dd'), ...getInfoAllMeal(listDates[0]).value };
-            const currentItem = [];
+            const acc = [];
             [...listDates].forEach((item) => {
-                currentItem.push({
+                acc.push({
                     date: format(item, 'd MMMM', { locale: ru }),
                     ...getInfoAllMeal(item).value,
                 });
             });
-            return currentItem;
+            return acc;
         });
+
+    const groupByWeek = (listDates) => {
+        return listDates.reduce((acc, curDate) => {
+            const weekStart = startOfWeek(curDate, { weekStartsOn: 1 });
+            const weekKey = `${format(weekStart, 'dd-MM-yyyy')}`;
+            if (!acc[weekKey]) acc[weekKey] = [];
+            acc[weekKey].push(format(curDate, 'yyyy-MM-dd'));
+            return acc;
+        }, {});
+    };
+    const groupByMonth = (listDates) => {
+        return listDates.reduce((acc, curDate) => {
+            const monthStart = startOfMonth(curDate);
+            const year = getYear(curDate);
+            const monthName =
+                format(monthStart, 'LLLLL', { locale: ru }) + format(monthStart, 'LLL', { locale: ru }).slice(1);
+            console.log(monthName);
+            const monthKey = `${monthName} - ${year}`;
+            if (!acc[monthKey]) acc[monthKey] = [];
+            acc[monthKey].push(format(curDate, 'yyyy-MM-dd'));
+            return acc;
+        }, {});
+    };
 
     const getInfoForWeek = (listDates) =>
         computed(() => {
@@ -233,6 +223,7 @@ export const useCalendarStore = defineStore('calendarStore', () => {
             }
             return res;
         });
+
     watch(
         () => calendar,
         (state) => localStorage.setItem('calendar', JSON.stringify(state)),

@@ -1,6 +1,7 @@
 <script setup>
 import { mdiAutorenew, mdiClose, mdiGaugeEmpty, mdiPencil } from '@mdi/js';
 import { useCalendarStore } from '../stores/Calendar.js';
+import CardEditFoodEaten from './CardEditFoodEaten.vue';
 
 const calendarStore = useCalendarStore();
 
@@ -20,53 +21,18 @@ const pups = (value) => {
 <template>
     <v-sheet
         v-for="item in calendarStore.getListOneMeal(day, type).value"
-        class="pa-2 rounded-lg text-primary mb-2 border-opacity-100"
+        class="py-2 rounded-lg text-primary mb-2 border-opacity-100"
         border="primary sm"
     >
         <v-row
-            class="gc-16 align-center mb-2"
+            class="gc-16 align-center mb-2 px-2"
             no-gutters
         >
-            <v-col class="text-h5 px-4"> {{ item.name }}</v-col>
+            <v-col class="text-h5 px-4">
+                {{ item.name }}
+            </v-col>
             <v-col cols="auto">
-                <!--                <v-text-field-->
-                <!--                    class="text-primary px-4 rounded-lg"-->
-                <!--                    width="80px"-->
-                <!--                    base-color="surface-add"-->
-                <!--                    variant="underlined"-->
-                <!--                    type="number"-->
-                <!--                    min="0"-->
-                <!--                    persistent-placeholder-->
-                <!--                    placeholder="0"-->
-                <!--                    :rules="[checkValidNumValues]"-->
-                <!--                    maxlength="5"-->
-                <!--                    hide-details-->
-                <!--                    hide-spin-buttons-->
-                <!--                    suffix="г."-->
-                <!--                    v-model="item.weight"-->
-                <!--                >-->
-                <!--                </v-text-field>-->
-                <div class="d-flex justify-space-between align-center">
-                    <v-icon
-                        class="mr-2"
-                        size="20"
-                    >
-                        {{ mdiPencil }}
-                    </v-icon>
-                    <v-text-field
-                        variant="underlined"
-                        color="transparent"
-                        base-color="transparent"
-                        bg-color="transparent"
-                        width="60px"
-                        suffix="г"
-                        v-model="item.weight"
-                        @update:model-value="item.weight = pups(item.weight)"
-                        :rules="[pups]"
-                        maxlength="5"
-                        autocomplete="off"
-                    />
-                </div>
+                <CardEditFoodEaten :item="item" />
             </v-col>
             <v-col cols="auto">
                 <v-btn
@@ -80,7 +46,7 @@ const pups = (value) => {
         </v-row>
 
         <v-divider
-            class="mb-2 ml-0"
+            class="mb-2 mx-2"
             color="primary"
             opacity="100"
         />

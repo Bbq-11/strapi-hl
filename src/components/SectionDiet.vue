@@ -30,7 +30,7 @@ const props = defineProps({
         >
             <v-expansion-panels>
                 <v-expansion-panel>
-                    <v-expansion-panel-title class="px-6">
+                    <v-expansion-panel-title class="">
                         <v-row
                             class="text-center text-primary"
                             no-gutters

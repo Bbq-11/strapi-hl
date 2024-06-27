@@ -14,7 +14,7 @@ const headers = ref([
         title: 'Продукты',
         align: 'start',
         key: 'name',
-        width: '40%',
+        maxWidth: '400px',
     },
     {
         title: 'Каллории',

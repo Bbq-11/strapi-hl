@@ -28,7 +28,7 @@ const diet = [
 ];
 </script>
 
-<template>
+<template class="">
     <v-date-picker
         class="mx-auto bg-transparent text-primary mb-6 rounded-xl px-4 py-4 scroll-container"
         width="40%"
@@ -38,7 +38,6 @@ const diet = [
         :min="(formatDate.getFullYear() - 2).toString()"
     />
     <v-card
-        v-if="calendarStore.getInfoAllMeal(dateSelected).value.length === 0"
         class="mx-auto text-primary w-75 mb-16 text-center"
         border="primary sm"
     >
@@ -54,11 +53,10 @@ const diet = [
                 <v-spacer />
                 <v-col> Каллории</v-col>
             </v-row>
-            <!--            {{ console.log(calendarStore.getListOneMeal(dateSelected, 'breakfast').value) }}-->
             <v-row no-gutters>
                 <template v-for="(key, value, index) in calendarStore.getInfoAllMeal(dateSelected).value">
                     <v-col>
-                        {{ key }}
+                        {{ key > 0 ? key : '-' }}
                     </v-col>
                     <v-spacer v-if="index === 2" />
                 </template>

@@ -7,7 +7,9 @@ import { useProductStore } from '../stores/Products.js';
 const productStore = useProductStore();
 
 const dialog = ref(false);
-
+const switchDialog = () => {
+    dialog.value = !dialog.value;
+};
 const props = defineProps({
     product: {
         type: Object,
@@ -51,7 +53,7 @@ const checkValidStringValues = (value, minLength = 1, maxLength = 80) => {
     return regex.test(value);
 };
 const checkValidNumValues = (value) => {
-    return /^(0|[1-9][0-9]{0,4}(\.[0-9]{0,2})?|0\.[0-9]{0,2})$/.test(value);
+    return /^(0|[1-9][0-9]{0,3}(\.[0-9]{0,2})?|0\.[0-9]{0,2})$/.test(value);
 };
 
 const checkValidData = computed(() => {
@@ -113,6 +115,7 @@ const checkValidData = computed(() => {
                             base-color="primary"
                             maxlength="5"
                             label="Ккал"
+                            suffix="г"
                             :rules="[checkValidNumValues]"
                         />
                     </v-col>
@@ -122,6 +125,7 @@ const checkValidData = computed(() => {
                             maxlength="5"
                             base-color="primary"
                             label="Белки"
+                            suffix="г"
                             :rules="[checkValidNumValues]"
                         />
                     </v-col>
@@ -131,6 +135,7 @@ const checkValidData = computed(() => {
                             maxlength="5"
                             base-color="primary"
                             label="Жиры"
+                            suffix="г"
                             :rules="[checkValidNumValues]"
                         />
                     </v-col>
@@ -140,6 +145,7 @@ const checkValidData = computed(() => {
                             maxlength="5"
                             base-color="primary"
                             label="Углеводы"
+                            suffix="г"
                             :rules="[checkValidNumValues]"
                         />
                     </v-col>
@@ -153,30 +159,29 @@ const checkValidData = computed(() => {
                 >
                     <v-col cols="auto">
                         <v-btn
-                            class="text-primary"
-                            variant="tonal"
-                            text="Отменить"
-                            @click="dialog = false"
+                            class="text-surface bg-primary"
+                            text="Отмена"
+                            variant="outlined"
+                            @click="switchDialog"
                         />
                     </v-col>
                     <v-col cols="auto">
-                        <div v-if="!checkValidData">Hea</div>
-                        <div v-else>
-                            <v-btn
-                                v-if="props.isAdd"
-                                class="text-primary"
-                                variant="outlined"
-                                text="Добавить"
-                                @click="addProduct"
-                            />
-                            <v-btn
-                                v-else
-                                class="text-primary"
-                                variant="outlined"
-                                text="Редактировать"
-                                @click="editProduct"
-                            />
-                        </div>
+                        <v-btn
+                            v-if="props.isAdd"
+                            class="text-surface bg-primary"
+                            variant="outlined"
+                            text="Добавить"
+                            :disabled="!checkValidData"
+                            @click="addProduct"
+                        />
+                        <v-btn
+                            v-else
+                            class="text-surface bg-primary"
+                            variant="outlined"
+                            text="Редактировать"
+                            :disabled="!checkValidData"
+                            @click="editProduct"
+                        />
                     </v-col>
                 </v-row>
             </v-card-actions>
