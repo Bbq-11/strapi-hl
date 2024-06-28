@@ -7,6 +7,9 @@ export const useProductStore = defineStore('productStore', () => {
 
     const addProducts = () => {
         const productsLS = localStorage.getItem('myLibrary');
+        console.log(productsLS);
+        console.log(JSON.parse(productsLS));
+        console.log(JSON.parse(productsLS)._value);
         if (productsLS) products.value = JSON.parse(productsLS);
         for (let i in db) {
             products.value.push({

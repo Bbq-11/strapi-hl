@@ -63,27 +63,31 @@ const checkValidData = computed(() => {
 <template>
     <v-btn
         v-if="props.isAdd"
-        :prepend-icon="mdiPlus"
+        class="text-subtitle-2"
         text="Добавить новый продукт"
+        :prepend-icon="mdiPlus"
         @click="dialog = true"
     />
     <v-icon
         v-else
         class="mr-2"
         :icon="mdiPencil"
+        size="20"
         @click="dialog = true"
     />
-    <v-dialog v-model="dialog">
-        <v-card
-            class="mx-auto px-4"
-            width="600"
-        >
-            <v-card-title class="mx-auto text-primary py-2">
+    <v-dialog
+        class="elevation-16"
+        scrim="secondary"
+        width="600"
+        v-model="dialog"
+    >
+        <v-card class="pa-4">
+            <v-card-title class="mx-auto w-75 text-primary text-h5 mb-4">
                 {{ props.text }}
             </v-card-title>
-            <v-card-text class="pa-0">
+            <v-card-text class="pa-0 mb-2">
                 <v-row
-                    class="mb-0"
+                    class="mb-0 gr-2"
                     dense
                 >
                     <template
@@ -92,8 +96,9 @@ const checkValidData = computed(() => {
                     >
                         <v-col :cols="value === 'name' ? 12 : 3">
                             <v-text-field
+                                class="text-subtitle-1"
                                 v-model="item[value]"
-                                :maxlength="key === 'name' ? 80 : 6"
+                                :maxlength="value === 'name' ? 80 : 6"
                                 base-color="primary"
                                 autocomplete="off"
                                 :label="listTitleForTextField[index]"
@@ -102,16 +107,16 @@ const checkValidData = computed(() => {
                         </v-col>
                     </template>
                 </v-row>
-                <small class="text-caption text-primary text-medium-emphasis">*Показатели для порции в 100гр.</small>
+                <small class="text-caption text-primary text-body-2">*Показатели для порции в 100гр.</small>
             </v-card-text>
-            <v-card-actions class="px-0 py-3">
+            <v-card-actions class="pa-0">
                 <v-row
                     no-gutters
                     justify="space-between"
                 >
                     <v-col cols="auto">
                         <v-btn
-                            class="text-surface bg-primary"
+                            class="text-surface bg-primary text-subtitle-2"
                             variant="outlined"
                             text="Отмена"
                             @click="switchDialog"
@@ -119,7 +124,7 @@ const checkValidData = computed(() => {
                     </v-col>
                     <v-col cols="auto">
                         <v-btn
-                            class="text-surface bg-primary"
+                            class="text-surface bg-primary text-subtitle-2"
                             :text="props.isAdd ? 'Добавить' : 'Редактировать'"
                             :disabled="!checkValidData"
                             @click="editProduct"

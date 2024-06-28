@@ -10,8 +10,29 @@ $fontFamily: 'Comfortaa', sans-serif;
 .text-subtitle-1,
 .text-subtitle-2,
 .text-body-1,
-.text-body-2, {
+.text-body-2,
+.text-caption {
   font-family: $fontFamily !important;
+}
+
+.text-h5 {
+  font-weight: bold;
+}
+
+.text-subtitle-1 {
+  font-size: 20px !important;
+}
+
+.text-subtitle-2 {
+  font-size: 16px !important;
+}
+
+.text-body-1 {
+  font-size: 14px !important;
+}
+
+.text-body-2 {
+  font-size: 12px !important;
 }
 
 .app-container {
@@ -33,22 +54,7 @@ $fontFamily: 'Comfortaa', sans-serif;
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: #1a237e;
-    border-radius: 20px
-  }
-}
-
-.scroll-el {
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #1a237e;
+    background-color: #232a59;
     border-radius: 20px
   }
 }

@@ -9,9 +9,6 @@ const props = defineProps({
     day: Object,
     type: String,
 });
-const checkValidNumValues = (value) => {
-    return /^([1-9][0-9]{0,4}(\.[0-9]{0,2})?|0\.[0-9]{0,3})$/.test(value);
-};
 </script>
 
 <template>
@@ -19,13 +16,14 @@ const checkValidNumValues = (value) => {
         v-for="item in calendarStore.getListOneMeal(day, type).value"
         :key="item.id"
         class="py-2 rounded-lg text-primary mb-2 border-opacity-100"
+        width="750px"
         border="primary sm"
     >
         <v-row
-            class="gc-16 align-center mb-2 px-4"
+            class="align-center justify-space-between mb-2 px-4 text-subtitle-2"
             no-gutters
         >
-            <v-col class="text-h5">
+            <v-col cols="8">
                 {{ item.name }}
             </v-col>
             <v-col cols="auto">
@@ -35,7 +33,7 @@ const checkValidNumValues = (value) => {
                 <v-btn
                     color="error"
                     variant="tonal"
-                    size="30"
+                    size="35"
                     :icon="mdiClose"
                     @click="calendarStore.removeMeal(day, type, item.id)"
                 />
@@ -46,15 +44,20 @@ const checkValidNumValues = (value) => {
             color="primary"
             opacity="100"
         />
-        <v-row
-            class="text-center"
-            no-gutters
+        <v-card
+            class="pa-0 text-primary text-body-1"
+            elevation="0"
         >
-            <v-col>{{ +(item.proteins * (item.weight / 100)).toFixed(2) }}</v-col>
-            <v-col>{{ +(item.fats * (item.weight / 100)).toFixed(2) }}</v-col>
-            <v-col>{{ +(item.carbs * (item.weight / 100)).toFixed(2) }}</v-col>
-            <v-spacer />
-            <v-col>{{ +(item.calories * (item.weight / 100)).toFixed(2) }}</v-col>
-        </v-row>
+            <v-row
+                class="text-center"
+                no-gutters
+            >
+                <v-col>{{ +(item.proteins * (item.weight / 100)).toFixed(2) }}</v-col>
+                <v-col>{{ +(item.fats * (item.weight / 100)).toFixed(2) }}</v-col>
+                <v-col>{{ +(item.carbs * (item.weight / 100)).toFixed(2) }}</v-col>
+                <v-spacer />
+                <v-col>{{ +(item.calories * (item.weight / 100)).toFixed(2) }}</v-col>
+            </v-row>
+        </v-card>
     </v-sheet>
 </template>

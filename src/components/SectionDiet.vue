@@ -29,18 +29,20 @@ const props = defineProps({
         >
             <v-expansion-panels>
                 <v-expansion-panel class="rounded-t-0 rounded-b-lg">
-                    <v-expansion-panel-title>
-                        <v-row
-                            class="text-center text-primary"
-                            no-gutters
-                        >
-                            <template v-for="(key, value, index) in calendarStore.getInfoOneMeal(day, type).value">
-                                <v-col>
-                                    {{ key }}
-                                </v-col>
-                                <v-spacer v-if="index === 2" />
-                            </template>
-                        </v-row>
+                    <v-expansion-panel-title class="border-t-lg border-opacity-100 border-primary">
+                        <v-sheet width="750">
+                            <v-row
+                                class="text-center text-primary text-subtitle-2"
+                                no-gutters
+                            >
+                                <template v-for="(key, value, index) in calendarStore.getInfoOneMeal(day, type).value">
+                                    <v-col>
+                                        {{ key }}
+                                    </v-col>
+                                    <v-spacer v-if="index === 2" />
+                                </template>
+                            </v-row>
+                        </v-sheet>
                         <template v-slot:actions />
                     </v-expansion-panel-title>
                     <v-expansion-panel-text>
@@ -59,5 +61,3 @@ const props = defineProps({
         </v-card-text>
     </v-card>
 </template>
-
-<style scoped></style>

@@ -34,24 +34,25 @@ const adding = () => {
 
 <template>
     <v-btn
-        class="rounded-lg"
+        class="rounded-lg text-subtitle-2"
         variant="text"
         :prepend-icon="mdiPencil"
         :text="`${props.item.weight}`"
         @click="switchDialog"
     />
-    <v-dialog v-model="dialog">
-        <v-card
-            class="mx-auto text-primary"
-            elevation="18"
-            width="400"
-        >
-            <v-card-title class="my-4 mx-auto font-weight-bold text-h5">
+    <v-dialog
+        class="elevation-16"
+        width="400px"
+        scrim="secondary"
+        v-model="dialog"
+    >
+        <v-card class="text-primary pa-4 text-subtitle-1">
+            <v-card-title class="mb-4 text-h5 w-75 mx-auto">
                 {{ props.item.name }}
             </v-card-title>
-            <v-card-text class="pt-0 pb-4 px-4">
+            <v-card-text class="pa-0">
                 <v-text-field
-                    class="mx-auto"
+                    class="mx-auto text-subtitle-1"
                     base-color="primary"
                     width="100px"
                     suffix="г"
@@ -61,10 +62,10 @@ const adding = () => {
                     :rules="[checkValidNumValues]"
                 />
                 <v-row
-                    class="mt-2 justify-space-between align-center"
+                    class="justify-space-between align-center"
                     no-gutters
                 >
-                    <v-col>
+                    <v-col cols="auto">
                         <v-btn
                             variant="text"
                             @click="switchDialog"

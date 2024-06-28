@@ -30,7 +30,7 @@ onBeforeMount(() => productStore.addProducts());
                     to="/"
                 >
                     <v-btn
-                        class="text-primary text-subtitle-1 h-100 px-8"
+                        class="text-primary text-subtitle-2 h-100 px-8"
                         variant="flat"
                         text="Главная"
                     />
@@ -47,7 +47,7 @@ onBeforeMount(() => productStore.addProducts());
                     to="/guide"
                 >
                     <v-btn
-                        class="text-primary text-subtitle-1 h-100 px-8"
+                        class="text-primary text-subtitle-2 h-100 px-8"
                         variant="flat"
                         text="Справочник"
                     />
@@ -64,7 +64,7 @@ onBeforeMount(() => productStore.addProducts());
                     to="/charts"
                 >
                     <v-btn
-                        class="text-primary text-subtitle-1 h-100 px-8"
+                        class="text-primary text-subtitle-2 h-100 px-8"
                         variant="flat"
                         text="Статистика"
                     />

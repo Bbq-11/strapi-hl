@@ -15,19 +15,15 @@ export default createVuetify({
         VBtnPrimary: VBtn,
     },
     defaults: {
-        VBtnPrimary: {
-            class: ['text-primary', 'bg-background', 'h-auto', 'border-sm', 'rounded-xl'],
-        },
         VTextField: {
             variant: 'outlined',
             hideDetails: 'true',
             color: 'primary',
             density: 'compact',
             autocomplete: 'off',
-            class: ['text-subtitle-1', 'text-primary'],
         },
         VField: {
-            class: ['text-subtitle-1', 'text-primary'],
+            class: ['text-primary'],
         },
         VDatePicker: {
             class: ['text-subtitle-1', 'text-primary', 'scroll-container'],
@@ -43,10 +39,7 @@ export default createVuetify({
                 dark: false,
                 colors: {
                     primary: '#232a59',
-                    'primary-darken-1': '#1F5592',
-                    secondary: colors.indigo.lighten5,
-
-                    'secondary-darken-1': '#018786',
+                    secondary: '#0b0d38',
                     accent: '#00ff00',
                     background: colors.amber.lighten5,
                     surface: colors.amber.lighten4,
@@ -62,17 +55,6 @@ export default createVuetify({
                     // danger: '#ff0000',
                 },
             },
-            // dark: {
-            //     dark: true,
-            //     colors: {
-            //         background: colors.indigo.darken4,
-            //         surface: colors.indigo.darken3,
-            //         'surface-variant': colors.amber.lighten4,
-            //         primary: colors.amber.lighten5,
-            //         secondary: colors.amber.lighten4,
-            //         error: '#d0733b',
-            //     },
-            // },
             dark: {
                 dark: true,
                 colors: {

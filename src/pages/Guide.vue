@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useProductStore } from '../stores/Products.js';
 import db from '../../db';
-import { mdiBedEmpty, mdiClose, mdiFlaskEmpty } from '@mdi/js';
+import { mdiBedEmpty, mdiClose, mdiFlaskEmpty, mdiTableSearch } from '@mdi/js';
 import CardActionsWithUserLibrary from '../components/CardActionsWithUserLibrary.vue';
 
 const productStore = useProductStore();
@@ -14,26 +14,25 @@ const headers = ref([
         title: 'Продукты',
         align: 'start',
         key: 'name',
-        maxWidth: '400px',
+        width: '400px',
     },
     {
         title: 'Каллории',
         align: 'center',
-        paddingX: '240px',
         key: 'calories',
     },
     {
-        title: 'Белки (гр)',
+        title: 'Белки (г)',
         align: 'center',
         key: 'proteins',
     },
     {
-        title: 'Жиры (гр)',
+        title: 'Жиры (г)',
         align: 'center',
         key: 'fats',
     },
     {
-        title: 'Углеводы (гр)',
+        title: 'Углеводы (г)',
         align: 'center',
         key: 'carbs',
     },
@@ -46,8 +45,8 @@ const headers = ref([
 
 <template>
     <v-card>
-        <v-data-table
-            class="mt-4 mb-2 text-primary scroll-container"
+        <v-data-table-virtual
+            class="mt-4 mb-2 text-primary scroll-container text-body-1"
             height="500px"
             density="compact"
             items-per-page="-1"
@@ -63,6 +62,7 @@ const headers = ref([
                     >
                         <v-col cols="6">
                             <v-text-field
+                                class="text-subtitle-1"
                                 base-color="primary"
                                 autocomplete="off"
                                 label="Поиск"
@@ -86,7 +86,7 @@ const headers = ref([
                         :isAdd="false"
                     />
                     <v-icon
-                        size="small"
+                        size="25"
                         :icon="mdiClose"
                         @click="productStore.removeProduct(item.id)"
                     />
@@ -94,21 +94,15 @@ const headers = ref([
             </template>
             <template v-slot:bottom />
             <template v-slot:no-data>
-                <v-sheet
-                    class="d-flex justify-center align-center"
-                    height="400px"
-                >
-                    <v-card elevation="0">
-                        <v-card-title>
-                            <v-icon>
-                                {{ mdiBedEmpty }}
-                            </v-icon>
-                        </v-card-title>
-                        <v-card-text> Пусто</v-card-text>
-                    </v-card>
-                </v-sheet>
+                <div class="my-4">
+                    <v-icon
+                        size="60"
+                        :icon="mdiTableSearch"
+                    />
+                    <p>Пусто</p>
+                </div>
             </template>
-        </v-data-table>
+        </v-data-table-virtual>
     </v-card>
 </template>
 

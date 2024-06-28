@@ -4,14 +4,19 @@ import {
     mdiArrowRightBoldCircleOutline,
     mdiBedEmpty,
     mdiCheckboxBlankCircleOutline,
+    mdiHeart,
     mdiPencil,
     mdiPlusCircleOutline,
+    mdiStar,
+    mdiTagHeart,
+    mdiTagHeartOutline,
     mdiWeatherSunsetUp,
 } from '@mdi/js';
 import { onBeforeMount, ref, onMounted, onUpdated, watch, computed } from 'vue';
 import { useCalendarStore } from '../stores/Calendar.js';
 import { useProductStore } from '../stores/Products.js';
 import { mdiCheckboxMarkedCircleOutline } from '@mdi/js';
+import db from '../../db.json';
 
 const calendarStore = useCalendarStore();
 const productStore = useProductStore();
@@ -39,7 +44,7 @@ const headers = ref([
     },
     {
         key: 'actions',
-        width: '10%',
+        width: '15%',
         sortable: false,
     },
 ]);
@@ -82,32 +87,33 @@ const onPageChange = (isAdd) => {
 
 <template>
     <v-btn
-        class="w-100 d-flex justify-space-between text-h5 font-weight-bold pa-8"
+        class="w-100 d-flex justify-space-between text-h5 pa-8"
         :prepend-icon="icon"
         :append-icon="mdiPlusCircleOutline"
         :text="title"
         @click="switchDialog"
     />
-    <v-dialog v-model="dialog">
-        <v-card
-            class="mx-auto text-primary"
-            elevation="18"
-            width="800"
-        >
-            <v-card-title class="my-4 mx-auto font-weight-bold text-h5">
+    <v-dialog
+        class="elevation-16"
+        scrim="secondary"
+        width="800"
+        v-model="dialog"
+    >
+        <v-card class="text-primary pa-4 ma-0">
+            <v-card-title class="mb-4 mx-auto w-75 text-h5">
                 {{ title }}
             </v-card-title>
-            <v-card-text class="pt-0">
+            <v-card-text class="pa-0 mb-4">
                 <v-data-table
-                    class="text-primary scroll-container"
+                    class="text-primary scroll-container text-body-1 w-100 overflow-x-hidden"
                     height="400px"
                     sticky
                     :search="inputSearchProduct"
                     :headers="headers"
                     :items="items"
                     :page.sync="page"
-                    @update:page="onPageChange"
                     :items-per-page="15"
+                    @update:page="onPageChange"
                 >
                     <template v-slot:top>
                         <v-text-field
@@ -119,9 +125,14 @@ const onPageChange = (isAdd) => {
                         />
                     </template>
                     <template v-slot:item.name="{ item }">
-                        <p class="text-subtitle-1">
+                        <p class="text-subtitle-2">
                             {{ item.name }}
                         </p>
+                        <v-icon
+                            v-if="item.id > db.length - 1"
+                            size="25"
+                            :icon="mdiTagHeartOutline"
+                        />
                         <small class="text-caption text-medium-emphasis">{{ item.calories }} ккал</small>
                     </template>
                     <template v-slot:item.weight="{ item }">
@@ -132,6 +143,7 @@ const onPageChange = (isAdd) => {
                                 :icon="mdiPencil"
                             />
                             <v-text-field
+                                class="text-subtitle-1"
                                 variant="underlined"
                                 color="transparent"
                                 base-color="transparent"
@@ -157,18 +169,18 @@ const onPageChange = (isAdd) => {
                     </template>
                     <template v-slot:bottom>
                         <v-row
-                            class="mt-4 justify-space-between align-center"
+                            class="mt-4 pa-0 justify-space-between align-center"
                             no-gutters
                         >
-                            <v-col cols="auto">
+                            <v-col>
                                 <v-btn
-                                    class="text-surface bg-primary"
+                                    class="text-surface bg-primary text-subtitle-2"
                                     text="Отмена"
                                     variant="outlined"
                                     @click="switchDialog"
                                 />
                             </v-col>
-                            <v-col cols="auto">
+                            <v-col class="text-center d-flex align-center justify-center">
                                 <v-btn
                                     variant="text"
                                     :icon="mdiArrowLeftBoldCircleOutline"
@@ -181,9 +193,9 @@ const onPageChange = (isAdd) => {
                                     @click="onPageChange(true)"
                                 />
                             </v-col>
-                            <v-col cols="auto">
+                            <v-col class="d-flex justify-end">
                                 <v-btn
-                                    class="text-surface bg-primary"
+                                    class="text-surface bg-primary text-subtitle-2"
                                     variant="outlined"
                                     text="Добавить"
                                     :disabled="!checkValidData"
