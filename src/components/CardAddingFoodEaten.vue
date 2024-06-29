@@ -95,7 +95,7 @@ const onPageChange = (isAdd) => {
     />
     <v-dialog
         class="elevation-16"
-        scrim="secondary"
+        scrim="primary"
         width="800"
         v-model="dialog"
     >

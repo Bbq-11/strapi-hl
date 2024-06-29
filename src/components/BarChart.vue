@@ -32,12 +32,15 @@ const chartData = computed(() => ({
         {
             label: 'Норма',
             data: props.lst.map((item) => Math.floor(personStore.getStandard * (item.count || 1))),
-            color: '#f30230',
-            borderColor: '#3e95cd',
-            borderWidth: 2,
-            backgroundColor: '#f30230',
+            color: '',
+            borderColor: theme.global.name.value === 'dark' ? '#232a59' : '#D1C4E9',
+            borderWidth: 4,
+            pointBorderColor: 'transparent',
+            backgroundColor: props.lst.map((item) =>
+                item.calories >= personStore.getStandard * (item.count || 1) ? '#1fda1f' : '#c9314e',
+            ),
             type: 'line',
-            pointRadius: 4,
+            pointRadius: 5,
             description: props.lst.map((item) => Math.floor(personStore.getStandard * (item.count || 1))),
         },
         {

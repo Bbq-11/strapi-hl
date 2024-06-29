@@ -77,7 +77,7 @@ const editProduct = () => {
     </v-btn>
     <v-dialog
         class="elevation-16 mx-auto"
-        scrim="secondary"
+        scrim="primary"
         width="600"
         v-model="dialog"
     >

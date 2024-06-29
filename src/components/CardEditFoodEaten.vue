@@ -43,7 +43,7 @@ const adding = () => {
     <v-dialog
         class="elevation-16"
         width="400px"
-        scrim="secondary"
+        scrim="primary"
         v-model="dialog"
     >
         <v-card class="text-primary pa-4 text-subtitle-1">

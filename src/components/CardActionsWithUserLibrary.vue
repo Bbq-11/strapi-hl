@@ -77,7 +77,7 @@ const checkValidData = computed(() => {
     />
     <v-dialog
         class="elevation-16"
-        scrim="secondary"
+        scrim="primary"
         width="600"
         v-model="dialog"
     >
