@@ -35,16 +35,16 @@ const headers = ref([
     {
         title: 'Продукты',
         align: 'start',
-        width: '85%',
         key: 'name',
     },
     {
         key: 'weight',
+        width: '120px',
         sortable: false,
     },
     {
         key: 'actions',
-        width: '15%',
+        width: '80px',
         sortable: false,
     },
 ]);
@@ -105,7 +105,7 @@ const onPageChange = (isAdd) => {
             </v-card-title>
             <v-card-text class="pa-0 mb-4">
                 <v-data-table
-                    class="text-primary scroll-container text-body-1 w-100 overflow-x-hidden"
+                    class="text-primary scroll-container text-body-1 w-100 overflow-x-hidden text-break"
                     height="400px"
                     sticky
                     :search="inputSearchProduct"
@@ -125,15 +125,18 @@ const onPageChange = (isAdd) => {
                         />
                     </template>
                     <template v-slot:item.name="{ item }">
-                        <p class="text-subtitle-2">
-                            {{ item.name }}
-                        </p>
-                        <v-icon
-                            v-if="item.id > db.length - 1"
-                            size="25"
-                            :icon="mdiTagHeartOutline"
-                        />
-                        <small class="text-caption text-medium-emphasis">{{ item.calories }} ккал</small>
+                        <div class="mr-8">
+                            <p class="text-subtitle-2 mb-1">
+                                {{ item.name }}
+                            </p>
+                            <v-icon
+                                v-if="item.id > db.length - 1"
+                                class="mr-2"
+                                size="25"
+                                :icon="mdiTagHeartOutline"
+                            />
+                            <small class="text-caption text-medium-emphasis">{{ item.calories }} ккал</small>
+                        </div>
                     </template>
                     <template v-slot:item.weight="{ item }">
                         <div class="d-flex justify-space-between align-center">

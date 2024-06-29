@@ -14,7 +14,7 @@ const headers = ref([
         title: 'Продукты',
         align: 'start',
         key: 'name',
-        width: '400px',
+        width: '40%',
     },
     {
         title: 'Каллории',
@@ -37,6 +37,7 @@ const headers = ref([
         key: 'carbs',
     },
     {
+        width: '100px',
         key: 'actions',
         sortable: false,
     },
@@ -44,12 +45,13 @@ const headers = ref([
 </script>
 
 <template>
-    <v-card>
+    <v-card width="100%">
         <v-data-table-virtual
-            class="mt-4 mb-2 text-primary scroll-container text-body-1"
+            class="mt-4 mb-2 text-primary scroll-container text-body-1 text-break"
             height="500px"
             density="compact"
             items-per-page="-1"
+            width="100%"
             :search.lazy="inputSearchProduct"
             :headers="headers"
             :items="productStore.products"

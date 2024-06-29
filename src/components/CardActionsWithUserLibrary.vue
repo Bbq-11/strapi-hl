@@ -42,7 +42,7 @@ const editProduct = () => {
     } else productStore.editProduct(item, props.product);
 };
 const switchDialog = () => (dialog.value = !dialog.value);
-const checkValidStringValues = (value, minLength = 1, maxLength = 80) => {
+const checkValidStringValues = (value, minLength = 1, maxLength = 100) => {
     const regex = new RegExp(`^.{${minLength},${maxLength}}$`);
     return regex.test(value);
 };
@@ -98,7 +98,7 @@ const checkValidData = computed(() => {
                             <v-text-field
                                 class="text-subtitle-1"
                                 v-model="item[value]"
-                                :maxlength="value === 'name' ? 80 : 6"
+                                :maxlength="value === 'name' ? 100 : 6"
                                 base-color="primary"
                                 autocomplete="off"
                                 :label="listTitleForTextField[index]"
