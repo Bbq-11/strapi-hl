@@ -4,33 +4,7 @@ import { startOfWeek, startOfMonth, getYear, format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
 export const useCalendarStore = defineStore('calendarStore', () => {
-    const calendar = ref([
-        {
-            date: '2024-06-19',
-            breakfast: [
-                {
-                    id: 1,
-                    name: 'Творог',
-                    weight: 90,
-                    proteins: 2,
-                    fats: 5,
-                    carbs: 12,
-                    calories: 42,
-                },
-                {
-                    id: 2,
-                    name: 'Йогурт',
-                    weight: 100,
-                    proteins: 10,
-                    fats: 5,
-                    carbs: 2,
-                    calories: 10,
-                },
-            ],
-            lunch: [],
-            dinner: [],
-        },
-    ]);
+    const calendar = ref([]);
 
     const calendarLS = localStorage.getItem('calendar');
     if (calendarLS) calendar.value = JSON.parse(calendarLS)._value;
@@ -43,9 +17,9 @@ export const useCalendarStore = defineStore('calendarStore', () => {
             lunch: [],
             dinner: [],
         };
-        if (calendar.value.findIndex((item) => item.date === currentDate) === -1)
+        if (calendar.value.findIndex((item) => item?.date === currentDate) === -1)
             calendar.value.push({ ...defaultItem });
-        const dayIndex = calendar.value.findIndex((item) => item.date === currentDate);
+        const dayIndex = calendar.value.findIndex((item) => item?.date === currentDate);
         [...listFoods].forEach((food) =>
             calendar.value[dayIndex][meal].push({
                 ...food,
@@ -55,15 +29,15 @@ export const useCalendarStore = defineStore('calendarStore', () => {
     };
     const removeMeal = (day, meal, id) => {
         const currentDate = format(day, 'yyyy-MM-dd');
-        const dayIndex = calendar.value.findIndex((item) => item.date === currentDate);
+        const dayIndex = calendar.value.findIndex((item) => item?.date === currentDate);
         calendar.value[dayIndex][meal] = calendar.value[dayIndex][meal].filter((item) => item.id !== id);
     };
 
     const getListOneMeal = (day, meal) =>
         computed(() => {
             const currentDate = format(day, 'yyyy-MM-dd');
-            if (calendar.value.find((item) => item.date === currentDate)) {
-                const dayIndex = calendar.value.findIndex((item) => item.date === currentDate);
+            if (calendar.value.find((item) => item?.date === currentDate)) {
+                const dayIndex = calendar.value.findIndex((item) => item?.date === currentDate);
                 return calendar.value[dayIndex][meal];
             } else return [];
         });
@@ -188,7 +162,6 @@ export const useCalendarStore = defineStore('calendarStore', () => {
             const year = getYear(curDate);
             const monthName =
                 format(monthStart, 'LLLLL', { locale: ru }) + format(monthStart, 'LLL', { locale: ru }).slice(1);
-            console.log(monthName);
             const monthKey = `${monthName} ${year}`;
             if (!acc[monthKey]) acc[monthKey] = [];
             acc[monthKey].push(format(curDate, 'yyyy-MM-dd'));
@@ -212,7 +185,6 @@ export const useCalendarStore = defineStore('calendarStore', () => {
     const getInfoForMonth = (listDates) =>
         computed(() => {
             const listOfMoths = groupByMonth(listDates);
-            console.log(listOfMoths);
             const res = [];
             for (let key in listOfMoths) {
                 res.push({
