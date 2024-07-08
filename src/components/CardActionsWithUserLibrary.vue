@@ -82,7 +82,7 @@ const checkValidData = computed(() => {
         v-model="dialog"
     >
         <v-card class="pa-4">
-            <v-card-title class="mx-auto w-75 text-primary text-h5 mb-4">
+            <v-card-title class="mx-auto text-center w-75 text-primary text-h5 mb-4">
                 {{ props.text }}
             </v-card-title>
             <v-card-text class="pa-0 mb-2">

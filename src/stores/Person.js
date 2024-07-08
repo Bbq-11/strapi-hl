@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia';
 import { computed, ref, watch } from 'vue';
-import db from '../../db';
-import { fa } from 'vuetify/locale';
 
 export const usePersonStore = defineStore('personStore', () => {
     const person = ref({

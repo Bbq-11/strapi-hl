@@ -1,7 +1,7 @@
 <script setup>
+import { computed } from 'vue';
 import CardEditPersonalData from './CardEditPersonalData.vue';
 import { usePersonStore } from '../stores/Person.js';
-import { computed } from 'vue';
 
 const personStore = usePersonStore();
 
@@ -33,13 +33,11 @@ const getAgeString = computed(() => {
                     <small class="text-primary text-body-2">уровень активности</small>
                 </v-col>
                 <v-spacer />
+                <v-col cols="2"> {{ `${Math.floor(personStore.getStandard)} ккал` || '-' }} <br /></v-col>
                 <v-col cols="auto">
                     <CardEditPersonalData />
                 </v-col>
             </v-row>
-            <!--            {{ personStore.getStandard }}-->
         </v-card-text>
     </v-card>
 </template>
-
-<style scoped></style>

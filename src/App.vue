@@ -2,9 +2,7 @@
 import { onBeforeMount, ref } from 'vue';
 import { useTheme } from 'vuetify';
 import { useProductStore } from './stores/Products.js';
-import Guide from './pages/Guide.vue';
-import Home from './pages/Home.vue';
-import { mdiHome, mdiWeatherSunsetDown, mdiWeatherSunsetUp } from '@mdi/js';
+import { mdiWeatherSunsetDown, mdiWeatherSunsetUp } from '@mdi/js';
 
 const productStore = useProductStore();
 

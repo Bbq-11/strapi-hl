@@ -1,5 +1,5 @@
 <script setup>
-import { mdiAutorenew, mdiClose, mdiGaugeEmpty, mdiPencil } from '@mdi/js';
+import { mdiClose } from '@mdi/js';
 import { useCalendarStore } from '../stores/Calendar.js';
 import CardEditFoodEaten from './CardEditFoodEaten.vue';
 

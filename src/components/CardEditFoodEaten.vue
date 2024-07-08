@@ -1,16 +1,6 @@
 <script setup>
-import {
-    mdiArrowLeftBoldCircleOutline,
-    mdiArrowRightBoldCircleOutline,
-    mdiBedEmpty,
-    mdiCheck,
-    mdiCheckboxBlankCircleOutline,
-    mdiCheckboxMarkedCircleOutline,
-    mdiCheckCircleOutline,
-    mdiClose,
-    mdiPencil,
-} from '@mdi/js';
-import { computed, ref } from 'vue';
+import { mdiCheck, mdiClose, mdiPencil } from '@mdi/js';
+import { ref } from 'vue';
 
 const props = defineProps({
     item: Object,

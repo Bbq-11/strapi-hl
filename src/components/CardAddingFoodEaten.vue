@@ -4,18 +4,14 @@ import {
     mdiArrowRightBoldCircleOutline,
     mdiBedEmpty,
     mdiCheckboxBlankCircleOutline,
-    mdiHeart,
     mdiPencil,
     mdiPlusCircleOutline,
-    mdiStar,
-    mdiTagHeart,
     mdiTagHeartOutline,
-    mdiWeatherSunsetUp,
+    mdiCheckboxMarkedCircleOutline,
 } from '@mdi/js';
-import { onBeforeMount, ref, onMounted, onUpdated, watch, computed } from 'vue';
+import { onBeforeMount, ref, computed } from 'vue';
 import { useCalendarStore } from '../stores/Calendar.js';
 import { useProductStore } from '../stores/Products.js';
-import { mdiCheckboxMarkedCircleOutline } from '@mdi/js';
 import db from '../../db.json';
 
 const calendarStore = useCalendarStore();
@@ -75,14 +71,14 @@ const checkValidData = computed(() => {
     return listProducts.value.length > 0 && listProducts.value.every((item) => checkValidNumValues(item?.weight));
 });
 
-onBeforeMount(() => {
-    initialize();
-});
-
 const onPageChange = (isAdd) => {
     if (isAdd) page.value += 1;
     else if (page.value > 1) page.value -= 1;
 };
+
+onBeforeMount(() => {
+    initialize();
+});
 </script>
 
 <template>
@@ -100,7 +96,7 @@ const onPageChange = (isAdd) => {
         v-model="dialog"
     >
         <v-card class="text-primary pa-4 ma-0">
-            <v-card-title class="mb-4 mx-auto w-75 text-h5">
+            <v-card-title class="mb-4 mx-auto text-center w-75 text-h5">
                 {{ title }}
             </v-card-title>
             <v-card-text class="pa-0 mb-4">
@@ -117,7 +113,7 @@ const onPageChange = (isAdd) => {
                 >
                     <template v-slot:top>
                         <v-text-field
-                            class="mb-2"
+                            class="mb-2 pt-2"
                             clearable
                             autocomplete="off"
                             label="Поиск"

@@ -19,6 +19,7 @@ import { usePersonStore } from '../stores/Person.js';
 
 const theme = useTheme();
 const personStore = usePersonStore();
+
 const props = defineProps({
     lst: Object,
     type: String,

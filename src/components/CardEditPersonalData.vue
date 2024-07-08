@@ -16,10 +16,6 @@ const item = reactive({
 
 const switchDialog = () => (dialog.value = !dialog.value);
 
-const checkValidStringValues = (value, minLength = 1, maxLength = 120) => {
-    const regex = new RegExp(`^.{${minLength},${maxLength}}$`);
-    return regex.test(value);
-};
 const checkValidIntNumValues = (value) => {
     return /^([1-9][0-9]{0,3})$/.test(value);
 };
@@ -31,10 +27,9 @@ const checkValidData = computed(() => {
         checkValidIntNumValues(item.age) && checkValidIntNumValues(item.height) && checkValidIntFloatValues(item.weight)
     );
 });
-
 const listSelectActivity = [
     {
-        title: 'Минималньный',
+        title: 'Минимальный',
         props: {
             subtitle: 'Сидячая работа, не требующая значительных физических нагрузок',
         },
@@ -187,5 +182,3 @@ const editProduct = () => {
         </v-card>
     </v-dialog>
 </template>
-
-<style scoped></style>

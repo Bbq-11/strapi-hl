@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useProductStore } from '../stores/Products.js';
 import db from '../../db';
-import { mdiBedEmpty, mdiClose, mdiFlaskEmpty, mdiTableSearch } from '@mdi/js';
+import { mdiClose, mdiTableSearch } from '@mdi/js';
 import CardActionsWithUserLibrary from '../components/CardActionsWithUserLibrary.vue';
 
 const productStore = useProductStore();
@@ -107,5 +107,3 @@ const headers = ref([
         </v-data-table-virtual>
     </v-card>
 </template>
-
-<style scoped></style>

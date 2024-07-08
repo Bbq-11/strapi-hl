@@ -5,7 +5,7 @@ const Guide = () => import('../pages/Guide.vue');
 const Charts = () => import('../pages/Charts.vue');
 
 export const router = createRouter({
-    history: createWebHistory('/delim-check/'),
+    history: createWebHistory('/healthy-lifestyle/'),
     routes: [
         { path: '/', component: Home },
         { path: '/guide', component: Guide },

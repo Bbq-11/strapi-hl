@@ -37,7 +37,7 @@ const listDiet = [
         hide-header
         v-model="dateSelected"
         :max="formatDate"
-        :min="(formatDate.getFullYear() - 2).toString()"
+        :min="(formatDate.getFullYear() - 10).toString()"
     />
     <v-card class="mx-auto w-75 mb-12 text-center pa-0">
         <v-card-title class="mb-4 text-primary text-h5 border-b-sm">Общие показатели</v-card-title>

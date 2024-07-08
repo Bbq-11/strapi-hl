@@ -1,11 +1,10 @@
 <script setup>
-import { reactive, ref } from 'vue';
+import { ref } from 'vue';
 import { useCalendarStore } from '../stores/Calendar.js';
 import BarChart from '../components/BarChart.vue';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
 import PersonalData from '../components/PersonalData.vue';
 import { usePersonStore } from '../stores/Person.js';
-import { list } from 'postcss';
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
@@ -40,7 +39,7 @@ const listDates = ref([actualDate]);
                             density="comfortable"
                             autocomplete="off"
                             :max="actualDate"
-                            :min="(actualDate.getFullYear() - 2).toString()"
+                            :min="(actualDate.getFullYear() - 10).toString()"
                             v-model="listDates"
                         />
                     </div>
@@ -68,11 +67,9 @@ const listDates = ref([actualDate]);
                             <v-col>
                                 {{ key > 0 ? key : '-' }}
                                 <span v-if="index === 3 && personStore.person.isActive">
-                                    ({{
-                                        Math.floor(((key / personStore.getStandard) * 100) / listDates.length)
-                                    }}
-                                    %)</span
-                                >
+                                    ({{ Math.floor(((key / personStore.getStandard) * 100) / listDates.length) }}
+                                    %)
+                                </span>
                             </v-col>
                         </template>
                     </v-row>
