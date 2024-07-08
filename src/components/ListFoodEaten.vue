@@ -6,7 +6,7 @@ import CardEditFoodEaten from './CardEditFoodEaten.vue';
 const calendarStore = useCalendarStore();
 
 const props = defineProps({
-    day: Object,
+    day: Date,
     type: String,
 });
 </script>
@@ -14,10 +14,9 @@ const props = defineProps({
 <template>
     <v-sheet
         v-for="item in calendarStore.getListOneMeal(day, type).value"
-        :key="item.id"
-        class="py-2 rounded-lg text-primary mb-2 border-opacity-100"
-        width="750px"
+        class="py-2 rounded-lg text-primary mb-2 border-opacity-100 calories-container"
         border="primary sm"
+        :key="item.id"
     >
         <v-row
             class="align-center justify-space-between mb-2 px-4 text-subtitle-2"
@@ -39,15 +38,8 @@ const props = defineProps({
                 />
             </v-col>
         </v-row>
-        <v-divider
-            class="mb-2 mx-2"
-            color="primary"
-            opacity="100"
-        />
-        <v-card
-            class="pa-0 text-primary text-body-1"
-            elevation="0"
-        >
+        <v-divider class="mb-2 mx-2 primary opacity-100" />
+        <v-card class="pa-0 text-primary text-body-1 elevation-0">
             <v-row
                 class="text-center"
                 no-gutters

@@ -4,6 +4,7 @@ import { mdiPencil, mdiPlus } from '@mdi/js';
 import { useProductStore } from '../stores/Products.js';
 
 const productStore = useProductStore();
+
 const props = defineProps({
     product: {
         type: Object,
@@ -28,6 +29,7 @@ const item = reactive({
     fats: props.product.fats,
     carbs: props.product.carbs,
 });
+
 const listTitleForTextField = ['Название продукта', 'Ккал', 'Белки', 'Жиры', 'Углеводы'];
 
 const editProduct = () => {
@@ -46,9 +48,7 @@ const checkValidStringValues = (value, minLength = 1, maxLength = 100) => {
     const regex = new RegExp(`^.{${minLength},${maxLength}}$`);
     return regex.test(value);
 };
-const checkValidNumValues = (value) => {
-    return /^(0|[1-9][0-9]{0,3}(\.[0-9]{0,2})?|0\.[0-9]{0,2})$/.test(value);
-};
+const checkValidNumValues = (value) => /^(0|[1-9][0-9]{0,3}(\.[0-9]{0,2})?|0\.[0-9]{0,2})$/.test(value);
 const checkValidData = computed(() => {
     return (
         checkValidStringValues(item.name) &&
@@ -71,8 +71,8 @@ const checkValidData = computed(() => {
     <v-icon
         v-else
         class="mr-2"
-        :icon="mdiPencil"
         size="20"
+        :icon="mdiPencil"
         @click="dialog = true"
     />
     <v-dialog
@@ -97,10 +97,10 @@ const checkValidData = computed(() => {
                         <v-col :cols="value === 'name' ? 12 : 3">
                             <v-text-field
                                 class="text-subtitle-1"
-                                v-model="item[value]"
-                                :maxlength="value === 'name' ? 100 : 6"
                                 base-color="primary"
                                 autocomplete="off"
+                                v-model="item[value]"
+                                :maxlength="value === 'name' ? 100 : 6"
                                 :label="listTitleForTextField[index]"
                                 :rules="value === 'name' ? [checkValidStringValues] : [checkValidNumValues]"
                             />

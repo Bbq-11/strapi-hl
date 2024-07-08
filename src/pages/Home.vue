@@ -1,12 +1,13 @@
 <script setup>
 import { ref } from 'vue';
-import SectionDiet from '../components/SectionDiet.vue';
 import { mdiWeatherSunny, mdiWeatherSunsetDown, mdiWeatherSunsetUp } from '@mdi/js';
 import { useCalendarStore } from '../stores/Calendar.js';
 import { usePersonStore } from '../stores/Person.js';
+import SectionDiet from '../components/SectionDiet.vue';
 
 const calendarStore = useCalendarStore();
 const personStore = usePersonStore();
+
 const formatDate = new Date();
 const dateSelected = ref(formatDate);
 
@@ -39,13 +40,10 @@ const listDiet = [
         :max="formatDate"
         :min="(formatDate.getFullYear() - 10).toString()"
     />
-    <v-card class="mx-auto w-75 mb-12 text-center pa-0">
+    <v-card class="mx-auto mb-12 text-center pa-0 app-container">
         <v-card-title class="mb-4 text-primary text-h5 border-b-sm">Общие показатели</v-card-title>
-        <v-card-text class="pa-0 mb-4 mx-0">
-            <v-sheet
-                class="ml-10 text-primary"
-                width="750px"
-            >
+        <v-card-text class="pa-0 mb-4">
+            <v-sheet class="ml-10 text-primary calories-container">
                 <v-row
                     class="mb-1 text-subtitle-1"
                     no-gutters
@@ -63,7 +61,10 @@ const listDiet = [
                     <template v-for="(key, value, index) in calendarStore.getInfoAllMeal(dateSelected).value">
                         <v-col>
                             {{ key > 0 ? key : '-' }}
-                            <span v-if="index === 3 && personStore.person.isActive">
+                            <span
+                                v-if="index === 3 && personStore.person.isActive"
+                                class="ml-2"
+                            >
                                 ({{ Math.floor((key / personStore.getStandard) * 100) }} %)</span
                             >
                         </v-col>

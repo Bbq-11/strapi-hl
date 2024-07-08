@@ -1,6 +1,6 @@
 <template>
     <v-sheet
-        class="bg-transparent"
+        class="bg-transparent mb-8"
         height="320px"
     >
         <Bar
@@ -17,41 +17,40 @@ import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, Li
 import { useTheme } from 'vuetify';
 import { usePersonStore } from '../stores/Person.js';
 
+const props = defineProps({
+    listData: Object,
+});
+
 const theme = useTheme();
 const personStore = usePersonStore();
-
-const props = defineProps({
-    lst: Object,
-    type: String,
-});
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 const chartData = computed(() => ({
-    labels: props.lst.map((item) => item.date),
+    labels: props.listData.map((item) => item.date),
     datasets: [
         {
             label: 'Норма',
-            data: props.lst.map((item) => Math.floor(personStore.getStandard * (item.count || 1))),
+            data: props.listData.map((item) => Math.floor(personStore.getStandard * (item.count || 1))),
             type: 'line',
             pointRadius: 5,
             borderWidth: 4,
             borderColor: theme.global.name.value === 'dark' ? '#649cc0' : '#D1C4E9',
             pointBorderColor: 'transparent',
-            pointBackgroundColor: props.lst.map((item) =>
+            pointBackgroundColor: props.listData.map((item) =>
                 item.calories >= personStore.getStandard * (item.count || 1) ? '#1fda1f' : '#c9314e',
             ),
             backgroundColor: 'transparent',
-            description: props.lst.map((item) => Math.floor(personStore.getStandard * (item.count || 1))),
+            description: props.listData.map((item) => Math.floor(personStore.getStandard * (item.count || 1))),
         },
         {
             type: 'bar',
-            label: props.type,
-            data: props.lst.map((item) => item.calories),
+            label: 'Ккал',
+            data: props.listData.map((item) => item.calories),
             backgroundColor: theme.global.name.value === 'dark' ? '#FFECB3' : '#1A237E',
             borderColor: '#bbad84',
             borderWidth: 1,
-            description: props.lst,
+            description: props.listData,
         },
     ],
 }));
@@ -64,9 +63,6 @@ const chartOptions = ref({
             display: true,
             onClick: () => {},
             position: 'bottom',
-            padding: {
-                top: 100,
-            },
             labels: {
                 display: true,
                 font: {

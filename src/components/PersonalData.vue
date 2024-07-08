@@ -28,8 +28,11 @@ const getAgeString = computed(() => {
                 <v-col> {{ personStore.person.height || 'Рост' }} (см)</v-col>
                 <v-col> {{ personStore.person.weight || 'Вес' }} (кг)</v-col>
                 <v-spacer />
-                <v-col cols="2">
-                    {{ personStore.person.activity || '-' }} <br />
+                <v-col
+                    class="d-flex flex-column"
+                    cols="3"
+                >
+                    {{ personStore.person.activity || '-' }}
                     <small class="text-primary text-body-2">уровень активности</small>
                 </v-col>
                 <v-spacer />
@@ -37,9 +40,9 @@ const getAgeString = computed(() => {
                     v-if="personStore.person.isActive"
                     cols="2"
                 >
-                    {{ `${Math.floor(personStore.getStandard)} ккал` || '-' }} <br
-                /></v-col>
-                <v-col cols="auto">
+                    {{ `${Math.floor(personStore.getStandard)} ккал` || '-' }}
+                </v-col>
+                <v-col>
                     <CardEditPersonalData />
                 </v-col>
             </v-row>

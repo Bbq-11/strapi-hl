@@ -4,6 +4,7 @@ import colors from 'vuetify/util/colors';
 import { ru } from 'vuetify/locale';
 import { VBtn } from 'vuetify/components';
 import { VDateInput } from 'vuetify/labs/components';
+import 'vuetify/dist/vuetify.min.css';
 
 export default createVuetify({
     locale: {

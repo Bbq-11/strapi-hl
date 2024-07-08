@@ -1,6 +1,6 @@
 <script setup>
-import { mdiPencil } from '@mdi/js';
 import { computed, reactive, ref } from 'vue';
+import { mdiPencil } from '@mdi/js';
 import { usePersonStore } from '../stores/Person.js';
 
 const personStore = usePersonStore();
@@ -14,19 +14,6 @@ const item = reactive({
     activity: personStore.person.activity,
 });
 
-const switchDialog = () => (dialog.value = !dialog.value);
-
-const checkValidIntNumValues = (value) => {
-    return /^([1-9][0-9]{0,3})$/.test(value);
-};
-const checkValidIntFloatValues = (value) => {
-    return /^([1-9][0-9]?(\.[0-9]{1,2})?)$/.test(value);
-};
-const checkValidData = computed(() => {
-    return (
-        checkValidIntNumValues(item.age) && checkValidIntNumValues(item.height) && checkValidIntFloatValues(item.weight)
-    );
-});
 const listSelectActivity = [
     {
         title: 'Минимальный',
@@ -60,10 +47,20 @@ const listSelectActivity = [
     },
 ];
 
+const switchDialog = () => (dialog.value = !dialog.value);
 const editProduct = () => {
     switchDialog();
     personStore.updatePerson(item);
 };
+
+const checkValidIntNumValues = (value) => /^([1-9][0-9]{0,3})$/.test(value);
+const checkValidIntFloatValues = (value) => /^([1-9][0-9]?(\.[0-9]{1,2})?)$/.test(value);
+const checkValidData = computed(
+    () =>
+        checkValidIntNumValues(item.age) &&
+        checkValidIntNumValues(item.height) &&
+        checkValidIntFloatValues(item.weight),
+);
 </script>
 
 <template>
@@ -99,39 +96,39 @@ const editProduct = () => {
                                 <v-list-item
                                     class="text-primary"
                                     v-bind="props"
-                                ></v-list-item>
+                                />
                             </template>
                         </v-select>
                     </v-col>
                     <v-col>
                         <v-text-field
-                            v-model="item.age"
-                            :maxlength="2"
                             base-color="primary"
                             autocomplete="off"
                             label="Возвраст"
+                            v-model="item.age"
+                            :maxlength="2"
                             :rules="[checkValidIntNumValues]"
                         />
                     </v-col>
                     <v-col>
                         <v-text-field
-                            v-model="item.height"
-                            :maxlength="3"
                             base-color="primary"
                             autocomplete="off"
                             label="Рост"
                             suffix="см"
+                            v-model="item.height"
+                            :maxlength="3"
                             :rules="[checkValidIntNumValues]"
                         />
                     </v-col>
                     <v-col>
                         <v-text-field
-                            v-model="item.weight"
-                            :maxlength="5"
                             base-color="primary"
                             autocomplete="off"
                             label="Вес"
                             suffix="кг"
+                            v-model="item.weight"
+                            :maxlength="5"
                             :rules="[checkValidIntFloatValues]"
                         />
                     </v-col>
@@ -153,7 +150,7 @@ const editProduct = () => {
                                 <v-list-item
                                     class="text-primary"
                                     v-bind="props"
-                                ></v-list-item>
+                                />
                             </template>
                         </v-select>
                     </v-col>
@@ -164,7 +161,6 @@ const editProduct = () => {
                     <v-col cols="auto">
                         <v-btn
                             class="text-surface bg-primary"
-                            variant="outlined"
                             text="Отмена"
                             @click="switchDialog"
                         />

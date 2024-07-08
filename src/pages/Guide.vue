@@ -1,15 +1,14 @@
 <script setup>
 import { ref } from 'vue';
-import { useProductStore } from '../stores/Products.js';
-import db from '../../db';
 import { mdiClose, mdiTableSearch } from '@mdi/js';
 import CardActionsWithUserLibrary from '../components/CardActionsWithUserLibrary.vue';
+import { useProductStore } from '../stores/Products.js';
+import db from '../../db';
 
 const productStore = useProductStore();
 
 const inputSearchProduct = ref('');
-
-const headers = ref([
+const headers = [
     {
         title: 'Продукты',
         align: 'start',
@@ -41,17 +40,16 @@ const headers = ref([
         key: 'actions',
         sortable: false,
     },
-]);
+];
 </script>
 
 <template>
-    <v-card width="100%">
+    <v-card class="mx-auto table-container">
         <v-data-table-virtual
             class="mt-4 mb-2 text-primary scroll-container text-body-1 text-break"
-            height="500px"
+            height="480px"
             density="compact"
             items-per-page="-1"
-            width="100%"
             :search.lazy="inputSearchProduct"
             :headers="headers"
             :items="productStore.products"

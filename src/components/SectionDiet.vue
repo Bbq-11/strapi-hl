@@ -6,7 +6,7 @@ import { useCalendarStore } from '../stores/Calendar.js';
 const calendarStore = useCalendarStore();
 
 const props = defineProps({
-    day: Object,
+    day: Date,
     type: String,
     title: String,
     icon: String,
@@ -14,7 +14,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <v-card class="w-75 text-primary mx-auto rounded-lg mb-6">
+    <v-card class="text-primary mx-auto rounded-lg mb-6 app-container">
         <v-card-title class="pa-0">
             <CardAddingFood
                 :title="title"
@@ -29,8 +29,11 @@ const props = defineProps({
         >
             <v-expansion-panels>
                 <v-expansion-panel class="rounded-t-0 rounded-b-lg">
-                    <v-expansion-panel-title class="border-t-lg border-opacity-100 border-primary">
-                        <v-sheet width="750">
+                    <v-expansion-panel-title
+                        class="border-t-lg border-opacity-100 border-primary"
+                        hide-actions
+                    >
+                        <v-sheet class="calories-container">
                             <v-row
                                 class="text-center text-primary text-subtitle-2"
                                 no-gutters
@@ -43,7 +46,6 @@ const props = defineProps({
                                 </template>
                             </v-row>
                         </v-sheet>
-                        <template v-slot:actions />
                     </v-expansion-panel-title>
                     <v-expansion-panel-text>
                         <v-card

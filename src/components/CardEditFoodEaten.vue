@@ -5,17 +5,12 @@ import { ref } from 'vue';
 const props = defineProps({
     item: Object,
 });
-const currentWeight = ref(props.item.weight);
-
-const checkValidNumValues = (value) => {
-    return /^([1-9][0-9]{0,3}(\.[0-9]{0,2})?|0\.[0-9]{0,2})$/.test(value);
-};
 
 const dialog = ref(false);
-const switchDialog = () => {
-    dialog.value = !dialog.value;
-};
+const currentWeight = ref(props.item.weight);
 
+const checkValidNumValues = (value) => /^([1-9][0-9]{0,3}(\.[0-9]{0,2})?|0\.[0-9]{0,2})$/.test(value);
+const switchDialog = () => (dialog.value = !dialog.value);
 const adding = () => {
     switchDialog();
     props.item.weight = currentWeight.value;
@@ -61,8 +56,8 @@ const adding = () => {
                             @click="switchDialog"
                         >
                             <v-icon
-                                :icon="mdiClose"
                                 size="30"
+                                :icon="mdiClose"
                             />
                         </v-btn>
                     </v-col>

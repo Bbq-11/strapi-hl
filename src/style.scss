@@ -1,7 +1,14 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
 
 $fontFamily: 'Comfortaa', sans-serif;
+.v-application {
+  [class*="text-"] {
+    font-family: $fontFamily, sans-serif !important;
+  }
+
+  font-family: $fontFamily, sans-serif !important;
+}
+
 .text-h1,
 .text-h2,
 .text-h3,
@@ -36,12 +43,16 @@ $fontFamily: 'Comfortaa', sans-serif;
 }
 
 .app-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  max-width: 1200px;
+  width: 880px;
 }
 
+.table-container {
+  width: 1200px;
+}
+
+.calories-container {
+  width: 750px;
+}
 
 .scroll-container,
 .scroll-container * {
