@@ -33,7 +33,12 @@ const getAgeString = computed(() => {
                     <small class="text-primary text-body-2">уровень активности</small>
                 </v-col>
                 <v-spacer />
-                <v-col cols="2"> {{ `${Math.floor(personStore.getStandard)} ккал` || '-' }} <br /></v-col>
+                <v-col
+                    v-if="personStore.person.isActive"
+                    cols="2"
+                >
+                    {{ `${Math.floor(personStore.getStandard)} ккал` || '-' }} <br
+                /></v-col>
                 <v-col cols="auto">
                     <CardEditPersonalData />
                 </v-col>
