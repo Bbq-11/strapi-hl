@@ -24,7 +24,7 @@ export default createVuetify({
             autocomplete: 'off',
         },
         VField: {
-            class: ['text-primary'],
+            class: ['text-primary', 'text-subtitle-1'],
         },
         VDatePicker: {
             class: ['text-subtitle-1', 'text-primary', 'scroll-container'],
@@ -65,6 +65,16 @@ export default createVuetify({
         aliases,
         sets: {
             mdi,
+        },
+    },
+    display: {
+        mobileBreakpoint: 'md',
+        thresholds: {
+            xs: 0,
+            sm: 340,
+            md: 600,
+            lg: 800,
+            xl: 1280,
         },
     },
 });

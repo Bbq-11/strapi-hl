@@ -2,6 +2,7 @@
 import { computed, reactive, ref } from 'vue';
 import { mdiPencil } from '@mdi/js';
 import { usePersonStore } from '../stores/Person.js';
+import { useDisplay } from 'vuetify';
 
 const personStore = usePersonStore();
 
@@ -61,76 +62,113 @@ const checkValidData = computed(
         checkValidIntNumValues(item.height) &&
         checkValidIntFloatValues(item.weight),
 );
+const { name } = useDisplay();
+
+const height = computed(() => {
+    switch (name.value) {
+        case 'sm':
+            return 300;
+        default:
+            return 600;
+    }
+});
 </script>
 
 <template>
-    <v-btn @click="switchDialog">
+    <v-btn
+        width="80"
+        block
+        @click="switchDialog"
+    >
         <v-icon :icon="mdiPencil" />
     </v-btn>
     <v-dialog
         class="elevation-16 mx-auto"
         scrim="primary"
-        width="600"
+        :width="height"
         v-model="dialog"
     >
         <v-card class="text-primary pa-4">
-            <v-card-title class="text-center mb-6 pa-0 text-h5"> Личная информация</v-card-title>
-            <v-card-text class="pa-0 mb-2">
+            <v-card-title class="text-center text-h6 text-sm-h5 font-weight-bold pa-0 mb-4 mb-sm-6">
+                Личная информация
+            </v-card-title>
+            <v-card-text class="pa-0 mb-4 mb-sm-6">
                 <v-row
-                    class="mb-2"
+                    class="mb-2 gc-6 gr-2"
+                    no-gutters
                     dense
                 >
-                    <v-col>
-                        <v-select
-                            color="primary"
-                            base-color="primary"
-                            variant="outlined"
-                            density="compact"
-                            autocomplete="off"
-                            hide-details
-                            label="Пол"
-                            :items="['Жен', 'Муж']"
-                            v-model="item.sex"
+                    <v-col
+                        cols="12"
+                        sm=""
+                    >
+                        <v-row
+                            class="gc-6 justify-space-between mb-2"
+                            no-gutters
                         >
-                            <template v-slot:item="{ props, item }">
-                                <v-list-item
-                                    class="text-primary"
-                                    v-bind="props"
+                            <v-col>
+                                <v-select
+                                    color="primary"
+                                    base-color="primary"
+                                    variant="outlined"
+                                    density="compact"
+                                    autocomplete="off"
+                                    hide-details
+                                    label="Пол"
+                                    :items="['Жен', 'Муж']"
+                                    v-model="item.sex"
+                                >
+                                    <template v-slot:item="{ props, item }">
+                                        <v-list-item
+                                            class="text-primary"
+                                            v-bind="props"
+                                        />
+                                    </template>
+                                </v-select>
+                            </v-col>
+                            <v-col>
+                                <v-text-field
+                                    base-color="primary"
+                                    autocomplete="off"
+                                    label="Возвраст"
+                                    v-model="item.age"
+                                    :maxlength="2"
+                                    :rules="[checkValidIntNumValues]"
                                 />
-                            </template>
-                        </v-select>
+                            </v-col>
+                        </v-row>
                     </v-col>
-                    <v-col>
-                        <v-text-field
-                            base-color="primary"
-                            autocomplete="off"
-                            label="Возвраст"
-                            v-model="item.age"
-                            :maxlength="2"
-                            :rules="[checkValidIntNumValues]"
-                        />
-                    </v-col>
-                    <v-col>
-                        <v-text-field
-                            base-color="primary"
-                            autocomplete="off"
-                            label="Рост"
-                            suffix="см"
-                            v-model="item.height"
-                            :maxlength="3"
-                            :rules="[checkValidIntNumValues]"
-                        />
-                    </v-col>
-                    <v-col>
-                        <v-text-field
-                            base-color="primary"
-                            autocomplete="off"
-                            label="Вес"
-                            suffix="кг"
-                            v-model="item.weight"
-                            :maxlength="5"
-                            :rules="[checkValidIntFloatValues]"
-                        />
+                    <v-col
+                        cols="12"
+                        sm=""
+                    >
+                        <v-row
+                            class="gc-6 mb-2"
+                            no-gutters
+                        >
+                            <v-col>
+                                <v-text-field
+                                    base-color="primary"
+                                    autocomplete="off"
+                                    label="Рост"
+                                    suffix="см"
+                                    v-model="item.height"
+                                    :maxlength="3"
+                                    :rules="[checkValidIntNumValues]"
+                                />
+                            </v-col>
+                            <v-col>
+                                <v-text-field
+                                    base-color="primary"
+                                    autocomplete="off"
+                                    label="Вес"
+                                    suffix="кг"
+                                    v-model="item.weight"
+                                    :maxlength="5"
+                                    :rules="[checkValidIntFloatValues]"
+                                />
+                            </v-col>
+                        </v-row>
                     </v-col>
                 </v-row>
                 <v-row dense>
@@ -160,14 +198,14 @@ const checkValidData = computed(
                 <v-row justify="space-between">
                     <v-col cols="auto">
                         <v-btn
-                            class="text-surface bg-primary"
+                            class="text-surface bg-primary text-caption text-sm-button text-uppercase"
                             text="Отмена"
                             @click="switchDialog"
                         />
                     </v-col>
                     <v-col cols="auto">
                         <v-btn
-                            class="text-surface bg-primary"
+                            class="text-surface bg-primary text-caption text-sm-button text-uppercase"
                             text="Редактировать"
                             :disabled="!checkValidData"
                             @click="editProduct"

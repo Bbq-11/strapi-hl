@@ -13,7 +13,7 @@ onBeforeMount(() => productStore.addProducts());
         <v-layout class="user-select-hidden">
             <AppBar />
             <v-main>
-                <v-container class="mt-14">
+                <v-container class="mt-8 mt-sm-14">
                     <router-view />
                 </v-container>
             </v-main>

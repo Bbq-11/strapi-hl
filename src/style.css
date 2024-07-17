@@ -11,32 +11,13 @@
 .text-h3,
 .text-h4,
 .text-h5,
+.text-h6,
 .text-subtitle-1,
 .text-subtitle-2,
 .text-body-1,
 .text-body-2,
 .text-caption {
   font-family: "Comfortaa", sans-serif !important;
-}
-
-.text-h5 {
-  font-weight: bold;
-}
-
-.text-subtitle-1 {
-  font-size: 20px !important;
-}
-
-.text-subtitle-2 {
-  font-size: 16px !important;
-}
-
-.text-body-1 {
-  font-size: 14px !important;
-}
-
-.text-body-2 {
-  font-size: 12px !important;
 }
 
 .app-container {

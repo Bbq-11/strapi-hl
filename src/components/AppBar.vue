@@ -1,7 +1,7 @@
 <script setup>
 import { mdiWeatherSunsetDown, mdiWeatherSunsetUp } from '@mdi/js';
-import { useTheme } from 'vuetify';
-import { ref } from 'vue';
+import { useDisplay, useTheme } from 'vuetify';
+import { ref, watch } from 'vue';
 
 const theme = useTheme();
 const actualTheme = ref('');
@@ -12,16 +12,25 @@ function toggleTheme() {
     theme.global.name.value = actualTheme.value;
     localStorage.theme = actualTheme.value;
 }
+
+const { mobile } = useDisplay();
+const bb = ref(mobile.value);
+watch(
+    () => mobile.value,
+    () => {
+        bb.value = mobile.value;
+    },
+);
 </script>
 
 <template>
-    <v-app-bar>
+    <v-app-bar density="compact">
         <router-link
             class="h-100"
             to="/"
         >
             <v-btn
-                class="text-primary text-subtitle-2 h-100 px-8"
+                class="text-primary text-caption text-sm-subtitle-1 h-100 px-0 px-sm-4 px-md-8"
                 variant="flat"
                 text="Главная"
             />
@@ -38,7 +47,7 @@ function toggleTheme() {
             to="/guide"
         >
             <v-btn
-                class="text-primary text-subtitle-2 h-100 px-8"
+                class="text-primary text-caption text-sm-subtitle-1 h-100 px-0 px-sm-4 px-md-8"
                 variant="flat"
                 text="Справочник"
             />
@@ -55,25 +64,25 @@ function toggleTheme() {
             to="/charts"
         >
             <v-btn
-                class="text-primary text-subtitle-2 h-100 px-8"
+                class="text-primary text-caption text-sm-subtitle-1 h-100 px-0 px-sm-4 px-md-8"
                 variant="flat"
                 text="Статистика"
             />
         </router-link>
         <v-spacer />
         <v-btn
-            class="h-100 pa-3"
+            class="h-100"
             color="primary"
             @click="toggleTheme"
         >
             <v-icon
                 v-if="actualTheme === 'dark'"
-                size="35"
+                :size="bb ? 25 : 35"
                 :icon="mdiWeatherSunsetUp"
             />
             <v-icon
                 v-else
-                size="40"
+                :size="bb ? 25 : 35"
                 :icon="mdiWeatherSunsetDown"
             />
         </v-btn>

@@ -1,6 +1,6 @@
 <template>
     <v-sheet
-        class="bg-transparent mb-8"
+        class="bg-transparent mb-4 mb-sm-8"
         height="320px"
     >
         <Bar

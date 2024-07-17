@@ -14,22 +14,26 @@ const personStore = usePersonStore();
 
 const actualDate = new Date();
 const listDates = ref([actualDate]);
+
+const listProperty = ['Белки', 'Жиры', 'Углеводы', 'Калории'];
 </script>
 
 <template>
     <v-sheet class="bg-transparent mx-auto table-container">
         <PersonalData />
         <v-row
-            class="justify-space-between align-center mb-12"
+            class="justify-space-between flex-column flex-md-row ga-6 align-center mb-8 mb-sm-12"
             no-gutters
         >
-            <v-col cols="5">
-                <v-card class="text-primary">
-                    <v-card-title class="mb-2 text-h5 text-center"> Выберите диапозон дат</v-card-title>
-                    <v-card-text class="d-flex justify-center">
-                        <div class="w-50">
+            <v-col>
+                <v-card class="text-primary py-2">
+                    <v-card-title class="text-h6 text-sm-h5 text-center font-weight-bold text-wrap pa-0 mb-4">
+                        Выберите диапозон дат
+                    </v-card-title>
+                    <v-card-text class="d-flex justify-center pa-0">
+                        <v-sheet width="200">
                             <v-date-input
-                                class="scroll-container"
+                                class="scroll-container pa-0"
                                 color="primary"
                                 base-color="primary"
                                 bg-color="background"
@@ -45,25 +49,20 @@ const listDates = ref([actualDate]);
                                 :min="(actualDate.getFullYear() - 10).toString()"
                                 v-model="listDates"
                             />
-                        </div>
+                        </v-sheet>
                     </v-card-text>
                 </v-card>
             </v-col>
-            <v-col cols="6">
-                <v-card class="mx-auto text-primary text-center">
-                    <v-card-title class="mb-2 border-b text-h5"> Средние показатели</v-card-title>
-                    <v-card-text class="pa-0 mb-4 mx-2">
+            <v-col>
+                <v-card class="mx-auto text-primary text-center py-2">
+                    <v-card-title
+                        class="text-h6 text-sm-h5 text-center font-weight-bold text-wrap border-b pa-0 pb-2 pb-md-1 mb-4"
+                    >
+                        Средние показатели
+                    </v-card-title>
+                    <v-card-text class="pa-0">
                         <v-row
-                            class="mb-1 text-subtitle-1 gc-4"
-                            no-gutters
-                        >
-                            <v-col> Белки</v-col>
-                            <v-col> Жиры</v-col>
-                            <v-col> Углеводы</v-col>
-                            <v-col cols="4"> Каллории</v-col>
-                        </v-row>
-                        <v-row
-                            class="text-body-1 gc-4"
+                            class="gc-6 gr-1 justify-center"
                             no-gutters
                         >
                             <template
@@ -71,18 +70,22 @@ const listDates = ref([actualDate]);
                                 :key="index"
                             >
                                 <v-col
-                                    class="d-flex justify-center"
-                                    :cols="index === 3 ? 4 : ''"
+                                    class="d-flex-column justify-center"
+                                    cols="4"
+                                    sm=""
                                 >
-                                    {{ key > 0 ? key : '-' }}
-                                    <span
+                                    <p class="text-subtitle-2 text-sm-subtitle-1">
+                                        {{ listProperty[index] }}
+                                    </p>
+                                    <p class="text-caption text-sm-body-2">
+                                        {{ key > 0 ? key : '-' }}
+                                    </p>
+                                    <p
                                         v-if="index === 3 && personStore.person.isActive && personStore.getStandard"
-                                        class="ml-2"
+                                        class="ml-2 text-caption"
                                     >
-                                        (
-                                        {{ Math.floor(((key / personStore.getStandard) * 100) / listDates.length) }}
-                                        %)
-                                    </span>
+                                        {{ Math.floor(((key / personStore.getStandard) * 100) / listDates.length) }}%
+                                    </p>
                                 </v-col>
                             </template>
                         </v-row>
@@ -92,17 +95,17 @@ const listDates = ref([actualDate]);
         </v-row>
         <div v-if="calendarStore.getListActualDays(listDates).value.length">
             <div v-if="calendarStore.getListActualDays(listDates).value.length < 30">
-                <p class="text-center text-h4 text-primary mb-6">По дням</p>
+                <p class="text-center text-h5 text-sm-h4 text-primary mb-4 mb-sm-6">По дням</p>
                 <BarCalories :listData="calendarStore.getListActualDays(listDates).value" />
                 <BarPFC :listData="calendarStore.getListActualDays(listDates).value" />
             </div>
             <div v-else-if="calendarStore.getListActualDays(listDates).value.length < 120">
-                <p class="text-center text-h4 text-primary mb-6">По неделям</p>
+                <p class="text-center text-h5 text-sm-h4 text-primary mb-6">По неделям</p>
                 <BarCalories :listData="calendarStore.getInfoForWeek(listDates).value" />
                 <BarPFC :listData="calendarStore.getInfoForWeek(listDates).value" />
             </div>
             <div v-else>
-                <p class="text-center text-h4 text-primary mb-6">По месяцам</p>
+                <p class="text-center text-h5 text-sm-h4 text-primary mb-6">По месяцам</p>
                 <BarCalories :listData="calendarStore.getInfoForMonth(listDates).value" />
                 <BarPFC :listData="calendarStore.getInfoForMonth(listDates).value" />
             </div>
