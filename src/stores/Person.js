@@ -27,11 +27,12 @@ export const usePersonStore = defineStore('personStore', () => {
         person.value.isActive = true;
     };
 
-    const getSumFormula = () => 10 * person.value.weight + 6.25 * person.value.height - 5 * person.value.age;
+    const getGeneralFormula = () => 10 * person.value.weight + 6.25 * person.value.height - 5 * person.value.age;
+
     const getStandard = computed(() => {
-        return person.value.sex === 'Муж'
-            ? listActivity.get(person.value.activity) * (getSumFormula() + 5)
-            : listActivity.get(person.value.activity) * (getSumFormula() - 161);
+        const indexActivity = listActivity.get(person.value.activity);
+        const indexSex = person.value.sex === 'Муж' ? 5 : -161;
+        return getGeneralFormula() + indexSex > 0 ? indexActivity * (getGeneralFormula() + indexSex) : 0;
     });
 
     watch(

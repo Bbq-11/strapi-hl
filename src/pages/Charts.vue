@@ -76,10 +76,12 @@ const listDates = ref([actualDate]);
                                 >
                                     {{ key > 0 ? key : '-' }}
                                     <span
-                                        v-if="index === 3 && personStore.person.isActive"
+                                        v-if="index === 3 && personStore.person.isActive && personStore.getStandard"
                                         class="ml-2"
                                     >
-                                        ({{ Math.floor(((key / personStore.getStandard) * 100) / listDates.length) }} %)
+                                        (
+                                        {{ Math.floor(((key / personStore.getStandard) * 100) / listDates.length) }}
+                                        %)
                                     </span>
                                 </v-col>
                             </template>

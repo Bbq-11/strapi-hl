@@ -11,10 +11,10 @@ const props = defineProps({
         required: false,
         default: () => ({
             name: '',
-            calories: 0,
-            proteins: 0,
-            fats: 0,
-            carbs: 0,
+            calories: '',
+            proteins: '',
+            fats: '',
+            carbs: '',
         }),
     },
     text: String,
@@ -37,10 +37,10 @@ const editProduct = () => {
     if (props.isAdd) {
         productStore.addProduct(item);
         item.name = '';
-        item.calories = 0;
-        item.proteins = 0;
-        item.fats = 0;
-        item.carbs = 0;
+        item.calories = '';
+        item.proteins = '';
+        item.fats = '';
+        item.carbs = '';
     } else productStore.editProduct(item, props.product);
 };
 const switchDialog = () => (dialog.value = !dialog.value);
@@ -48,7 +48,10 @@ const checkValidStringValues = (value, minLength = 1, maxLength = 100) => {
     const regex = new RegExp(`^.{${minLength},${maxLength}}$`);
     return regex.test(value);
 };
-const checkValidNumValues = (value) => /^(0|[1-9][0-9]{0,3}(\.[0-9]{0,2})?|0\.[0-9]{0,2})$/.test(value);
+const checkValidNumValues = (value) => {
+    if (value === '') return true;
+    return /^(0|[1-9][0-9]{0,3}(\.[0-9]{0,2})?|0\.[0-9]{0,2})$/.test(value);
+};
 const checkValidData = computed(() => {
     return (
         checkValidStringValues(item.name) &&
@@ -99,9 +102,10 @@ const checkValidData = computed(() => {
                                 class="text-subtitle-1"
                                 base-color="primary"
                                 autocomplete="off"
-                                v-model="item[value]"
-                                :maxlength="value === 'name' ? 100 : 6"
+                                v-model.trim="item[value]"
+                                :maxlength="value === 'name' ? 100 : 5"
                                 :label="listTitleForTextField[index]"
+                                :placeholder="value === 'name' ? '' : '0'"
                                 :rules="value === 'name' ? [checkValidStringValues] : [checkValidNumValues]"
                             />
                         </v-col>

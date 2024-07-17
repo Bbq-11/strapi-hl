@@ -136,24 +136,27 @@ onBeforeMount(() => {
                     </template>
                     <template v-slot:item.weight="{ item }">
                         <div class="d-flex justify-space-between align-center">
-                            <v-icon
-                                class="mr-2"
-                                size="20"
-                                :icon="mdiPencil"
-                            />
                             <v-text-field
                                 class="text-subtitle-1"
                                 variant="underlined"
-                                color="transparent"
                                 base-color="transparent"
                                 bg-color="transparent"
                                 width="60px"
                                 suffix="г"
-                                maxlength="6"
+                                maxlength="4"
                                 autocomplete="off"
                                 v-model="item.weight"
                                 :rules="[checkValidNumValues]"
-                            />
+                            >
+                                <template v-slot:prepend-inner>
+                                    <v-icon
+                                        class="mr-2"
+                                        color="primary opacity-100"
+                                        size="20"
+                                        :icon="mdiPencil"
+                                    />
+                                </template>
+                            </v-text-field>
                         </div>
                     </template>
                     <template v-slot:item.actions="{ item }">

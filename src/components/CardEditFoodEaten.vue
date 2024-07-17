@@ -32,7 +32,7 @@ const adding = () => {
         v-model="dialog"
     >
         <v-card class="text-primary pa-4 text-subtitle-1">
-            <v-card-title class="mb-4 text-h5 w-75 mx-auto">
+            <v-card-title class="mb-4 text-h5 w-75 mx-auto text-center">
                 {{ props.item.name }}
             </v-card-title>
             <v-card-text class="pa-0">

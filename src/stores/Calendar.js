@@ -9,19 +9,44 @@ export const useCalendarStore = defineStore('calendarStore', () => {
     const calendarLS = localStorage.getItem('calendar');
     if (calendarLS) calendar.value = JSON.parse(calendarLS)._value;
 
+    const listOfMeals = ['breakfast', 'lunch', 'dinner'];
+
+    const defaultMeal = () => {
+        return {
+            proteins: 0,
+            fats: 0,
+            carbs: 0,
+            calories: 0,
+        };
+    };
+    const formatFood = (food) => {
+        const res = {};
+        Object.keys(food).forEach((key) => {
+            res[key] = food[key] % 1 ? food[key].toFixed(2) : food[key];
+        });
+        return res;
+    };
+    const formatSumFoods = (sum, numberDays) => {
+        const res = {};
+        Object.keys(sum).forEach((key) => {
+            const averageCount = sum[key] / numberDays;
+            res[key] = averageCount % 1 ? averageCount.toFixed(2) : averageCount;
+        });
+        return res;
+    };
+
     const addToMealList = (day, meal, listFoods) => {
         const currentDate = format(day, 'yyyy-MM-dd');
-        const defaultItem = {
+        const item = {
             date: currentDate,
             breakfast: [],
             lunch: [],
             dinner: [],
         };
-        if (calendar.value.findIndex((item) => item?.date === currentDate) === -1)
-            calendar.value.push({ ...defaultItem });
-        const dayIndex = calendar.value.findIndex((item) => item?.date === currentDate);
+        if (calendar.value.findIndex((item) => item?.date === currentDate) === -1) calendar.value.push({ ...item });
+        const indexDay = calendar.value.findIndex((item) => item?.date === currentDate);
         [...listFoods].forEach((food) =>
-            calendar.value[dayIndex][meal].push({
+            calendar.value[indexDay][meal].push({
                 ...food,
                 id: `${food.id}-${Date.now()}`,
             }),
@@ -29,28 +54,20 @@ export const useCalendarStore = defineStore('calendarStore', () => {
     };
     const removeMeal = (day, meal, id) => {
         const currentDate = format(day, 'yyyy-MM-dd');
-        const dayIndex = calendar.value.findIndex((item) => item?.date === currentDate);
-        calendar.value[dayIndex][meal] = calendar.value[dayIndex][meal].filter((item) => item.id !== id);
+        const indexDay = calendar.value.findIndex((item) => item?.date === currentDate);
+        calendar.value[indexDay][meal] = calendar.value[indexDay][meal].filter((item) => item.id !== id);
     };
-
     const getListOneMeal = (day, meal) =>
         computed(() => {
             const currentDate = format(day, 'yyyy-MM-dd');
             if (calendar.value.find((item) => item?.date === currentDate)) {
-                const dayIndex = calendar.value.findIndex((item) => item?.date === currentDate);
-                return calendar.value[dayIndex][meal];
+                const indexDay = calendar.value.findIndex((item) => item?.date === currentDate);
+                return calendar.value[indexDay][meal];
             } else return [];
         });
-
     const getInfoOneMeal = (day, meal) =>
         computed(() => {
             const currentItem = getListOneMeal(day, meal).value;
-            const defaultItem = {
-                proteins: 0,
-                fats: 0,
-                carbs: 0,
-                calories: 0,
-            };
             if (currentItem.length) {
                 const res = currentItem.reduce((acc, curItem) => {
                     acc.calories += curItem.calories * (curItem.weight / 100);
@@ -58,53 +75,28 @@ export const useCalendarStore = defineStore('calendarStore', () => {
                     acc.fats += curItem.fats * (curItem.weight / 100);
                     acc.carbs += curItem.carbs * (curItem.weight / 100);
                     return acc;
-                }, defaultItem);
-                return {
-                    proteins: res.proteins % 1 ? res.proteins.toFixed(2) : res.proteins,
-                    fats: res.fats % 1 ? res.fats.toFixed(2) : res.fats,
-                    carbs: res.carbs % 1 ? res.carbs.toFixed(2) : res.carbs,
-                    calories: res.calories % 1 ? res.calories.toFixed(2) : res.calories,
-                };
-            } else return defaultItem;
+                }, defaultMeal());
+                return formatFood(res);
+            } else return defaultMeal();
         });
-
     const getInfoAllMeal = (day) =>
         computed(() => {
-            const currentItem = [
-                getInfoOneMeal(day, 'breakfast').value,
-                getInfoOneMeal(day, 'lunch').value,
-                getInfoOneMeal(day, 'dinner').value,
-            ];
-            const defaultItem = {
-                proteins: 0,
-                fats: 0,
-                carbs: 0,
-                calories: 0,
-            };
+            const currentItem = [];
+            listOfMeals.forEach((meal) => {
+                currentItem.push(getInfoOneMeal(day, meal).value);
+            });
             const res = currentItem.reduce((acc, curItem) => {
                 acc.calories += +curItem.calories;
                 acc.proteins += +curItem.proteins;
                 acc.fats += +curItem.fats;
                 acc.carbs += +curItem.carbs;
                 return acc;
-            }, defaultItem);
-            return {
-                proteins: res.proteins % 1 ? res.proteins.toFixed(2) : res.proteins,
-                fats: res.fats % 1 ? res.fats.toFixed(2) : res.fats,
-                carbs: res.carbs % 1 ? res.carbs.toFixed(2) : res.carbs,
-                calories: res.calories % 1 ? res.calories.toFixed(2) : res.calories,
-            };
+            }, defaultMeal());
+            return formatFood(res);
         });
-
     const getInfoAllMealInGapDays = (listDates) =>
         computed(() => {
             if ([...listDates].length === 1) return getInfoAllMeal([...listDates][0]).value;
-            const defaultItem = {
-                proteins: 0,
-                fats: 0,
-                carbs: 0,
-                calories: 0,
-            };
             const res = [...listDates].reduce((acc, curItem) => {
                 const currentItem = getInfoAllMeal(curItem).value;
                 acc.calories += +currentItem.calories;
@@ -112,27 +104,9 @@ export const useCalendarStore = defineStore('calendarStore', () => {
                 acc.fats += +currentItem.fats;
                 acc.carbs += +currentItem.carbs;
                 return acc;
-            }, defaultItem);
-            return {
-                proteins:
-                    (res.proteins / listDates.length) % 1
-                        ? (res.proteins / listDates.length).toFixed(2)
-                        : res.proteins / listDates.length,
-                fats:
-                    (res.fats / listDates.length) % 1
-                        ? (res.fats / listDates.length).toFixed(2)
-                        : res.fats / listDates.length,
-                carbs:
-                    (res.carbs / listDates.length) % 1
-                        ? (res.carbs / listDates.length).toFixed(2)
-                        : res.carbs / listDates.length,
-                calories:
-                    (res.calories / listDates.length) % 1
-                        ? (res.calories / listDates.length).toFixed(2)
-                        : res.calories / listDates.length,
-            };
+            }, defaultMeal());
+            return formatSumFoods(res, listDates);
         });
-
     const getListActualDays = (listDates) =>
         computed(() => {
             if ([...listDates].length === 1)
