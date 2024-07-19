@@ -20,12 +20,23 @@
   font-family: "Comfortaa", sans-serif !important;
 }
 
+.jj,
+.jj * {
+  font-family: "Comfortaa", sans-serif !important;
+}
+
 .app-container {
   width: 880px;
 }
 
-.table-container {
-  width: 1200p;
+.bb {
+  text-transform: uppercase;
+}
+
+.title-table {
+  height: auto !important;
+  padding: 8px 16px !important;
+  overflow: auto;
 }
 
 .calories-container {
@@ -35,6 +46,7 @@
 .scroll-container::-webkit-scrollbar,
 .scroll-container *::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 .scroll-container::-webkit-scrollbar-track,
 .scroll-container *::-webkit-scrollbar-track {

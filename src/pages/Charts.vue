@@ -1,11 +1,12 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
 import { useCalendarStore } from '../stores/Calendar.js';
 import { usePersonStore } from '../stores/Person.js';
 import PersonalData from '../components/PersonalData.vue';
 import BarCalories from '../components/BarCalories.vue';
 import BarPFC from '../components/BarPFC.vue';
+import { useDisplay } from 'vuetify';
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
@@ -16,10 +17,32 @@ const actualDate = new Date();
 const listDates = ref([actualDate]);
 
 const listProperty = ['Белки', 'Жиры', 'Углеводы', 'Калории'];
+const { name } = useDisplay();
+const adaptiveWidth = computed(() => {
+    switch (name.value) {
+        case 'xs':
+            return 300;
+        case 'sm':
+            return 400;
+        case 'md':
+            return '90%';
+        case 'lg':
+            return 920;
+        case 'xl':
+            return 1200;
+        case 'xxl':
+            return '75%';
+        default:
+            return '75%';
+    }
+});
 </script>
 
 <template>
-    <v-sheet class="bg-transparent mx-auto table-container">
+    <v-sheet
+        class="bg-transparent mx-auto table-container"
+        :width="adaptiveWidth"
+    >
         <PersonalData />
         <v-row
             class="justify-space-between flex-column flex-md-row ga-6 align-center mb-8 mb-sm-12"
@@ -74,7 +97,7 @@ const listProperty = ['Белки', 'Жиры', 'Углеводы', 'Калор�
                                     cols="4"
                                     sm=""
                                 >
-                                    <p class="text-subtitle-2 text-sm-subtitle-1">
+                                    <p class="text-subtitle-2 text-sm-subtitle-1 mb-1">
                                         {{ listProperty[index] }}
                                     </p>
                                     <p class="text-caption text-sm-body-2">

@@ -2,6 +2,7 @@
 import { computed, reactive, ref } from 'vue';
 import { mdiPencil, mdiPlus } from '@mdi/js';
 import { useProductStore } from '../stores/Products.js';
+import { useDisplay } from 'vuetify';
 
 const productStore = useProductStore();
 
@@ -61,13 +62,23 @@ const checkValidData = computed(() => {
         checkValidNumValues(item.carbs)
     );
 });
+const { name } = useDisplay();
+const adaptiveWidth = computed(() => {
+    switch (name.value) {
+        case 'sm':
+            return 300;
+        default:
+            return 600;
+    }
+});
 </script>
 
 <template>
     <v-btn
         v-if="props.isAdd"
-        class="text-subtitle-2"
+        class="text-caption text-md-subtitle-2 text-md-subtitle-1"
         text="Добавить новый продукт"
+        block
         :prepend-icon="mdiPlus"
         @click="dialog = true"
     />
@@ -81,11 +92,14 @@ const checkValidData = computed(() => {
     <v-dialog
         class="elevation-16"
         scrim="primary"
-        width="600"
+        :width="adaptiveWidth"
         v-model="dialog"
     >
         <v-card class="pa-4">
-            <v-card-title class="mx-auto text-center w-75 text-primary text-h5 mb-4">
+            <v-card-title
+                class="mx-auto text-center w-75 text-primary text-h6 text-sm-h5 font-weight-bold pa-0 mb-4 mb-sm-6"
+                :class="[isAdd ? 'text-wrap' : 'text-no-wrap']"
+            >
                 {{ props.text }}
             </v-card-title>
             <v-card-text class="pa-0 mb-2">
@@ -120,7 +134,7 @@ const checkValidData = computed(() => {
                 >
                     <v-col cols="auto">
                         <v-btn
-                            class="text-surface bg-primary text-subtitle-2"
+                            class="text-surface bg-primary text-caption text-sm-button text-uppercase"
                             variant="outlined"
                             text="Отмена"
                             @click="switchDialog"
@@ -128,7 +142,7 @@ const checkValidData = computed(() => {
                     </v-col>
                     <v-col cols="auto">
                         <v-btn
-                            class="text-surface bg-primary text-subtitle-2"
+                            class="text-surface bg-primary text-caption text-sm-button text-uppercase"
                             :text="props.isAdd ? 'Добавить' : 'Редактировать'"
                             :disabled="!checkValidData"
                             @click="editProduct"

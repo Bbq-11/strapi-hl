@@ -29,18 +29,20 @@ const page = ref(1);
 const inputSearchProduct = ref('');
 const headers = ref([
     {
+        width: '65%',
         title: 'Продукты',
         align: 'start',
         key: 'name',
+        cellProps: { class: 'title-table' },
     },
     {
         key: 'weight',
-        width: '120px',
+        nowrap: true,
         sortable: false,
     },
     {
         key: 'actions',
-        width: '80px',
+        nowrap: true,
         sortable: false,
     },
 ]);
@@ -83,7 +85,7 @@ onBeforeMount(() => {
 
 <template>
     <v-btn
-        class="w-100 d-flex justify-space-between text-h5 pa-8"
+        class="w-100 d-flex justify-space-between text-h6 text-sm-h5 font-weight-bold pa-8"
         :prepend-icon="icon"
         :append-icon="mdiPlusCircleOutline"
         :text="title"
@@ -143,7 +145,7 @@ onBeforeMount(() => {
                                 bg-color="transparent"
                                 width="60px"
                                 suffix="г"
-                                maxlength="4"
+                                maxlength="6"
                                 autocomplete="off"
                                 v-model="item.weight"
                                 :rules="[checkValidNumValues]"

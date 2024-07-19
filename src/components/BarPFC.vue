@@ -71,7 +71,6 @@ const chartOptions = ref({
                 font: {
                     size: 16,
                 },
-                boxPadding: 200,
                 color: '#bbad84',
             },
         },

@@ -31,8 +31,10 @@ const adding = () => {
         scrim="primary"
         v-model="dialog"
     >
-        <v-card class="text-primary pa-4 text-subtitle-1">
-            <v-card-title class="mb-4 text-h5 w-75 mx-auto text-center">
+        <v-card class="text-primary pa-4">
+            <v-card-title
+                class="mx-auto text-center w-75 text-primary text-h6 text-sm-h5 font-weight-bold pa-0 mb-4 mb-sm-6"
+            >
                 {{ props.item.name }}
             </v-card-title>
             <v-card-text class="pa-0">

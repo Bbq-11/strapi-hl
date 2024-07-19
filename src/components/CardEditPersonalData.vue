@@ -64,7 +64,7 @@ const checkValidData = computed(
 );
 const { name } = useDisplay();
 
-const height = computed(() => {
+const adaptiveWidth = computed(() => {
     switch (name.value) {
         case 'sm':
             return 300;
@@ -85,7 +85,7 @@ const height = computed(() => {
     <v-dialog
         class="elevation-16 mx-auto"
         scrim="primary"
-        :width="height"
+        :width="adaptiveWidth"
         v-model="dialog"
     >
         <v-card class="text-primary pa-4">

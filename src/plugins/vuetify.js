@@ -2,7 +2,7 @@ import { createVuetify } from 'vuetify';
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg';
 import colors from 'vuetify/util/colors';
 import { ru } from 'vuetify/locale';
-import { VBtn } from 'vuetify/components';
+import { VBtn, VDataTable, VDataTableHeaders, VDataTableVirtual, VSelect } from 'vuetify/components';
 import { VDateInput } from 'vuetify/labs/components';
 import 'vuetify/dist/vuetify.min.css';
 
@@ -22,11 +22,27 @@ export default createVuetify({
             color: 'primary',
             density: 'compact',
             autocomplete: 'off',
+            class: ['jj'],
         },
         VField: {
             class: ['text-primary', 'text-subtitle-1'],
         },
         VDatePicker: {
+            class: ['text-subtitle-1', 'text-primary', 'scroll-container'],
+        },
+        VDataTableVirtual: {
+            class: ['text-subtitle-1', 'text-primary', 'scroll-container'],
+        },
+        VTable: {
+            class: ['text-subtitle-1', 'text-primary', 'scroll-container'],
+        },
+        VDataTableHeaders: {
+            class: ['text-subtitle-1', 'text-primary', 'scroll-container'],
+        },
+        VDataTable: {
+            class: ['text-subtitle-1', 'text-primary', 'scroll-container'],
+        },
+        VSelect: {
             class: ['text-subtitle-1', 'text-primary', 'scroll-container'],
         },
     },
@@ -71,10 +87,11 @@ export default createVuetify({
         mobileBreakpoint: 'md',
         thresholds: {
             xs: 0,
-            sm: 340,
+            sm: 420,
             md: 600,
-            lg: 800,
+            lg: 960,
             xl: 1280,
+            xxl: 1920,
         },
     },
 });

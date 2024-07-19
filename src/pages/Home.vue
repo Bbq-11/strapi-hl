@@ -1,9 +1,10 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { mdiWeatherSunny, mdiWeatherSunsetDown, mdiWeatherSunsetUp } from '@mdi/js';
 import { useCalendarStore } from '../stores/Calendar.js';
 import { usePersonStore } from '../stores/Person.js';
 import SectionDiet from '../components/SectionDiet.vue';
+import { useDisplay } from 'vuetify';
 
 const calendarStore = useCalendarStore();
 const personStore = usePersonStore();
@@ -28,45 +29,79 @@ const listDiet = [
         icon: mdiWeatherSunsetDown,
     },
 ];
+const { mobile } = useDisplay();
+const bb = ref(mobile.value);
+watch(
+    () => mobile.value,
+    () => {
+        bb.value = mobile.value;
+    },
+);
+const { name } = useDisplay();
+const adaptiveWidth = computed(() => {
+    switch (name.value) {
+        case 'xs':
+            return 300;
+        case 'sm':
+            return 400;
+        case 'md':
+            return '90%';
+        case 'lg':
+            return 920;
+        case 'xl':
+            return 1200;
+        case 'xxl':
+            return '75%';
+        default:
+            return '75%';
+    }
+});
+
+const listProperty = ['Белки', 'Жиры', 'Углеводы', 'Калории'];
 </script>
 
 <template>
     <v-date-picker
         class="mx-auto bg-transparent text-primary mb-6 scroll-container"
         color="primary"
-        width="400px"
+        :width="bb ? 300 : 460"
         hide-header
         v-model="dateSelected"
         :max="formatDate"
         :min="(formatDate.getFullYear() - 10).toString()"
     />
-    <v-card class="mx-auto mb-12 text-center pa-0 app-container">
-        <v-card-title class="mb-4 text-primary text-h5 border-b-sm">Общие показатели</v-card-title>
-        <v-card-text class="pa-0 mb-4">
+    <v-card class="mx-auto mb-12 text-center py-4 app-container">
+        <v-card-title
+            class="text-h6 text-sm-h5 text-center font-weight-bold text-wrap pa-0 mb-4 text-primary border-b-sm"
+            >Общие показатели
+        </v-card-title>
+        <v-card-text class="pa-0">
             <v-sheet class="ml-10 text-primary calories-container">
                 <v-row
-                    class="mb-1 text-subtitle-1"
+                    class=""
                     no-gutters
                 >
-                    <v-col> Белки</v-col>
-                    <v-col> Жиры</v-col>
-                    <v-col> Углеводы</v-col>
-                    <v-spacer />
-                    <v-col> Каллории</v-col>
-                </v-row>
-                <v-row
-                    class="text-subtitle-2"
-                    no-gutters
-                >
-                    <template v-for="(key, value, index) in calendarStore.getInfoAllMeal(dateSelected).value">
-                        <v-col>
-                            {{ key > 0 ? key : '-' }}
-                            <span
+                    <template
+                        v-for="(key, value, index) in calendarStore.getInfoAllMeal(dateSelected).value"
+                        :key="index"
+                    >
+                        <v-col
+                            class="d-flex-column justify-center"
+                            cols="4"
+                            sm=""
+                        >
+                            <p class="text-subtitle-2 text-sm-subtitle-1 mb-1">
+                                {{ listProperty[index] }}
+                            </p>
+                            <p class="text-caption text-sm-body-2">
+                                {{ key > 0 ? key : '-' }}
+                            </p>
+                            <p
                                 v-if="index === 3 && personStore.person.isActive && personStore.getStandard"
                                 class="ml-2"
                             >
-                                ({{ Math.floor((key / personStore.getStandard) * 100) }} %)</span
-                            >
+                                ({{ Math.floor((key / personStore.getStandard) * 100) }} %)
+                            </p>
                         </v-col>
                         <v-spacer v-if="index === 2" />
                     </template>

@@ -24,6 +24,10 @@ $fontFamily: 'Comfortaa', sans-serif;
   font-family: $fontFamily !important;
 }
 
+.jj,
+.jj * {
+  font-family: $fontFamily !important;
+}
 
 //.text-h5 {
 //  font-weight: bold;
@@ -49,10 +53,19 @@ $fontFamily: 'Comfortaa', sans-serif;
   width: 880px;
 }
 
-.table-container {
-  width: 1200p;
+.bb {
+  text-transform: uppercase;
 }
 
+.title-table {
+  height: auto !important;
+  padding: 8px 16px !important;
+  overflow: auto;
+}
+
+//.table-container {
+//  width: 1200p;
+//}
 .calories-container {
   width: 750px;
 }
@@ -61,6 +74,7 @@ $fontFamily: 'Comfortaa', sans-serif;
 .scroll-container * {
   &::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
   }
 
   &::-webkit-scrollbar-track {
