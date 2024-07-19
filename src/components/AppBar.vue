@@ -14,11 +14,11 @@ function toggleTheme() {
 }
 
 const { mobile } = useDisplay();
-const bb = ref(mobile.value);
+const mobileSize = ref(mobile.value);
 watch(
     () => mobile.value,
     () => {
-        bb.value = mobile.value;
+        mobileSize.value = mobile.value;
     },
 );
 </script>
@@ -64,14 +64,14 @@ watch(
             @click="toggleTheme"
         >
             <v-icon
-                :size="bb ? 25 : 35"
-                :icon="mdiWeatherSunsetUp"
                 v-if="actualTheme === 'dark'"
+                :size="mobileSize ? 25 : 35"
+                :icon="mdiWeatherSunsetUp"
             />
             <v-icon
-                :size="bb ? 25 : 35"
-                :icon="mdiWeatherSunsetDown"
                 v-else
+                :size="mobileSize ? 25 : 35"
+                :icon="mdiWeatherSunsetDown"
             />
         </v-btn>
     </v-app-bar>

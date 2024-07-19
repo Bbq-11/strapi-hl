@@ -26,35 +26,36 @@ const theme = useTheme();
 
 const listTitles = ['Белки', 'Жиры', 'Углеводы'];
 
+const getListData = (property) => props.listData.map((item) => item[property]);
 const chartData = computed(() => ({
     labels: props.listData.map((item) => item.date),
     datasets: [
         {
             type: 'bar',
             label: listTitles[0],
-            data: props.listData.map((item) => item.proteins),
+            data: getListData('proteins'),
             backgroundColor: theme.global.name.value === 'dark' ? '#c4c26e' : '#288dcc',
             borderColor: '#bbad84',
             borderWidth: 1,
-            description: props.listData.map((item) => item.proteins),
+            description: getListData('proteins'),
         },
         {
             type: 'bar',
             label: listTitles[1],
-            data: props.listData.map((item) => item.fats),
+            data: getListData('fats'),
             backgroundColor: theme.global.name.value === 'dark' ? '#7c7b44' : '#1e6191',
             borderColor: '#bbad84',
             borderWidth: 1,
-            description: props.listData.map((item) => item.fats),
+            description: getListData('fats'),
         },
         {
             type: 'bar',
             label: listTitles[2],
-            data: props.listData.map((item) => item.carbs),
+            data: getListData('carbs'),
             backgroundColor: theme.global.name.value === 'dark' ? '#5b5b33' : '#123a52',
             borderColor: '#bbad84',
             borderWidth: 1,
-            description: props.listData.map((item) => item.carbs),
+            description: getListData('carbs'),
         },
     ],
 }));

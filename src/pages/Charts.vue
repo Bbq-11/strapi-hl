@@ -36,8 +36,14 @@ const adaptiveWidth = computed(() => {
             return '75%';
     }
 });
-</script>
 
+const getPercentageOfProgress = computed(() => {
+    const res = calendarStore.getInfoAllMealInGapDays(listDates.value).value.calories;
+    return Math.floor(((res / personStore.getStandard) * 100) / listDates.value.length) || 0;
+});
+
+const checkActivePerson = computed(() => personStore.person.isActive && personStore.getStandard);
+</script>
 <template>
     <v-sheet
         class="bg-transparent mx-auto table-container"
@@ -45,77 +51,98 @@ const adaptiveWidth = computed(() => {
     >
         <PersonalData />
         <v-row
-            class="justify-space-between flex-column flex-md-row ga-6 align-center mb-8 mb-sm-12"
+            class="align-center justify-space-between ga-4 mb-12 mb-md-16"
             no-gutters
         >
-            <v-col>
-                <v-card class="text-primary py-2">
-                    <v-card-title class="text-h6 text-sm-h5 text-center font-weight-bold text-wrap pa-0 mb-4">
-                        Выберите диапозон дат
-                    </v-card-title>
-                    <v-card-text class="d-flex justify-center pa-0">
-                        <v-sheet width="200">
-                            <v-date-input
-                                class="scroll-container pa-0"
-                                color="primary"
-                                base-color="primary"
-                                bg-color="background"
-                                placeholder="Выберите"
-                                hide-details
-                                multiple="range"
-                                variant="outlined"
-                                prepend-icon=""
-                                ok-text="Выбрать"
-                                density="comfortable"
-                                autocomplete="off"
-                                :max="actualDate"
-                                :min="(actualDate.getFullYear() - 10).toString()"
-                                v-model="listDates"
-                            />
-                        </v-sheet>
-                    </v-card-text>
-                </v-card>
-            </v-col>
-            <v-col>
-                <v-card class="mx-auto text-primary text-center py-2">
-                    <v-card-title
-                        class="text-h6 text-sm-h5 text-center font-weight-bold text-wrap border-b pa-0 pb-2 pb-md-1 mb-4"
+            <v-col class="">
+                <v-row
+                    class="justify-space-between flex-column flex-md-row ga-6 align-center flex-wrap"
+                    no-gutters
+                >
+                    <v-col
+                        cols=""
+                        :md="checkActivePerson ? 12 : 6"
                     >
-                        Средние показатели
-                    </v-card-title>
-                    <v-card-text class="pa-0">
-                        <v-row
-                            class="gc-6 gr-1 justify-center"
-                            no-gutters
-                        >
-                            <template
-                                v-for="(key, value, index) in calendarStore.getInfoAllMealInGapDays(listDates).value"
-                                :key="index"
+                        <v-card class="text-primary py-2 py-md-4">
+                            <v-card-title class="text-h6 text-sm-h5 text-center font-weight-bold text-wrap pa-0 mb-4">
+                                Выберите диапозон дат
+                            </v-card-title>
+                            <v-card-text class="d-flex justify-center pa-0">
+                                <v-sheet width="200">
+                                    <v-date-input
+                                        v-model="listDates"
+                                        class="scroll-container pa-0"
+                                        color="primary"
+                                        base-color="primary"
+                                        bg-color="background"
+                                        placeholder="Выберите"
+                                        hide-details
+                                        multiple="range"
+                                        variant="outlined"
+                                        prepend-icon=""
+                                        ok-text="Выбрать"
+                                        density="comfortable"
+                                        autocomplete="off"
+                                        :max="actualDate"
+                                        :min="(actualDate.getFullYear() - 10).toString()"
+                                    />
+                                </v-sheet>
+                            </v-card-text>
+                        </v-card>
+                    </v-col>
+                    <v-col>
+                        <v-card class="mx-auto text-primary text-center py-2 py-md-4">
+                            <v-card-title
+                                class="text-h6 text-sm-h5 text-center font-weight-bold text-wrap border-b pa-0 pb-2 pb-md-1 mb-4"
                             >
-                                <v-col
-                                    class="d-flex-column justify-center"
-                                    cols="4"
-                                    sm=""
+                                Средние показатели
+                            </v-card-title>
+                            <v-card-text class="pa-0">
+                                <v-row
+                                    class="gc-6 gr-1 justify-center"
+                                    no-gutters
                                 >
-                                    <p class="text-subtitle-2 text-sm-subtitle-1 mb-1">
-                                        {{ listProperty[index] }}
-                                    </p>
-                                    <p class="text-caption text-sm-body-2">
-                                        {{ key > 0 ? key : '-' }}
-                                    </p>
-                                    <p
-                                        v-if="index === 3 && personStore.person.isActive && personStore.getStandard"
-                                        class="ml-2 text-caption"
+                                    <template
+                                        v-for="(key, value, index) in calendarStore.getInfoAllMealInGapDays(listDates)
+                                            .value"
+                                        :key="value"
                                     >
-                                        {{ Math.floor(((key / personStore.getStandard) * 100) / listDates.length) }}%
-                                    </p>
-                                </v-col>
-                            </template>
-                        </v-row>
-                    </v-card-text>
-                </v-card>
+                                        <v-col
+                                            class="d-flex-column justify-center"
+                                            cols="4"
+                                            sm=""
+                                        >
+                                            <p class="text-subtitle-2 text-sm-subtitle-1 mb-1">
+                                                {{ listProperty[index] }}
+                                            </p>
+                                            <p class="text-caption text-sm-body-2">
+                                                {{ key > 0 ? key : '-' }}
+                                            </p>
+                                        </v-col>
+                                    </template>
+                                </v-row>
+                            </v-card-text>
+                        </v-card>
+                    </v-col>
+                </v-row>
+            </v-col>
+            <v-col
+                class="d-flex justify-center"
+                cols="12"
+                md="5"
+                v-if="checkActivePerson"
+            >
+                <v-progress-circular
+                    :model-value="getPercentageOfProgress"
+                    class="text-h6 text-sm-h5 text-primary"
+                    size="240"
+                    width="15"
+                >
+                    <template v-slot:default> {{ getPercentageOfProgress }} %</template>
+                </v-progress-circular>
             </v-col>
         </v-row>
+
         <div v-if="calendarStore.getListActualDays(listDates).value.length">
             <div v-if="calendarStore.getListActualDays(listDates).value.length < 30">
                 <p class="text-center text-h5 text-sm-h4 text-primary mb-4 mb-sm-6">По дням</p>

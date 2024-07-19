@@ -2,12 +2,10 @@
 import { computed, ref, watch } from 'vue';
 import { mdiWeatherSunny, mdiWeatherSunsetDown, mdiWeatherSunsetUp } from '@mdi/js';
 import { useCalendarStore } from '../stores/Calendar.js';
-import { usePersonStore } from '../stores/Person.js';
 import SectionDiet from '../components/SectionDiet.vue';
 import { useDisplay } from 'vuetify';
 
 const calendarStore = useCalendarStore();
-const personStore = usePersonStore();
 
 const formatDate = new Date();
 const dateSelected = ref(formatDate);
@@ -29,12 +27,14 @@ const listDiet = [
         icon: mdiWeatherSunsetDown,
     },
 ];
+const listProperty = ['Белки', 'Жиры', 'Углеводы', 'Калории'];
+
 const { mobile } = useDisplay();
-const bb = ref(mobile.value);
+const mobileSize = ref(mobile.value);
 watch(
     () => mobile.value,
     () => {
-        bb.value = mobile.value;
+        mobileSize.value = mobile.value;
     },
 );
 const { name } = useDisplay();
@@ -56,17 +56,15 @@ const adaptiveWidth = computed(() => {
             return '75%';
     }
 });
-
-const listProperty = ['Белки', 'Жиры', 'Углеводы', 'Калории'];
 </script>
 
 <template>
     <v-date-picker
+        v-model="dateSelected"
         class="mx-auto bg-transparent text-primary mb-6 scroll-container"
         color="primary"
-        :width="bb ? 300 : 460"
         hide-header
-        v-model="dateSelected"
+        :width="mobileSize ? 300 : 460"
         :max="formatDate"
         :min="(formatDate.getFullYear() - 10).toString()"
     />
@@ -83,7 +81,7 @@ const listProperty = ['Белки', 'Жиры', 'Углеводы', 'Калор�
                 >
                     <template
                         v-for="(key, value, index) in calendarStore.getInfoAllMeal(dateSelected).value"
-                        :key="index"
+                        :key="value"
                     >
                         <v-col
                             class="d-flex-column justify-center"
@@ -95,12 +93,6 @@ const listProperty = ['Белки', 'Жиры', 'Углеводы', 'Калор�
                             </p>
                             <p class="text-caption text-sm-body-2">
                                 {{ key > 0 ? key : '-' }}
-                            </p>
-                            <p
-                                v-if="index === 3 && personStore.person.isActive && personStore.getStandard"
-                                class="ml-2"
-                            >
-                                ({{ Math.floor((key / personStore.getStandard) * 100) }} %)
                             </p>
                         </v-col>
                         <v-spacer v-if="index === 2" />

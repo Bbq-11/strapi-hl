@@ -26,10 +26,10 @@ const adding = () => {
         @click="switchDialog"
     />
     <v-dialog
+        v-model="dialog"
         class="elevation-16"
         width="400px"
         scrim="primary"
-        v-model="dialog"
     >
         <v-card class="text-primary pa-4">
             <v-card-title
@@ -39,13 +39,13 @@ const adding = () => {
             </v-card-title>
             <v-card-text class="pa-0">
                 <v-text-field
+                    v-model="currentWeight"
                     class="mx-auto text-subtitle-1"
                     base-color="primary"
                     width="100px"
                     suffix="г"
                     maxlength="6"
                     autocomplete="off"
-                    v-model="currentWeight"
                     :rules="[checkValidNumValues]"
                 />
                 <v-row
@@ -70,8 +70,8 @@ const adding = () => {
                             @click="adding"
                         >
                             <v-icon
-                                :icon="mdiCheck"
                                 size="30"
+                                :icon="mdiCheck"
                             />
                         </v-btn>
                     </v-col>

@@ -70,7 +70,7 @@ const checkValidNumValues = (value) => {
 };
 
 const checkValidData = computed(() => {
-    return listProducts.value.length > 0 && listProducts.value.every((item) => checkValidNumValues(item?.weight));
+    return listProducts.value.length && listProducts.value.every((item) => checkValidNumValues(item?.weight));
 });
 
 const onPageChange = (isAdd) => {
@@ -92,10 +92,10 @@ onMounted(() => {
         @click="switchDialog"
     />
     <v-dialog
+        v-model="dialog"
         class="elevation-16"
         scrim="primary"
         width="800"
-        v-model="dialog"
     >
         <v-card class="text-primary pa-4 ma-0">
             <v-card-title class="mb-4 mx-auto text-center w-75 text-h5">
@@ -103,23 +103,23 @@ onMounted(() => {
             </v-card-title>
             <v-card-text class="pa-0 mb-4">
                 <v-data-table
+                    v-model:page="page"
                     class="text-primary scroll-container text-body-1 w-100 overflow-x-hidden text-break"
                     height="400px"
                     sticky
                     :search="inputSearchProduct"
                     :headers="headers"
                     :items="items"
-                    v-model:page="page"
                     :items-per-page="15"
                     @update:page="onPageChange"
                 >
                     <template #top>
                         <v-text-field
+                            v-model="inputSearchProduct"
                             class="mb-2 pt-2"
                             clearable
                             autocomplete="off"
                             label="Поиск"
-                            v-model="inputSearchProduct"
                         />
                     </template>
                     <template #[`item.name`]="{ item }">
@@ -139,6 +139,7 @@ onMounted(() => {
                     <template #[`item.weight`]="{ item }">
                         <div class="d-flex justify-space-between align-center">
                             <v-text-field
+                                v-model="item.weight"
                                 class="text-subtitle-1"
                                 variant="underlined"
                                 base-color="transparent"
@@ -147,7 +148,6 @@ onMounted(() => {
                                 suffix="г"
                                 maxlength="6"
                                 autocomplete="off"
-                                v-model="item.weight"
                                 :rules="[checkValidNumValues]"
                             >
                                 <template #prepend-inner>
@@ -163,12 +163,12 @@ onMounted(() => {
                     </template>
                     <template #[`item.actions`]="{ item }">
                         <v-checkbox
+                            v-model="listProducts"
                             density="compact"
                             hide-details
                             :value="item"
                             :false-icon="mdiCheckboxBlankCircleOutline"
                             :true-icon="mdiCheckboxMarkedCircleOutline"
-                            v-model="listProducts"
                         />
                     </template>
                     <template #bottom>

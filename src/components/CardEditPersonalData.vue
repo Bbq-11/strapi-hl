@@ -54,8 +54,8 @@ const editProduct = () => {
     personStore.updatePerson(item);
 };
 
-const checkValidIntNumValues = (value) => /^([1-9][0-9]{0,3})$/.test(value);
-const checkValidIntFloatValues = (value) => /^([1-9][0-9]?(\.[0-9]{1,2})?)$/.test(value);
+const checkValidIntNumValues = (value) => /^([1-9][0-9]{0,2})$/.test(value);
+const checkValidIntFloatValues = (value) => /^(([1-9][0-9]{0,2})?(\.[0-9]{1,2})?)$/.test(value);
 const checkValidData = computed(
     () =>
         checkValidIntNumValues(item.age) &&
@@ -76,17 +76,17 @@ const adaptiveWidth = computed(() => {
 
 <template>
     <v-btn
-        width="80"
         block
+        width="80"
         @click="switchDialog"
     >
         <v-icon :icon="mdiPencil" />
     </v-btn>
     <v-dialog
+        v-model="dialog"
         class="elevation-16 mx-auto"
         scrim="primary"
         :width="adaptiveWidth"
-        v-model="dialog"
     >
         <v-card class="text-primary pa-4">
             <v-card-title class="text-center text-h6 text-sm-h5 font-weight-bold pa-0 mb-4 mb-sm-6">
@@ -108,6 +108,7 @@ const adaptiveWidth = computed(() => {
                         >
                             <v-col>
                                 <v-select
+                                    v-model="item.sex"
                                     color="primary"
                                     base-color="primary"
                                     variant="outlined"
@@ -116,7 +117,6 @@ const adaptiveWidth = computed(() => {
                                     hide-details
                                     label="Пол"
                                     :items="['Жен', 'Муж']"
-                                    v-model="item.sex"
                                 >
                                     <template #item="{ props }">
                                         <v-list-item
@@ -128,10 +128,10 @@ const adaptiveWidth = computed(() => {
                             </v-col>
                             <v-col>
                                 <v-text-field
+                                    v-model="item.age"
                                     base-color="primary"
                                     autocomplete="off"
                                     label="Возвраст"
-                                    v-model="item.age"
                                     :maxlength="2"
                                     :rules="[checkValidIntNumValues]"
                                 />
@@ -148,23 +148,23 @@ const adaptiveWidth = computed(() => {
                         >
                             <v-col>
                                 <v-text-field
+                                    v-model="item.height"
                                     base-color="primary"
                                     autocomplete="off"
                                     label="Рост"
                                     suffix="см"
-                                    v-model="item.height"
                                     :maxlength="3"
                                     :rules="[checkValidIntNumValues]"
                                 />
                             </v-col>
                             <v-col>
                                 <v-text-field
+                                    v-model="item.weight"
                                     base-color="primary"
                                     autocomplete="off"
                                     label="Вес"
                                     suffix="кг"
-                                    v-model="item.weight"
-                                    :maxlength="5"
+                                    :maxlength="6"
                                     :rules="[checkValidIntFloatValues]"
                                 />
                             </v-col>
@@ -174,6 +174,7 @@ const adaptiveWidth = computed(() => {
                 <v-row dense>
                     <v-col>
                         <v-select
+                            v-model="item.activity"
                             color="primary"
                             base-color="primary"
                             variant="outlined"
@@ -182,7 +183,6 @@ const adaptiveWidth = computed(() => {
                             hide-details
                             label="Уровень активности"
                             :items="listSelectActivity"
-                            v-model="item.activity"
                         >
                             <template #item="{ props }">
                                 <v-list-item

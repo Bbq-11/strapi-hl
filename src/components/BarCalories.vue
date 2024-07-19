@@ -26,14 +26,14 @@ const personStore = usePersonStore();
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
-const getFinalData = () => props.listData.map((item) => Math.floor(personStore.getStandard * (item.count || 1)));
+const getListData = () => props.listData.map((item) => Math.floor(personStore.getStandard * (item.count || 1)));
 
 const chartData = computed(() => ({
     labels: props.listData.map((item) => item.date),
     datasets: [
         {
             label: 'Норма',
-            data: getFinalData(),
+            data: getListData(),
             type: 'line',
             pointRadius: 5,
             borderWidth: 4,
@@ -43,7 +43,7 @@ const chartData = computed(() => ({
                 item.calories >= personStore.getStandard * (item.count || 1) ? '#1fda1f' : '#c9314e',
             ),
             backgroundColor: 'transparent',
-            description: getFinalData(),
+            description: getListData(),
         },
         {
             type: 'bar',

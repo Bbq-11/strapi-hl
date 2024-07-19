@@ -74,10 +74,10 @@ const adaptiveWidth = computed(() => {
 
 <template>
     <v-btn
+        block
         v-if="props.isAdd"
         class="text-caption text-md-subtitle-2 text-md-subtitle-1"
         text="Добавить новый продукт"
-        block
         :prepend-icon="mdiPlus"
         @click="switchDialog"
     />
@@ -89,10 +89,10 @@ const adaptiveWidth = computed(() => {
         @click="switchDialog"
     />
     <v-dialog
+        v-model="dialog"
         class="elevation-16"
         scrim="primary"
         :width="adaptiveWidth"
-        v-model="dialog"
     >
         <v-card class="pa-4">
             <v-card-title
@@ -106,13 +106,16 @@ const adaptiveWidth = computed(() => {
                     class="mb-0 gr-2"
                     dense
                 >
-                    <template v-for="(key, value, index) in item">
+                    <template
+                        v-for="(key, value, index) in item"
+                        :key="value"
+                    >
                         <v-col :cols="value === 'name' ? 12 : 3">
                             <v-text-field
+                                v-model.trim="item[value]"
                                 class="text-subtitle-1"
                                 base-color="primary"
                                 autocomplete="off"
-                                v-model.trim="item[value]"
                                 :maxlength="value === 'name' ? 100 : 5"
                                 :label="listTitleForTextField[index]"
                                 :placeholder="value === 'name' ? '' : '0'"

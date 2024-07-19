@@ -12,11 +12,12 @@ const props = defineProps({
 </script>
 
 <template>
+    {{ calendarStore.getListOneMeal(day, type).value }}
     <v-sheet
         v-for="item in calendarStore.getListOneMeal(day, type).value"
+        :key="item.id"
         class="py-2 rounded-lg text-primary mb-2 border-opacity-100 calories-container"
         border="primary sm"
-        :key="item.id"
     >
         <v-row
             class="align-center justify-space-between mb-2 px-4 text-subtitle-2"

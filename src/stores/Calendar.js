@@ -43,8 +43,9 @@ export const useCalendarStore = defineStore('calendarStore', () => {
         };
         const dayItem = calendar.value.find((item) => item?.date === currentDate);
         if (!dayItem) calendar.value.push({ ...item });
+        const updateDayItem = calendar.value.find((item) => item?.date === currentDate);
         [...listFoods].forEach((food) =>
-            dayItem[meal].push({
+            updateDayItem[meal].push({
                 ...food,
                 id: `${food.id}-${Date.now()}`,
             }),
@@ -59,7 +60,7 @@ export const useCalendarStore = defineStore('calendarStore', () => {
         computed(() => {
             const currentDate = format(day, 'yyyy-MM-dd');
             const listOneMeal = calendar.value.find((item) => item?.date === currentDate);
-            return listOneMeal[meal] || [];
+            return listOneMeal ? listOneMeal[meal] : [];
         });
     const getInfoOneMeal = (day, meal) =>
         computed(() => {
@@ -109,7 +110,7 @@ export const useCalendarStore = defineStore('calendarStore', () => {
                 },
                 { ...defaultMeal },
             );
-            return formatSumFoods(res, listDates);
+            return formatSumFoods(res, [...listDates].length);
         });
     const getListActualDays = (listDates) =>
         computed(() => {

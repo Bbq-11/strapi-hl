@@ -86,12 +86,6 @@ const adaptiveHeight = computed(() => {
             return 2000;
     }
 });
-// xs: 0,
-//     sm: 400,
-//     md: 640,
-//     lg: 960,
-//     xl: 1280,
-//     xxl: 1920,
 </script>
 
 <template>
@@ -101,10 +95,10 @@ const adaptiveHeight = computed(() => {
     >
         <v-data-table-virtual
             class="mt-4 mb-2 text-primary scroll-container text-caption text-sm-body-2 text-lg-body-1 text-break"
-            :height="adaptiveHeight"
             density="compact"
             fixed-header
             items-per-page="-1"
+            :height="adaptiveHeight"
             :search.lazy="inputSearchProduct"
             :headers="headers"
             :items="productStore.products"
@@ -121,11 +115,11 @@ const adaptiveHeight = computed(() => {
                             md="4"
                         >
                             <v-text-field
+                                v-model="inputSearchProduct"
                                 class="text-subtitle-1"
                                 base-color="primary"
                                 autocomplete="off"
                                 label="Поиск"
-                                v-model="inputSearchProduct"
                             />
                         </v-col>
                         <v-col
@@ -167,9 +161,3 @@ const adaptiveHeight = computed(() => {
         </v-data-table-virtual>
     </v-card>
 </template>
-
-<style scoped>
-.title {
-    text-transform: uppercase;
-}
-</style>

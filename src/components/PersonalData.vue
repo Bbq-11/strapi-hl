@@ -82,7 +82,7 @@ const getAgeString = computed(() => {
                                         {{ `${Math.floor(personStore.getStandard)} ккал` }}
                                     </p>
                                     <p v-else>-</p>
-                                    <span class="text-caption text-sm-body-2">суточная норма</span>
+                                    <span class="text-caption text-sm-body-2"> суточная норма</span>
                                 </v-col>
                                 <v-col cols="auto">
                                     <CardEditPersonalData />
