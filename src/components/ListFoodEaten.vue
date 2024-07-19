@@ -12,7 +12,6 @@ const props = defineProps({
 </script>
 
 <template>
-    {{ calendarStore.getListOneMeal(day, type).value }}
     <v-sheet
         v-for="item in calendarStore.getListOneMeal(day, type).value"
         :key="item.id"

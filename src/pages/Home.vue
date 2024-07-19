@@ -37,25 +37,6 @@ watch(
         mobileSize.value = mobile.value;
     },
 );
-const { name } = useDisplay();
-const adaptiveWidth = computed(() => {
-    switch (name.value) {
-        case 'xs':
-            return 300;
-        case 'sm':
-            return 400;
-        case 'md':
-            return '90%';
-        case 'lg':
-            return 920;
-        case 'xl':
-            return 1200;
-        case 'xxl':
-            return '75%';
-        default:
-            return '75%';
-    }
-});
 </script>
 
 <template>
