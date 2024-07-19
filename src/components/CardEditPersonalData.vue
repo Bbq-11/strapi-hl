@@ -118,7 +118,7 @@ const adaptiveWidth = computed(() => {
                                     :items="['Жен', 'Муж']"
                                     v-model="item.sex"
                                 >
-                                    <template v-slot:item="{ props, item }">
+                                    <template #item="{ props }">
                                         <v-list-item
                                             class="text-primary"
                                             v-bind="props"
@@ -184,7 +184,7 @@ const adaptiveWidth = computed(() => {
                             :items="listSelectActivity"
                             v-model="item.activity"
                         >
-                            <template v-slot:item="{ props, item }">
+                            <template #item="{ props }">
                                 <v-list-item
                                     class="text-primary"
                                     v-bind="props"

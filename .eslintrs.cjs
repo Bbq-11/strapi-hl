@@ -3,17 +3,18 @@ module.exports = {
         browser: true,
         es2021: true,
     },
-    extends: [
-        'prettier',
-        'eslint:recommended',
-        'plugin:import/recommended',
-    ],
+    extends: ['prettier', 'eslint:recommended', 'plugin:vue/vue3-recommended', 'plugin:import/recommended'],
     parserOptions: {
         ecmaVersion: 13,
         sourceType: 'module',
     },
-    plugins: [],
+    plugins: ['vue', 'prettier'],
     rules: {
+        'prettier/prettier': 'error',
+        'vue/require-default-prop': 'off',
+        'vue/html-indent': ['error', 4],
+        'vue/singleline-html-element-content-newline': 0,
+        'vue/component-name-in-template-casing': ['error', 'PascalCase'],
         'object-curly-newline': 'off',
         semi: 'off',
         'func-names': 'off',
@@ -23,10 +24,7 @@ module.exports = {
         'no-use-before-define': 'off', // a lot off errors
         radix: 'error',
         indent: ['error', 4],
-        'padded-blocks': [
-            'warn',
-            { blocks: 'never', classes: 'always', switches: 'never' },
-        ],
+        'padded-blocks': ['warn', { blocks: 'never', classes: 'always', switches: 'never' }],
         'import/no-extraneous-dependencies': 'off',
         'import/no-cycle': 'off',
         'import/no-duplicates': 'error',
@@ -84,4 +82,4 @@ module.exports = {
             },
         },
     },
-}
+};

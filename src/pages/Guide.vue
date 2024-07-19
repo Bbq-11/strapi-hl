@@ -100,7 +100,7 @@ const adaptiveHeight = computed(() => {
         :width="adaptiveWidth"
     >
         <v-data-table-virtual
-            class="jj mt-4 mb-2 text-primary scroll-container text-caption text-sm-body-2 text-lg-body-1 text-break"
+            class="mt-4 mb-2 text-primary scroll-container text-caption text-sm-body-2 text-lg-body-1 text-break"
             :height="adaptiveHeight"
             density="compact"
             fixed-header
@@ -109,7 +109,7 @@ const adaptiveHeight = computed(() => {
             :headers="headers"
             :items="productStore.products"
         >
-            <template v-slot:top>
+            <template #top>
                 <v-container>
                     <v-row
                         class="justify-space-between align-center gr-2"
@@ -140,7 +140,7 @@ const adaptiveHeight = computed(() => {
                     </v-row>
                 </v-container>
             </template>
-            <template v-slot:item.actions="{ item }">
+            <template #[`item.actions`]="{ item }">
                 <div v-if="item.id > db.length - 1">
                     <CardActionsWithUserLibrary
                         :product="item"
@@ -154,8 +154,8 @@ const adaptiveHeight = computed(() => {
                     />
                 </div>
             </template>
-            <template v-slot:bottom />
-            <template v-slot:no-data>
+            <template #bottom />
+            <template #no-data>
                 <div class="my-4">
                     <v-icon
                         size="60"

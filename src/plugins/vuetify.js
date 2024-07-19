@@ -2,7 +2,7 @@ import { createVuetify } from 'vuetify';
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg';
 import colors from 'vuetify/util/colors';
 import { ru } from 'vuetify/locale';
-import { VBtn, VDataTable, VDataTableHeaders, VDataTableVirtual, VSelect } from 'vuetify/components';
+import { VBtn } from 'vuetify/components';
 import { VDateInput } from 'vuetify/labs/components';
 import 'vuetify/dist/vuetify.min.css';
 
@@ -28,21 +28,6 @@ export default createVuetify({
             class: ['text-primary', 'text-subtitle-1'],
         },
         VDatePicker: {
-            class: ['text-subtitle-1', 'text-primary', 'scroll-container'],
-        },
-        VDataTableVirtual: {
-            class: ['text-subtitle-1', 'text-primary', 'scroll-container'],
-        },
-        VTable: {
-            class: ['text-subtitle-1', 'text-primary', 'scroll-container'],
-        },
-        VDataTableHeaders: {
-            class: ['text-subtitle-1', 'text-primary', 'scroll-container'],
-        },
-        VDataTable: {
-            class: ['text-subtitle-1', 'text-primary', 'scroll-container'],
-        },
-        VSelect: {
             class: ['text-subtitle-1', 'text-primary', 'scroll-container'],
         },
     },

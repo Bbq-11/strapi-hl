@@ -9,7 +9,7 @@ import {
     mdiTagHeartOutline,
     mdiCheckboxMarkedCircleOutline,
 } from '@mdi/js';
-import { onBeforeMount, ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useCalendarStore } from '../stores/Calendar.js';
 import { useProductStore } from '../stores/Products.js';
 import db from '../../db.json';
@@ -56,7 +56,7 @@ const adding = () => {
     switchDialog();
     listProducts.value.length = 0;
     inputSearchProduct.value = '';
-    setTimeout(() => initialize(), 1000);
+    initialize();
 };
 
 const initialize = () => {
@@ -78,7 +78,7 @@ const onPageChange = (isAdd) => {
     else if (page.value > 1) page.value -= 1;
 };
 
-onBeforeMount(() => {
+onMounted(() => {
     initialize();
 });
 </script>
@@ -109,11 +109,11 @@ onBeforeMount(() => {
                     :search="inputSearchProduct"
                     :headers="headers"
                     :items="items"
-                    :page.sync="page"
+                    v-model:page="page"
                     :items-per-page="15"
                     @update:page="onPageChange"
                 >
-                    <template v-slot:top>
+                    <template #top>
                         <v-text-field
                             class="mb-2 pt-2"
                             clearable
@@ -122,7 +122,7 @@ onBeforeMount(() => {
                             v-model="inputSearchProduct"
                         />
                     </template>
-                    <template v-slot:item.name="{ item }">
+                    <template #[`item.name`]="{ item }">
                         <div class="mr-8">
                             <p class="text-subtitle-2 mb-1">
                                 {{ item.name }}
@@ -136,7 +136,7 @@ onBeforeMount(() => {
                             <small class="text-caption text-medium-emphasis">{{ item.calories }} ккал</small>
                         </div>
                     </template>
-                    <template v-slot:item.weight="{ item }">
+                    <template #[`item.weight`]="{ item }">
                         <div class="d-flex justify-space-between align-center">
                             <v-text-field
                                 class="text-subtitle-1"
@@ -150,7 +150,7 @@ onBeforeMount(() => {
                                 v-model="item.weight"
                                 :rules="[checkValidNumValues]"
                             >
-                                <template v-slot:prepend-inner>
+                                <template #prepend-inner>
                                     <v-icon
                                         class="mr-2"
                                         color="primary opacity-100"
@@ -161,7 +161,7 @@ onBeforeMount(() => {
                             </v-text-field>
                         </div>
                     </template>
-                    <template v-slot:item.actions="{ item }">
+                    <template #[`item.actions`]="{ item }">
                         <v-checkbox
                             density="compact"
                             hide-details
@@ -171,7 +171,7 @@ onBeforeMount(() => {
                             v-model="listProducts"
                         />
                     </template>
-                    <template v-slot:bottom>
+                    <template #bottom>
                         <v-row
                             class="mt-4 pa-0 justify-space-between align-center"
                             no-gutters
@@ -208,7 +208,7 @@ onBeforeMount(() => {
                             </v-col>
                         </v-row>
                     </template>
-                    <template v-slot:no-data>
+                    <template #no-data>
                         <v-card elevation="0">
                             <v-card-title>
                                 <v-icon>

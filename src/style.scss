@@ -24,37 +24,12 @@ $fontFamily: 'Comfortaa', sans-serif;
   font-family: $fontFamily !important;
 }
 
-.jj,
-.jj * {
-  font-family: $fontFamily !important;
-}
-
-//.text-h5 {
-//  font-weight: bold;
-//}
-//
-//.text-subtitle-1 {
-//  font-size: 20px !important;
-//}
-//
-//.text-subtitle-2 {
-//  font-size: 16px !important;
-//}
-//
-//.text-body-1 {
-//  font-size: 14px !important;
-//}
-//
-//.text-body-2 {
-//  font-size: 12px !important;
-//}
-
 .app-container {
   width: 880px;
 }
 
-.bb {
-  text-transform: uppercase;
+.calories-container {
+  width: 750px;
 }
 
 .title-table {
@@ -63,12 +38,6 @@ $fontFamily: 'Comfortaa', sans-serif;
   overflow: auto;
 }
 
-//.table-container {
-//  width: 1200p;
-//}
-.calories-container {
-  width: 750px;
-}
 
 .scroll-container,
 .scroll-container * {

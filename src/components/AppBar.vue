@@ -25,16 +25,12 @@ watch(
 
 <template>
     <v-app-bar density="compact">
-        <router-link
-            class="h-100"
+        <v-btn
+            class="text-primary text-caption text-sm-subtitle-1 h-100 px-0 px-sm-4 px-md-8"
             to="/"
-        >
-            <v-btn
-                class="text-primary text-caption text-sm-subtitle-1 h-100 px-0 px-sm-4 px-md-8"
-                variant="flat"
-                text="Главная"
-            />
-        </router-link>
+            variant="flat"
+            text="Главная"
+        />
         <v-divider
             class="mx-1"
             vertical
@@ -42,16 +38,12 @@ watch(
             color="primary"
             opacity="100"
         />
-        <router-link
-            class="h-100"
+        <v-btn
+            class="text-primary text-caption text-sm-subtitle-1 h-100 px-0 px-sm-4 px-md-8"
             to="/guide"
-        >
-            <v-btn
-                class="text-primary text-caption text-sm-subtitle-1 h-100 px-0 px-sm-4 px-md-8"
-                variant="flat"
-                text="Справочник"
-            />
-        </router-link>
+            variant="flat"
+            text="Справочник"
+        />
         <v-divider
             class="mx-1"
             vertical
@@ -59,16 +51,12 @@ watch(
             color="primary"
             opacity="100"
         />
-        <router-link
-            class="h-100"
+        <v-btn
+            class="text-primary text-caption text-sm-subtitle-1 h-100 px-0 px-sm-4 px-md-8"
             to="/charts"
-        >
-            <v-btn
-                class="text-primary text-caption text-sm-subtitle-1 h-100 px-0 px-sm-4 px-md-8"
-                variant="flat"
-                text="Статистика"
-            />
-        </router-link>
+            variant="flat"
+            text="Статистика"
+        />
         <v-spacer />
         <v-btn
             class="h-100"
@@ -76,14 +64,14 @@ watch(
             @click="toggleTheme"
         >
             <v-icon
-                v-if="actualTheme === 'dark'"
                 :size="bb ? 25 : 35"
                 :icon="mdiWeatherSunsetUp"
+                v-if="actualTheme === 'dark'"
             />
             <v-icon
-                v-else
                 :size="bb ? 25 : 35"
                 :icon="mdiWeatherSunsetDown"
+                v-else
             />
         </v-btn>
     </v-app-bar>

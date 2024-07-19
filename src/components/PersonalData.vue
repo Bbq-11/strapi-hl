@@ -39,7 +39,7 @@ const getAgeString = computed(() => {
                             {{ personStore.person.sex || 'Пол' }}
                         </v-col>
                         <v-col cols="auto">
-                            {{ getAgeString || 'Возвраст' }}
+                            {{ getAgeString || 'Возраст' }}
                         </v-col>
                         <v-col cols="auto">
                             {{ personStore.person.height || 'Рост' }}

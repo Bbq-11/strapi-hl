@@ -9,7 +9,6 @@ const productStore = useProductStore();
 const props = defineProps({
     product: {
         type: Object,
-        required: false,
         default: () => ({
             name: '',
             calories: '',
@@ -80,14 +79,14 @@ const adaptiveWidth = computed(() => {
         text="Добавить новый продукт"
         block
         :prepend-icon="mdiPlus"
-        @click="dialog = true"
+        @click="switchDialog"
     />
     <v-icon
         v-else
         class="mr-2"
         size="20"
         :icon="mdiPencil"
-        @click="dialog = true"
+        @click="switchDialog"
     />
     <v-dialog
         class="elevation-16"
@@ -107,10 +106,7 @@ const adaptiveWidth = computed(() => {
                     class="mb-0 gr-2"
                     dense
                 >
-                    <template
-                        v-for="(key, value, index) in item"
-                        :key="index"
-                    >
+                    <template v-for="(key, value, index) in item">
                         <v-col :cols="value === 'name' ? 12 : 3">
                             <v-text-field
                                 class="text-subtitle-1"
