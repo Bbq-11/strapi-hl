@@ -2,6 +2,8 @@
 import ListFood from './ListFoodEaten.vue';
 import CardAddingFood from './CardAddingFoodEaten.vue';
 import { useCalendarStore } from '../stores/Calendar.js';
+import { useDisplay } from 'vuetify';
+import { computed } from 'vue';
 
 const calendarStore = useCalendarStore();
 
@@ -11,10 +13,42 @@ const props = defineProps({
     title: String,
     icon: String,
 });
+const { name } = useDisplay();
+const adaptiveWidth = computed(() => {
+    switch (name.value) {
+        case 'xs':
+            return 300;
+        case 'sm':
+            return 400;
+        case 'md':
+            return 580;
+        case 'lg':
+            return 880;
+        default:
+            return 880;
+    }
+});
+const adaptiveContainer = computed(() => {
+    switch (name.value) {
+        case 'xs':
+            return '100%';
+        case 'sm':
+            return 300;
+        case 'md':
+            return 480;
+        case 'lg':
+            return 750;
+        default:
+            return 750;
+    }
+});
 </script>
 
 <template>
-    <v-card class="text-primary mx-auto rounded-lg mb-6 app-container">
+    <v-card
+        class="text-primary mx-auto rounded-lg mb-4 mb-sm-6"
+        :width="adaptiveWidth"
+    >
         <v-card-title class="pa-0">
             <CardAddingFood
                 :title="title"
@@ -33,9 +67,9 @@ const props = defineProps({
                         class="border-t-lg border-opacity-100 border-primary"
                         hide-actions
                     >
-                        <v-sheet class="calories-container">
+                        <v-sheet :width="adaptiveContainer">
                             <v-row
-                                class="text-center text-primary text-subtitle-2"
+                                class="text-center text-primary text-caption text-sm-subtitle-2"
                                 no-gutters
                             >
                                 <template

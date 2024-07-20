@@ -1,6 +1,7 @@
 <script setup>
 import { mdiCheck, mdiClose, mdiPencil } from '@mdi/js';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import { useDisplay } from 'vuetify';
 
 const props = defineProps({
     item: Object,
@@ -15,13 +16,22 @@ const adding = () => {
     switchDialog();
     props.item.weight = currentWeight.value;
 };
+const { mobile } = useDisplay();
+const isMobile = ref(mobile.value);
+watch(
+    () => mobile.value,
+    () => {
+        isMobile.value = mobile.value;
+    },
+);
 </script>
 
 <template>
     <v-btn
-        class="rounded-lg text-subtitle-2"
+        class="rounded-lg text-caption text-sm-subtitle-2 px-0 px-sm-4"
         variant="text"
         :prepend-icon="mdiPencil"
+        :density="isMobile ? 'compact' : 'default'"
         :text="`${props.item.weight}`"
         @click="switchDialog"
     />

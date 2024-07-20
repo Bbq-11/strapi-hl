@@ -30,34 +30,70 @@ const listDiet = [
 const listProperty = ['Белки', 'Жиры', 'Углеводы', 'Калории'];
 
 const { mobile } = useDisplay();
-const mobileSize = ref(mobile.value);
+const isMobile = ref(mobile.value);
 watch(
     () => mobile.value,
     () => {
-        mobileSize.value = mobile.value;
+        isMobile.value = mobile.value;
     },
 );
+const { name } = useDisplay();
+const adaptiveWidth = computed(() => {
+    switch (name.value) {
+        case 'xs':
+            return 300;
+        case 'sm':
+            return 400;
+        case 'md':
+            return 580;
+        case 'lg':
+            return 880;
+        default:
+            return 880;
+    }
+});
+const adaptiveContainer = computed(() => {
+    switch (name.value) {
+        case 'xs':
+            return 300;
+        case 'sm':
+            return 400;
+        case 'md':
+            return 480;
+        case 'lg':
+            return 750;
+        default:
+            return 750;
+    }
+});
 </script>
 
 <template>
     <v-date-picker
         v-model="dateSelected"
-        class="mx-auto bg-transparent text-primary mb-6 scroll-container"
+        class="mx-auto bg-transparent text-primary mb-sm-6 scroll-container"
         color="primary"
         hide-header
-        :width="mobileSize ? 300 : 460"
+        :width="isMobile ? 300 : 460"
         :max="formatDate"
         :min="(formatDate.getFullYear() - 10).toString()"
     />
-    <v-card class="mx-auto mb-12 text-center py-4 app-container">
+    <v-card
+        class="mx-auto mb-8 mb-sm-12 text-center py-2 py-md-4"
+        :width="adaptiveWidth"
+    >
         <v-card-title
-            class="text-h6 text-sm-h5 text-center font-weight-bold text-wrap pa-0 mb-4 text-primary border-b-sm"
-            >Общие показатели
+            class="text-h6 text-sm-h5 text-center font-weight-bold text-wrap pa-0 mb-2 mb-md-4 text-primary border-b-sm"
+        >
+            Общие показатели
         </v-card-title>
         <v-card-text class="pa-0">
-            <v-sheet class="ml-10 text-primary calories-container">
+            <v-sheet
+                class="mx-auto ml-sm-10 text-primary"
+                :width="adaptiveContainer"
+            >
                 <v-row
-                    class=""
+                    class="justify-center gr-2"
                     no-gutters
                 >
                     <template
@@ -65,13 +101,11 @@ watch(
                         :key="value"
                     >
                         <v-col
-                            class="d-flex-column justify-center"
-                            cols="4"
+                            class="d-flex-row justify-center"
+                            cols="6"
                             sm=""
                         >
-                            <p class="text-subtitle-2 text-sm-subtitle-1 mb-1">
-                                {{ listProperty[index] }}
-                            </p>
+                            <p class="text-subtitle-2 text-sm-subtitle-1 mb-1">{{ listProperty[index] }}</p>
                             <p class="text-caption text-sm-body-2">
                                 {{ key > 0 ? key : '-' }}
                             </p>

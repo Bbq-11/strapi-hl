@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
 import { useCalendarStore } from '../stores/Calendar.js';
 import { usePersonStore } from '../stores/Person.js';
@@ -12,12 +12,14 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
 const calendarStore = useCalendarStore();
 const personStore = usePersonStore();
+const { name, mobile } = useDisplay();
 
 const actualDate = new Date();
 const listDates = ref([actualDate]);
+const isMobile = ref(mobile.value);
 
 const listProperty = ['Белки', 'Жиры', 'Углеводы', 'Калории'];
-const { name } = useDisplay();
+
 const adaptiveWidth = computed(() => {
     switch (name.value) {
         case 'xs':
@@ -43,6 +45,13 @@ const getPercentageOfProgress = computed(() => {
 });
 
 const checkActivePerson = computed(() => personStore.person.isActive && personStore.getStandard);
+
+watch(
+    () => mobile.value,
+    () => {
+        isMobile.value = mobile.value;
+    },
+);
 </script>
 <template>
     <v-sheet
@@ -51,7 +60,7 @@ const checkActivePerson = computed(() => personStore.person.isActive && personSt
     >
         <PersonalData />
         <v-row
-            class="align-center justify-space-between ga-4 mb-12 mb-md-16"
+            class="align-center justify-space-between ga-4 gr-sm-8 mb-12 mb-md-16"
             no-gutters
         >
             <v-col class="">
@@ -135,10 +144,15 @@ const checkActivePerson = computed(() => personStore.person.isActive && personSt
                 <v-progress-circular
                     :model-value="getPercentageOfProgress"
                     class="text-h6 text-sm-h5 text-primary"
-                    size="240"
+                    :size="isMobile ? 200 : 240"
                     width="15"
                 >
-                    <template v-slot:default> {{ getPercentageOfProgress }} %</template>
+                    <template v-slot:default>
+                        <div class="d-flex-column align-center text-center">
+                            <span>{{ getPercentageOfProgress }} %</span>
+                            <p class="text-caption text-sm-body-2">от суточной нормы</p>
+                        </div>
+                    </template>
                 </v-progress-circular>
             </v-col>
         </v-row>

@@ -21,9 +21,10 @@ export const useProductStore = defineStore('productStore', () => {
     };
     const addProduct = (item) => {
         const product = {
-            id: Date.now(),
+            id: String(Date.now()),
             ...formatProduct(item),
         };
+        console.log(product);
         products.value.unshift(product);
         const productsLS = JSON.parse(localStorage.getItem('myLibrary')) || [];
         productsLS.unshift(product);
