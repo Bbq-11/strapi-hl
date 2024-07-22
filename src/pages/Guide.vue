@@ -1,12 +1,14 @@
 <script setup>
-import { computed, ref } from 'vue';
-import { mdiClose, mdiTableSearch } from '@mdi/js';
+import { computed, ref, watch } from 'vue';
+import { mdiClose, mdiFoodApple } from '@mdi/js';
 import CardActionsWithUserLibrary from '../components/CardActionsWithUserLibrary.vue';
 import { useProductStore } from '../stores/Products.js';
 import db from '../../db';
 import { useDisplay } from 'vuetify';
 
 const productStore = useProductStore();
+const { name, mobile } = useDisplay();
+const isMobile = ref(mobile.value);
 
 const inputSearchProduct = ref('');
 const headers = [
@@ -29,6 +31,7 @@ const headers = [
         nowrap: true,
         align: 'center',
         key: 'proteins',
+        tag: 'div',
     },
     {
         title: 'Жиры (г)',
@@ -48,7 +51,6 @@ const headers = [
         sortable: false,
     },
 ];
-const { name } = useDisplay();
 
 const adaptiveWidth = computed(() => {
     switch (name.value) {
@@ -62,10 +64,8 @@ const adaptiveWidth = computed(() => {
             return 900;
         case 'xl':
             return 1200;
-        case 'xxl':
-            return 1800;
         default:
-            return 1200;
+            return 1800;
     }
 });
 const adaptiveHeight = computed(() => {
@@ -83,9 +83,14 @@ const adaptiveHeight = computed(() => {
         case 'xxl':
             return 600;
         default:
-            return 2000;
+            return 800;
     }
 });
+
+watch(
+    () => mobile.value,
+    () => (isMobile.value = mobile.value),
+);
 </script>
 
 <template>
@@ -94,7 +99,7 @@ const adaptiveHeight = computed(() => {
         :width="adaptiveWidth"
     >
         <v-data-table-virtual
-            class="mt-4 mb-2 text-primary scroll-container text-caption text-sm-body-2 text-lg-body-1 text-break"
+            class="text-primary scroll-container text-caption text-sm-body-2 text-lg-body-1 text-break mb-2"
             density="compact"
             fixed-header
             items-per-page="-1"
@@ -116,8 +121,6 @@ const adaptiveHeight = computed(() => {
                         >
                             <v-text-field
                                 v-model="inputSearchProduct"
-                                class="text-subtitle-1"
-                                base-color="primary"
                                 autocomplete="off"
                                 label="Поиск"
                             />
@@ -127,22 +130,23 @@ const adaptiveHeight = computed(() => {
                             sm="auto"
                         >
                             <CardActionsWithUserLibrary
-                                text="Добавить новый продукт"
+                                text="Новый продукт"
                                 :isAdd="true"
                             />
                         </v-col>
                     </v-row>
                 </v-container>
             </template>
+            <template #body.prepend></template>
             <template #[`item.actions`]="{ item }">
                 <div v-if="item.id > db.length - 1">
                     <CardActionsWithUserLibrary
+                        text="Редактирование"
                         :product="item"
-                        :text="item.name"
                         :isAdd="false"
                     />
                     <v-icon
-                        size="25"
+                        :size="isMobile ? 20 : 25"
                         :icon="mdiClose"
                         @click="productStore.removeProduct(item.id)"
                     />
@@ -150,13 +154,18 @@ const adaptiveHeight = computed(() => {
             </template>
             <template #bottom />
             <template #no-data>
-                <div class="my-4">
-                    <v-icon
-                        size="60"
-                        :icon="mdiTableSearch"
-                    />
-                    <p>Пусто</p>
-                </div>
+                <v-card
+                    class="d-flex flex-column align-center mt-12 text-primary"
+                    elevation="0"
+                >
+                    <v-card-title>
+                        <v-icon
+                            :icon="mdiFoodApple"
+                            :size="isMobile ? 60 : 90"
+                        />
+                    </v-card-title>
+                    <v-card-text class="text-h6 text-sm-h5">Пусто</v-card-text>
+                </v-card>
             </template>
         </v-data-table-virtual>
     </v-card>

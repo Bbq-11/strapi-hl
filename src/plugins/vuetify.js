@@ -1,4 +1,4 @@
-import { createVuetify } from 'vuetify';
+import { createVuetify, useDisplay } from 'vuetify';
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg';
 import colors from 'vuetify/util/colors';
 import { ru } from 'vuetify/locale';
@@ -13,7 +13,7 @@ export default createVuetify({
         messages: { ru },
     },
     aliases: {
-        VBtnPrimary: VBtn,
+        VBtnCard: VBtn,
     },
     defaults: {
         VTextField: {
@@ -22,13 +22,29 @@ export default createVuetify({
             color: 'primary',
             density: 'compact',
             autocomplete: 'off',
-            class: ['jj'],
+            VField: {
+                class: ['text-primary', 'text-caption', 'text-sm-subtitle-1'],
+            },
         },
-        VField: {
-            class: ['text-primary', 'text-subtitle-1'],
+        VDialog: {
+            elevation: 16,
+            scrim: 'primary',
         },
         VDatePicker: {
+            color: 'primary',
             class: ['text-subtitle-1', 'text-primary', 'scroll-container'],
+        },
+        VList: {
+            VListItem: {
+                class: ['text-primary', 'px-2', 'px-sm-4'],
+                VListItemTitle: {
+                    class: ['text-caption', 'text-sm-subtitle-1'],
+                },
+            },
+        },
+        VBtnCard: {
+            class: ['text-surface', 'bg-primary', 'text-caption', 'text-sm-button', 'text-uppercase'],
+            variant: 'outlined',
         },
     },
     components: {
@@ -45,7 +61,6 @@ export default createVuetify({
                     background: colors.amber.lighten5,
                     surface: colors.amber.lighten4,
                     'surface-variant': colors.indigo.darken4,
-                    'surface-add': colors.amber.lighten5,
                     error: '#d0733b',
                 },
             },

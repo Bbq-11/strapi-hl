@@ -6,12 +6,14 @@ import { useDisplay } from 'vuetify';
 import { computed, ref, watch } from 'vue';
 
 const calendarStore = useCalendarStore();
+const { name, mobile } = useDisplay();
+const isMobile = ref(mobile.value);
 
 const props = defineProps({
     day: Date,
     type: String,
 });
-const { name, mobile } = useDisplay();
+
 const adaptiveWidthContainer = computed(() => {
     switch (name.value) {
         case 'xs':
@@ -20,18 +22,14 @@ const adaptiveWidthContainer = computed(() => {
             return '95%';
         case 'md':
             return 480;
-        case 'lg':
-            return 750;
         default:
             return 750;
     }
 });
-const isMobile = ref(mobile.value);
+
 watch(
     () => mobile.value,
-    () => {
-        isMobile.value = mobile.value;
-    },
+    () => (isMobile.value = mobile.value),
 );
 </script>
 
@@ -40,8 +38,8 @@ watch(
         v-for="item in calendarStore.getListOneMeal(day, type).value"
         :key="item.id"
         class="rounded-lg text-primary mb-2 mb-md-4 py-1 py-md-2 border-opacity-100"
-        :width="adaptiveWidthContainer"
         border="primary sm"
+        :width="adaptiveWidthContainer"
     >
         <v-row
             class="align-center justify-space-between mb-1 mb-sm-2 px-2 px-md-4 text-caption text-sm-subtitle-1 text-md-h6"

@@ -6,6 +6,7 @@ import { useDisplay } from 'vuetify';
 import { computed } from 'vue';
 
 const calendarStore = useCalendarStore();
+const { name } = useDisplay();
 
 const props = defineProps({
     day: Date,
@@ -13,7 +14,7 @@ const props = defineProps({
     title: String,
     icon: String,
 });
-const { name } = useDisplay();
+
 const adaptiveWidth = computed(() => {
     switch (name.value) {
         case 'xs':
@@ -22,8 +23,6 @@ const adaptiveWidth = computed(() => {
             return 400;
         case 'md':
             return 580;
-        case 'lg':
-            return 880;
         default:
             return 880;
     }
@@ -36,8 +35,6 @@ const adaptiveContainer = computed(() => {
             return 300;
         case 'md':
             return 480;
-        case 'lg':
-            return 750;
         default:
             return 750;
     }
@@ -46,7 +43,7 @@ const adaptiveContainer = computed(() => {
 
 <template>
     <v-card
-        class="text-primary mx-auto rounded-lg mb-4 mb-sm-6"
+        class="text-primary mx-auto rounded-lg mb-2 mb-sm-6"
         :width="adaptiveWidth"
     >
         <v-card-title class="pa-0">
@@ -59,7 +56,7 @@ const adaptiveContainer = computed(() => {
         </v-card-title>
         <v-card-text
             v-if="calendarStore.getListOneMeal(day, type).value.length"
-            class="py-0 mb-4"
+            class="py-0 mb-2 mb-sm-4"
         >
             <v-expansion-panels>
                 <v-expansion-panel class="rounded-t-0 rounded-b-lg">
@@ -87,7 +84,7 @@ const adaptiveContainer = computed(() => {
                     <v-expansion-panel-text>
                         <v-card
                             class="overflow-y-auto scroll-container elevation-0"
-                            max-height="300px"
+                            max-height="300"
                         >
                             <ListFood
                                 :day="day"

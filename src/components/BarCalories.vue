@@ -4,7 +4,7 @@
         height="320px"
     >
         <Bar
-            :data="chartData"
+            :data="personStore.person.isActive ? chartDataPerson : chartData"
             :options="chartOptions"
         />
     </v-sheet>
@@ -29,6 +29,20 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 const getListData = () => props.listData.map((item) => Math.floor(personStore.getStandard * (item.count || 1)));
 
 const chartData = computed(() => ({
+    labels: props.listData.map((item) => item.date),
+    datasets: [
+        {
+            type: 'bar',
+            label: 'Ккал',
+            data: props.listData.map((item) => item.calories),
+            backgroundColor: theme.global.name.value === 'dark' ? '#FFECB3' : '#1A237E',
+            borderColor: '#bbad84',
+            borderWidth: 1,
+            description: props.listData,
+        },
+    ],
+}));
+const chartDataPerson = computed(() => ({
     labels: props.listData.map((item) => item.date),
     datasets: [
         {

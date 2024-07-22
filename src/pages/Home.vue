@@ -9,6 +9,8 @@ const calendarStore = useCalendarStore();
 
 const formatDate = new Date();
 const dateSelected = ref(formatDate);
+const { name, mobile } = useDisplay();
+const isMobile = ref(mobile.value);
 
 const listDiet = [
     {
@@ -29,15 +31,6 @@ const listDiet = [
 ];
 const listProperty = ['Белки', 'Жиры', 'Углеводы', 'Калории'];
 
-const { mobile } = useDisplay();
-const isMobile = ref(mobile.value);
-watch(
-    () => mobile.value,
-    () => {
-        isMobile.value = mobile.value;
-    },
-);
-const { name } = useDisplay();
 const adaptiveWidth = computed(() => {
     switch (name.value) {
         case 'xs':
@@ -66,25 +59,26 @@ const adaptiveContainer = computed(() => {
             return 750;
     }
 });
+watch(
+    () => mobile.value,
+    () => (isMobile.value = mobile.value),
+);
 </script>
 
 <template>
     <v-date-picker
         v-model="dateSelected"
-        class="mx-auto bg-transparent text-primary mb-sm-6 scroll-container"
-        color="primary"
+        class="mx-auto bg-transparent mb-3 mb-sm-6"
         hide-header
         :width="isMobile ? 300 : 460"
         :max="formatDate"
         :min="(formatDate.getFullYear() - 10).toString()"
     />
     <v-card
-        class="mx-auto mb-8 mb-sm-12 text-center py-2 py-md-4"
+        class="text-primary text-center mx-auto mb-8 mb-sm-12 py-2 py-md-4"
         :width="adaptiveWidth"
     >
-        <v-card-title
-            class="text-h6 text-sm-h5 text-center font-weight-bold text-wrap pa-0 mb-2 mb-md-4 text-primary border-b-sm"
-        >
+        <v-card-title class="text-h6 text-sm-h5 text-center font-weight-bold pa-0 mb-2 mb-md-4 border-b-sm">
             Общие показатели
         </v-card-title>
         <v-card-text class="pa-0">

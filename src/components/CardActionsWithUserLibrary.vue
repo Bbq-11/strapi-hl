@@ -1,6 +1,6 @@
 <script setup>
-import { computed, reactive, ref } from 'vue';
-import { mdiPencil, mdiPlus } from '@mdi/js';
+import { computed, reactive, ref, watch } from 'vue';
+import { mdiCheck, mdiClose, mdiPencil, mdiPlus } from '@mdi/js';
 import { useProductStore } from '../stores/Products.js';
 import { useDisplay } from 'vuetify';
 
@@ -61,7 +61,7 @@ const checkValidData = computed(() => {
         checkValidNumValues(item.carbs)
     );
 });
-const { name } = useDisplay();
+const { name, mobile } = useDisplay();
 const adaptiveWidth = computed(() => {
     switch (name.value) {
         case 'sm':
@@ -70,6 +70,13 @@ const adaptiveWidth = computed(() => {
             return 600;
     }
 });
+const isMobile = ref(mobile.value);
+watch(
+    () => mobile.value,
+    () => {
+        isMobile.value = mobile.value;
+    },
+);
 </script>
 
 <template>
@@ -84,26 +91,21 @@ const adaptiveWidth = computed(() => {
     <v-icon
         v-else
         class="mr-2"
-        size="20"
+        :size="isMobile ? 15 : 20"
         :icon="mdiPencil"
         @click="switchDialog"
     />
     <v-dialog
         v-model="dialog"
-        class="elevation-16"
-        scrim="primary"
         :width="adaptiveWidth"
     >
-        <v-card class="pa-4">
-            <v-card-title
-                class="mx-auto text-center w-75 text-primary text-h6 text-sm-h5 font-weight-bold pa-0 mb-4 mb-sm-6"
-                :class="[isAdd ? 'text-wrap' : 'text-no-wrap']"
-            >
+        <v-card class="px-4 py-2 py-md-4 text-primary">
+            <v-card-title class="mx-auto text-center w-75 text-h6 text-sm-h5 font-weight-bold pa-0 mb-4 mb-sm-6">
                 {{ props.text }}
             </v-card-title>
-            <v-card-text class="pa-0 mb-2">
+            <v-card-text class="pa-0">
                 <v-row
-                    class="mb-0 gr-2"
+                    class="gr-2"
                     dense
                 >
                     <template
@@ -113,8 +115,6 @@ const adaptiveWidth = computed(() => {
                         <v-col :cols="value === 'name' ? 12 : 3">
                             <v-text-field
                                 v-model.trim="item[value]"
-                                class="text-subtitle-1"
-                                base-color="primary"
                                 autocomplete="off"
                                 :maxlength="value === 'name' ? 100 : 5"
                                 :label="listTitleForTextField[index]"
@@ -124,25 +124,26 @@ const adaptiveWidth = computed(() => {
                         </v-col>
                     </template>
                 </v-row>
-                <small class="text-caption text-primary text-body-2">*Показатели для порции в 100гр.</small>
+                <small class="text-caption text-body-2">* Показатели для порции в 100гр.</small>
             </v-card-text>
             <v-card-actions class="pa-0">
                 <v-row
+                    class="justify-space-between align-end"
                     no-gutters
-                    justify="space-between"
                 >
                     <v-col cols="auto">
-                        <v-btn
-                            class="text-surface bg-primary text-caption text-sm-button text-uppercase"
-                            variant="outlined"
-                            text="Отмена"
+                        <VBtnCard
+                            :size="isMobile ? 40 : 'default'"
+                            :icon="isMobile ? mdiClose : false"
+                            :text="isMobile ? '' : 'Отмена'"
                             @click="switchDialog"
                         />
                     </v-col>
                     <v-col cols="auto">
-                        <v-btn
-                            class="text-surface bg-primary text-caption text-sm-button text-uppercase"
-                            :text="props.isAdd ? 'Добавить' : 'Редактировать'"
+                        <VBtnCard
+                            :size="isMobile ? 40 : 'default'"
+                            :icon="isMobile ? mdiCheck : false"
+                            :text="isMobile ? '' : props.isAdd ? 'Добавить' : 'Редактировать'"
                             :disabled="!checkValidData"
                             @click="editProduct"
                         />

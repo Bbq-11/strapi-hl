@@ -14,12 +14,17 @@ const calendarStore = useCalendarStore();
 const personStore = usePersonStore();
 const { name, mobile } = useDisplay();
 
+const isMobile = ref(mobile.value);
 const actualDate = new Date();
 const listDates = ref([actualDate]);
-const isMobile = ref(mobile.value);
 
 const listProperty = ['Белки', 'Жиры', 'Углеводы', 'Калории'];
 
+const getPercentageOfProgress = computed(() => {
+    const res = calendarStore.getInfoAllMealInGapDays(listDates.value).value.calories;
+    return Math.floor(((res / personStore.getStandard) * 100) / listDates.value.length) || 0;
+});
+const checkActivePerson = computed(() => personStore.person.isActive && personStore.getStandard);
 const adaptiveWidth = computed(() => {
     switch (name.value) {
         case 'xs':
@@ -32,30 +37,19 @@ const adaptiveWidth = computed(() => {
             return 920;
         case 'xl':
             return 1200;
-        case 'xxl':
-            return '75%';
         default:
             return '75%';
     }
 });
 
-const getPercentageOfProgress = computed(() => {
-    const res = calendarStore.getInfoAllMealInGapDays(listDates.value).value.calories;
-    return Math.floor(((res / personStore.getStandard) * 100) / listDates.value.length) || 0;
-});
-
-const checkActivePerson = computed(() => personStore.person.isActive && personStore.getStandard);
-
 watch(
     () => mobile.value,
-    () => {
-        isMobile.value = mobile.value;
-    },
+    () => (isMobile.value = mobile.value),
 );
 </script>
 <template>
     <v-sheet
-        class="bg-transparent mx-auto table-container"
+        class="bg-transparent mx-auto"
         :width="adaptiveWidth"
     >
         <PersonalData />
@@ -63,7 +57,7 @@ watch(
             class="align-center justify-space-between ga-4 gr-sm-8 mb-12 mb-md-16"
             no-gutters
         >
-            <v-col class="">
+            <v-col>
                 <v-row
                     class="justify-space-between flex-column flex-md-row ga-6 align-center flex-wrap"
                     no-gutters
@@ -72,26 +66,27 @@ watch(
                         cols=""
                         :md="checkActivePerson ? 12 : 6"
                     >
-                        <v-card class="text-primary py-2 py-md-4">
-                            <v-card-title class="text-h6 text-sm-h5 text-center font-weight-bold text-wrap pa-0 mb-4">
+                        <v-card class="text-primary py-2 py-sm-4 py-md-6">
+                            <v-card-title
+                                class="text-h6 text-sm-h5 text-center font-weight-bold text-wrap pa-0 mb-2 mb-sm-4"
+                            >
                                 Выберите диапозон дат
                             </v-card-title>
                             <v-card-text class="d-flex justify-center pa-0">
-                                <v-sheet width="200">
+                                <v-sheet :width="isMobile ? 165 : 210">
                                     <v-date-input
                                         v-model="listDates"
-                                        class="scroll-container pa-0"
                                         color="primary"
                                         base-color="primary"
                                         bg-color="background"
                                         placeholder="Выберите"
-                                        hide-details
                                         multiple="range"
                                         variant="outlined"
                                         prepend-icon=""
                                         ok-text="Выбрать"
-                                        density="comfortable"
                                         autocomplete="off"
+                                        hide-details
+                                        :density="isMobile ? 'compact' : 'comfortable'"
                                         :max="actualDate"
                                         :min="(actualDate.getFullYear() - 10).toString()"
                                     />
@@ -100,15 +95,15 @@ watch(
                         </v-card>
                     </v-col>
                     <v-col>
-                        <v-card class="mx-auto text-primary text-center py-2 py-md-4">
+                        <v-card class="mx-auto text-primary text-center py-2 py-sm-4 py-md-6">
                             <v-card-title
-                                class="text-h6 text-sm-h5 text-center font-weight-bold text-wrap border-b pa-0 pb-2 pb-md-1 mb-4"
+                                class="text-h6 text-sm-h5 text-center font-weight-bold text-wrap border-b pa-0 pb-sm-2 mb-2 mb-md-4"
                             >
                                 Средние показатели
                             </v-card-title>
                             <v-card-text class="pa-0">
                                 <v-row
-                                    class="gc-6 gr-1 justify-center"
+                                    class="gc-6 justify-center"
                                     no-gutters
                                 >
                                     <template
@@ -136,18 +131,18 @@ watch(
                 </v-row>
             </v-col>
             <v-col
+                v-if="checkActivePerson"
                 class="d-flex justify-center"
                 cols="12"
                 md="5"
-                v-if="checkActivePerson"
             >
                 <v-progress-circular
-                    :model-value="getPercentageOfProgress"
                     class="text-h6 text-sm-h5 text-primary"
-                    :size="isMobile ? 200 : 240"
                     width="15"
+                    :model-value="getPercentageOfProgress"
+                    :size="isMobile ? 200 : 240"
                 >
-                    <template v-slot:default>
+                    <template #default>
                         <div class="d-flex-column align-center text-center">
                             <span>{{ getPercentageOfProgress }} %</span>
                             <p class="text-caption text-sm-body-2">от суточной нормы</p>

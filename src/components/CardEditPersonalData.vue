@@ -1,11 +1,13 @@
 <script setup>
-import { computed, reactive, ref } from 'vue';
-import { mdiPencil } from '@mdi/js';
+import { computed, reactive, ref, watch } from 'vue';
+import { mdiCheck, mdiClose, mdiPencil } from '@mdi/js';
 import { usePersonStore } from '../stores/Person.js';
 import { useDisplay } from 'vuetify';
 
 const personStore = usePersonStore();
+const { mobile, name } = useDisplay();
 
+const isMobile = ref(mobile.value);
 const dialog = ref(false);
 const item = reactive({
     sex: personStore.person.sex,
@@ -62,8 +64,6 @@ const checkValidData = computed(
         checkValidIntNumValues(item.height) &&
         checkValidIntFloatValues(item.weight),
 );
-const { name } = useDisplay();
-
 const adaptiveWidth = computed(() => {
     switch (name.value) {
         case 'sm':
@@ -72,10 +72,18 @@ const adaptiveWidth = computed(() => {
             return 600;
     }
 });
+
+watch(
+    () => mobile.value,
+    () => {
+        isMobile.value = mobile.value;
+    },
+);
 </script>
 
 <template>
     <v-btn
+        class="rounded-lg"
         block
         width="80"
         @click="switchDialog"
@@ -84,11 +92,9 @@ const adaptiveWidth = computed(() => {
     </v-btn>
     <v-dialog
         v-model="dialog"
-        class="elevation-16 mx-auto"
-        scrim="primary"
         :width="adaptiveWidth"
     >
-        <v-card class="text-primary pa-4">
+        <v-card class="text-primary pa-2 pa-sm-4">
             <v-card-title class="text-center text-h6 text-sm-h5 font-weight-bold pa-0 mb-4 mb-sm-6">
                 Личная информация
             </v-card-title>
@@ -129,9 +135,8 @@ const adaptiveWidth = computed(() => {
                             <v-col>
                                 <v-text-field
                                     v-model="item.age"
-                                    base-color="primary"
                                     autocomplete="off"
-                                    label="Возвраст"
+                                    label="Возраст"
                                     :maxlength="2"
                                     :rules="[checkValidIntNumValues]"
                                 />
@@ -149,7 +154,6 @@ const adaptiveWidth = computed(() => {
                             <v-col>
                                 <v-text-field
                                     v-model="item.height"
-                                    base-color="primary"
                                     autocomplete="off"
                                     label="Рост"
                                     suffix="см"
@@ -160,7 +164,6 @@ const adaptiveWidth = computed(() => {
                             <v-col>
                                 <v-text-field
                                     v-model="item.weight"
-                                    base-color="primary"
                                     autocomplete="off"
                                     label="Вес"
                                     suffix="кг"
@@ -195,18 +198,23 @@ const adaptiveWidth = computed(() => {
                 </v-row>
             </v-card-text>
             <v-card-actions class="pa-0">
-                <v-row justify="space-between">
+                <v-row
+                    justify="space-between"
+                    no-gutters
+                >
                     <v-col cols="auto">
-                        <v-btn
-                            class="text-surface bg-primary text-caption text-sm-button text-uppercase"
-                            text="Отмена"
+                        <VBtnCard
+                            :size="isMobile ? 40 : 'default'"
+                            :icon="isMobile ? mdiClose : false"
+                            :text="isMobile ? '' : 'Отмена'"
                             @click="switchDialog"
                         />
                     </v-col>
                     <v-col cols="auto">
-                        <v-btn
-                            class="text-surface bg-primary text-caption text-sm-button text-uppercase"
-                            text="Редактировать"
+                        <VBtnCard
+                            :size="isMobile ? 40 : 'default'"
+                            :icon="isMobile ? mdiCheck : false"
+                            :text="isMobile ? '' : 'Редактировать'"
                             :disabled="!checkValidData"
                             @click="editProduct"
                         />

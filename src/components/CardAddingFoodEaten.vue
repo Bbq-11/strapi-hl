@@ -2,7 +2,6 @@
 import {
     mdiArrowLeftBoldCircleOutline,
     mdiArrowRightBoldCircleOutline,
-    mdiBedEmpty,
     mdiCheckboxBlankCircleOutline,
     mdiPencil,
     mdiPlusCircleOutline,
@@ -10,7 +9,7 @@ import {
     mdiCheckboxMarkedCircleOutline,
     mdiClose,
     mdiCheck,
-    mdiCheckBold
+    mdiFoodApple,
 } from '@mdi/js';
 import { ref, computed, onMounted, watch } from 'vue';
 import { useCalendarStore } from '../stores/Calendar.js';
@@ -20,14 +19,16 @@ import { useDisplay } from 'vuetify';
 
 const calendarStore = useCalendarStore();
 const productStore = useProductStore();
+const { mobile, name } = useDisplay();
 
 const props = defineProps({
     day: Object,
     title: String,
     type: String,
-    icon: String
+    icon: String,
 });
 
+const isMobile = ref(mobile.value);
 const dialog = ref(false);
 const page = ref(1);
 const inputSearchProduct = ref('');
@@ -35,20 +36,19 @@ const headers = ref([
     {
         title: 'Продукты',
         align: 'start',
-        key: 'name'
+        key: 'name',
     },
     {
         key: 'weight',
         width: '140px',
-        sortable: false
+        sortable: false,
     },
     {
         width: '50px',
         key: 'actions',
-        sortable: false
-    }
+        sortable: false,
+    },
 ]);
-
 const items = ref([]);
 const listProducts = ref([]);
 
@@ -60,13 +60,15 @@ const adding = () => {
     inputSearchProduct.value = '';
     setTimeout(() => initialize(), 1000);
 };
-
 const initialize = () => {
     const actualInfo = [...productStore.products];
     actualInfo.map((item) => (item.weight = '100'));
     items.value = actualInfo;
 };
-
+const onPageChange = (isAdd) => {
+    if (isAdd) page.value += 1;
+    else if (page.value > 1) page.value -= 1;
+};
 const checkValidNumValues = (value) => {
     return /^([1-9][0-9]{0,3}(\.[0-9]{0,2})?|0\.[0-9]{0,2})$/.test(value);
 };
@@ -74,20 +76,6 @@ const checkValidNumValues = (value) => {
 const checkValidData = computed(() => {
     return listProducts.value.length && listProducts.value.every((item) => checkValidNumValues(item?.weight));
 });
-
-const onPageChange = (isAdd) => {
-    if (isAdd) page.value += 1;
-    else if (page.value > 1) page.value -= 1;
-};
-
-const { mobile, name } = useDisplay();
-const isMobile = ref(mobile.value);
-watch(
-    () => mobile.value,
-    () => {
-        isMobile.value = mobile.value;
-    }
-);
 const adaptiveWidth = computed(() => {
     switch (name.value) {
         case 'xs':
@@ -111,6 +99,13 @@ const adaptiveHeight = computed(() => {
     }
 });
 
+watch(
+    () => mobile.value,
+    () => {
+        isMobile.value = mobile.value;
+    },
+);
+
 onMounted(() => initialize());
 </script>
 
@@ -124,22 +119,20 @@ onMounted(() => initialize());
     />
     <v-dialog
         v-model="dialog"
-        class="elevation-16"
-        scrim="primary"
         :width="adaptiveWidth"
     >
-        <v-card class="text-primary pa-2 pa-md-4 ma-0">
+        <v-card class="text-primary pa-2 pa-sm-4 ma-0">
             <v-card-title
                 class="mx-auto text-center w-75 text-h6 text-sm-h5 font-weight-bold pa-0 mb-2 mb-sm-4 mb-md-6"
             >
                 {{ title }}
             </v-card-title>
-            <v-card-text class="pa-0 mb-2 mb-md-4">
+            <v-card-text class="pa-0">
                 <v-data-table
                     v-model:page="page"
                     class="text-primary scroll-container text-caption text-sm-body-2 text-lg-body-1 text-break"
-                    :height="adaptiveHeight"
                     sticky
+                    :height="adaptiveHeight"
                     :mobile="false"
                     :search="inputSearchProduct"
                     :headers="headers"
@@ -160,88 +153,85 @@ onMounted(() => initialize());
                         v-if="isMobile"
                         #headers
                     />
-                    <!--                        <tr>-->
-                    <!--                            <td>{{ headers[0].title }}</td>-->
-                    <!--                            <td v-if="!mobileSize" />-->
-                    <!--
-                     <td v-if="!mobileSize" />-->
-                    <!--                        </tr>-->
-                    <!--                    </template>-->
                     <template #item="{ item }">
                         <tr>
                             <td>
                                 <label :for="item.id">
-                                    <p>
-                                        <p class="text-subtitle-2 mb-1">
+                                    <v-container class="px-0 py-1 pa-sm-2">
+                                        <span class="text-subtitle-2 mb-1">
                                             {{ item.name }}
-                                        </p>
-                                        <v-icon
-                                            v-if="item.id > db.length - 1"
-                                            class=""
-                                            size="25"
-                                            :icon="mdiTagHeartOutline"
-                                        />
-                                        <span class="text-caption text-medium-emphasis">{{ item.calories }} ккал</span>
-                                    </p>
-
-                                    <v-row
-                                        v-if="isMobile"
-                                        class="align-center justify-space-between"
-                                        no-gutters
-                                        dense
-                                    >
-                                        <v-col cols="auto">
-                                            <v-text-field
-                                                v-model="item.weight"
-                                                class="text-subtitle-1"
-                                                variant="underlined"
-                                                base-color="transparent"
-                                                bg-color="transparent"
-                                                width="80px"
-                                                suffix="г"
-                                                maxlength="6"
-                                                autocomplete="off"
-                                                :rules="[checkValidNumValues]"
+                                        </span>
+                                        <v-row
+                                            class="align-end justify-space-between gc-8"
+                                            no-gutters
+                                            dense
+                                        >
+                                            <v-col class="d-flex flex-column flex-sm-row">
+                                                <v-icon
+                                                    v-if="item.id > db.length - 1"
+                                                    :size="isMobile ? 20 : 25"
+                                                    :icon="mdiTagHeartOutline"
+                                                />
+                                                <span class="text-caption text-medium-emphasis">
+                                                    {{ item.calories }} ккал
+                                                </span>
+                                            </v-col>
+                                            <v-col
+                                                v-if="isMobile"
+                                                cols="auto"
                                             >
-                                                <template #prepend-inner>
-                                                    <v-icon
-                                                        color="primary opacity-100"
-                                                        size="20"
-                                                        :icon="mdiPencil"
-                                                    />
-                                                </template>
-                                            </v-text-field>
-                                        </v-col>
-                                        <v-col cols="auto">
-                                            <v-checkbox
-                                                v-model="listProducts"
-                                                density="compact"
-                                                hide-details
-                                                :id="item.id"
-                                                :value="item"
-                                                :false-icon="mdiCheckboxBlankCircleOutline"
-                                                :true-icon="mdiCheckboxMarkedCircleOutline"
-                                            />
-                                        </v-col>
-                                    </v-row>
+                                                <v-text-field
+                                                    v-model="item.weight"
+                                                    variant="underlined"
+                                                    base-color="transparent"
+                                                    bg-color="transparent"
+                                                    width="70px"
+                                                    suffix="г"
+                                                    maxlength="6"
+                                                    autocomplete="off"
+                                                    :rules="[checkValidNumValues]"
+                                                >
+                                                    <template #prepend-inner>
+                                                        <v-icon
+                                                            color="primary opacity-100 h-100"
+                                                            size="15"
+                                                            :icon="mdiPencil"
+                                                        />
+                                                    </template>
+                                                </v-text-field>
+                                            </v-col>
+                                            <v-col
+                                                v-if="isMobile"
+                                                cols="auto"
+                                            >
+                                                <v-checkbox
+                                                    v-model="listProducts"
+                                                    density="compact"
+                                                    hide-details
+                                                    :id="item.id"
+                                                    :value="item"
+                                                    :false-icon="mdiCheckboxBlankCircleOutline"
+                                                    :true-icon="mdiCheckboxMarkedCircleOutline"
+                                                />
+                                            </v-col>
+                                        </v-row>
+                                    </v-container>
                                 </label>
                             </td>
-                            <td class="px-8 " v-if="!isMobile">
+                            <td v-if="!isMobile">
                                 <v-text-field
                                     v-model="item.weight"
-                                    class="text-subtitle-1 "
+                                    width="100"
                                     variant="underlined"
                                     base-color="transparent"
                                     bg-color="transparent"
-                                    width="80px"
+                                    autocomplete="off"
                                     suffix="г"
                                     maxlength="6"
-                                    autocomplete="off"
                                     :rules="[checkValidNumValues]"
                                 >
                                     <template #prepend-inner>
                                         <v-icon
-                                            class=""
                                             color="primary opacity-100"
                                             size="20"
                                             :icon="mdiPencil"
@@ -250,8 +240,8 @@ onMounted(() => initialize());
                                 </v-text-field>
                             </td>
                             <td
-                                class="pa-0"
                                 v-if="!isMobile"
+                                class="pa-0"
                             >
                                 <v-checkbox
                                     v-model="listProducts"
@@ -266,23 +256,14 @@ onMounted(() => initialize());
                     </template>
                     <template #bottom>
                         <v-row
-                            class="justify-space-between align-center"
+                            class="justify-space-between align-end"
                             no-gutters
                         >
                             <v-col cols="3">
-                                <v-btn
-                                    v-if="isMobile"
-                                    class="text-surface bg-primary"
-                                    variant="outlined"
-                                    :icon="mdiClose"
-                                    size="40"
-                                    @click="switchDialog"
-                                />
-                                <v-btn
-                                    v-else
-                                    class="text-surface bg-primary text-caption text-sm-button text-uppercase"
-                                    text="Отмена"
-                                    variant="outlined"
+                                <VBtnCard
+                                    :size="isMobile ? 40 : 'default'"
+                                    :icon="isMobile ? mdiClose : false"
+                                    :text="isMobile ? '' : 'Отмена'"
                                     @click="switchDialog"
                                 />
                             </v-col>
@@ -293,7 +274,7 @@ onMounted(() => initialize());
                                         :icon="mdiArrowLeftBoldCircleOutline"
                                         @click="onPageChange(false)"
                                     />
-                                    <span class="text-body-2 text-sm-body-1  mx-sm-2">{{ page }}</span>
+                                    <span class="text-body-2 text-sm-body-1 mx-sm-2">{{ page }}</span>
                                     <v-btn
                                         variant="text"
                                         :icon="mdiArrowRightBoldCircleOutline"
@@ -301,21 +282,14 @@ onMounted(() => initialize());
                                     />
                                 </div>
                             </v-col>
-                            <v-col cols="3" class="d-flex justify-end">
-                                <v-btn
-                                    v-if="isMobile"
-                                    class="text-surface bg-primary"
-                                    variant="outlined"
-                                    size="40"
-                                    :icon="mdiCheck"
-                                    :disabled="!checkValidData"
-                                    @click="adding"
-                                />
-                                <v-btn
-                                    v-else
-                                    class="text-surface bg-primary text-caption text-sm-button text-uppercase"
-                                    variant="outlined"
-                                    text="Добавить"
+                            <v-col
+                                cols="3"
+                                class="d-flex justify-end"
+                            >
+                                <VBtnCard
+                                    :size="isMobile ? 40 : 'default'"
+                                    :icon="isMobile ? mdiCheck : false"
+                                    :text="isMobile ? '' : 'Добавить'"
                                     :disabled="!checkValidData"
                                     @click="adding"
                                 />
@@ -323,13 +297,17 @@ onMounted(() => initialize());
                         </v-row>
                     </template>
                     <template #no-data>
-                        <v-card elevation="0">
+                        <v-card
+                            class="d-flex flex-column align-center mt-12 text-primary"
+                            elevation="0"
+                        >
                             <v-card-title>
-                                <v-icon>
-                                    {{ mdiBedEmpty }}
-                                </v-icon>
+                                <v-icon
+                                    :icon="mdiFoodApple"
+                                    :size="isMobile ? 60 : 90"
+                                />
                             </v-card-title>
-                            <v-card-text>Пусто</v-card-text>
+                            <v-card-text class="text-h6 text-sm-h5">Пусто</v-card-text>
                         </v-card>
                     </template>
                 </v-data-table>

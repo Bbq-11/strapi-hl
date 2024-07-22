@@ -14,7 +14,7 @@ onBeforeMount(() => productStore.addProducts());
             <AppBar />
             <v-main>
                 <v-container
-                    class="mt-8 mt-sm-14 pa-0"
+                    class="mt-8 mt-sm-16 pa-0"
                     fluid
                 >
                     <router-view />

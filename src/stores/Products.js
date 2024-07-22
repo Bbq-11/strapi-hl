@@ -24,7 +24,6 @@ export const useProductStore = defineStore('productStore', () => {
             id: String(Date.now()),
             ...formatProduct(item),
         };
-        console.log(product);
         products.value.unshift(product);
         const productsLS = JSON.parse(localStorage.getItem('myLibrary')) || [];
         productsLS.unshift(product);
@@ -41,12 +40,12 @@ export const useProductStore = defineStore('productStore', () => {
         localStorage.setItem('myLibrary', JSON.stringify(productsLS.filter((item) => item?.id !== id)));
     };
     const editProduct = (newItem, lastItem) => {
-        const item = products.value.findIndex((el) => el?.id === lastItem.id);
-        const updateItem = { id: products.value[item].id, ...formatProduct(newItem) };
-        products.value[item] = updateItem;
+        const itemIndex = products.value.findIndex((el) => el?.id === lastItem.id);
+        const updateItem = { id: products.value[itemIndex].id, ...formatProduct(newItem) };
+        products.value[itemIndex] = updateItem;
         const productsLS = JSON.parse(localStorage.getItem('myLibrary'));
-        const itemLS = productsLS.findIndex((el) => el.id === lastItem.id);
-        productsLS[itemLS] = updateItem;
+        const itemIndexLS = productsLS.findIndex((el) => el.id === lastItem.id);
+        productsLS[itemIndexLS] = updateItem;
         localStorage.setItem('myLibrary', JSON.stringify(productsLS));
     };
 

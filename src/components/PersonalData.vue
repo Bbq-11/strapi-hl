@@ -21,7 +21,7 @@ const getAgeString = computed(() => {
 
 <template>
     <v-card class="mx-auto mb-12 mb-lg-8 text-primary">
-        <v-card-text class="py-6 pa-lg-8">
+        <v-card-text class="py-2 py-sm-6 pa-lg-8">
             <v-row
                 class="text-center align-center justify-space-between ga-2 ga-sm-6 text-subtitle-2 text-sm-subtitle-1"
                 no-gutters
