@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { mdiWeatherSunny, mdiWeatherSunsetDown, mdiWeatherSunsetUp } from '@mdi/js';
 import { useCalendarStore } from '../stores/Calendar.js';
 import SectionDiet from '../components/SectionDiet.vue';
@@ -112,7 +112,7 @@ watch(
     </v-card>
     <SectionDiet
         v-for="item in listDiet"
-        :key="item.id"
+        :key="item.privateID"
         :day="dateSelected"
         :title="item.title"
         :type="item.field"

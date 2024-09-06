@@ -1,5 +1,5 @@
 <script setup>
-import { mdiMenu, mdiMenuClose, mdiMenuOpen, mdiWeatherSunsetDown, mdiWeatherSunsetUp } from '@mdi/js';
+import { mdiMenu, mdiWeatherSunsetDown, mdiWeatherSunsetUp } from '@mdi/js';
 import { useDisplay, useTheme } from 'vuetify';
 import { ref, watch } from 'vue';
 

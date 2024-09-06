@@ -1,11 +1,12 @@
 <script setup>
-import { onBeforeMount } from 'vue';
+import { onMounted } from 'vue';
 import { useProductStore } from './stores/Products.js';
 import AppBar from './components/AppBar.vue';
+import AlertResponse from './components/AlertResponse.vue';
 
 const productStore = useProductStore();
 
-onBeforeMount(() => productStore.addProducts());
+onMounted(() => productStore.addProducts());
 </script>
 
 <template>
@@ -17,6 +18,7 @@ onBeforeMount(() => productStore.addProducts());
                     class="mt-8 mt-sm-16 pa-0"
                     fluid
                 >
+                    <AlertResponse :response="productStore.res" />
                     <router-view />
                 </v-container>
             </v-main>

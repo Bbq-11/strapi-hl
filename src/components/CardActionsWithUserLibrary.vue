@@ -3,6 +3,8 @@ import { computed, reactive, ref, watch } from 'vue';
 import { mdiCheck, mdiClose, mdiPencil, mdiPlus } from '@mdi/js';
 import { useProductStore } from '../stores/Products.js';
 import { useDisplay } from 'vuetify';
+import { log10 } from 'chart.js/helpers';
+import AlertResponse from './AlertResponse.vue';
 
 const productStore = useProductStore();
 

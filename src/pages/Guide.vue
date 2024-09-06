@@ -3,7 +3,7 @@ import { computed, ref, watch } from 'vue';
 import { mdiClose, mdiFoodApple } from '@mdi/js';
 import CardActionsWithUserLibrary from '../components/CardActionsWithUserLibrary.vue';
 import { useProductStore } from '../stores/Products.js';
-import db from '../../db';
+
 import { useDisplay } from 'vuetify';
 
 const productStore = useProductStore();
@@ -137,9 +137,9 @@ watch(
                     </v-row>
                 </v-container>
             </template>
-            <template #body.prepend></template>
+            <template #body.prepend />
             <template #[`item.actions`]="{ item }">
-                <div v-if="item.id > db.length - 1">
+                <div v-if="+item.privateID > +productStore.products[productStore.products.length - 1].privateID">
                     <CardActionsWithUserLibrary
                         text="Редактирование"
                         :product="item"
@@ -148,7 +148,7 @@ watch(
                     <v-icon
                         :size="isMobile ? 20 : 25"
                         :icon="mdiClose"
-                        @click="productStore.removeProduct(item.id)"
+                        @click="productStore.removeProduct(item.privateID)"
                     />
                 </div>
             </template>

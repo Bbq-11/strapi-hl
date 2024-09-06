@@ -14,7 +14,6 @@ import {
 import { ref, computed, onMounted, watch } from 'vue';
 import { useCalendarStore } from '../stores/Calendar.js';
 import { useProductStore } from '../stores/Products.js';
-import db from '../../db.json';
 import { useDisplay } from 'vuetify';
 
 const calendarStore = useCalendarStore();
@@ -60,11 +59,15 @@ const adding = () => {
     inputSearchProduct.value = '';
     setTimeout(() => initialize(), 1000);
 };
-const initialize = () => {
-    const actualInfo = [...productStore.products];
-    actualInfo.map((item) => (item.weight = '100'));
-    items.value = actualInfo;
+const initialize = async () => {
+    if (!productStore.products.length) setTimeout(() => initialize(), 0);
+    else {
+        const actualInfo = productStore.products;
+        [...actualInfo].map((item) => (item.weight = '100'));
+        items.value = actualInfo;
+    }
 };
+
 const onPageChange = (isAdd) => {
     if (isAdd) page.value += 1;
     else if (page.value > 1) page.value -= 1;
@@ -156,7 +159,7 @@ onMounted(() => initialize());
                     <template #item="{ item }">
                         <tr>
                             <td>
-                                <label :for="item.id">
+                                <label :for="item.privateID">
                                     <v-container class="px-0 py-1 pa-sm-2">
                                         <span class="text-subtitle-2 mb-1">
                                             {{ item.name }}
@@ -168,7 +171,11 @@ onMounted(() => initialize());
                                         >
                                             <v-col class="d-flex flex-column flex-sm-row">
                                                 <v-icon
-                                                    v-if="item.id > db.length - 1"
+                                                    v-if="
+                                                        +item.privateID >
+                                                        +productStore.products[productStore.products.length - 1]
+                                                            .privateID
+                                                    "
                                                     :size="isMobile ? 20 : 25"
                                                     :icon="mdiTagHeartOutline"
                                                 />
@@ -208,7 +215,7 @@ onMounted(() => initialize());
                                                     v-model="listProducts"
                                                     density="compact"
                                                     hide-details
-                                                    :id="item.id"
+                                                    :id="item.privateID"
                                                     :value="item"
                                                     :false-icon="mdiCheckboxBlankCircleOutline"
                                                     :true-icon="mdiCheckboxMarkedCircleOutline"
@@ -246,7 +253,7 @@ onMounted(() => initialize());
                                 <v-checkbox
                                     v-model="listProducts"
                                     hide-details
-                                    :id="item.id"
+                                    :id="item.privateID"
                                     :value="item"
                                     :false-icon="mdiCheckboxBlankCircleOutline"
                                     :true-icon="mdiCheckboxMarkedCircleOutline"
