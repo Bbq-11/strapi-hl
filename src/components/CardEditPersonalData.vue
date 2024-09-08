@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive, ref, watch } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { mdiCheck, mdiClose, mdiPencil } from '@mdi/js';
 import { usePersonStore } from '../stores/Person.js';
 import { useDisplay } from 'vuetify';
@@ -7,7 +7,6 @@ import { useDisplay } from 'vuetify';
 const personStore = usePersonStore();
 const { mobile, name } = useDisplay();
 
-const isMobile = ref(mobile.value);
 const dialog = ref(false);
 const item = reactive({
     sex: personStore.person.sex,
@@ -72,13 +71,6 @@ const adaptiveWidth = computed(() => {
             return 600;
     }
 });
-
-watch(
-    () => mobile.value,
-    () => {
-        isMobile.value = mobile.value;
-    },
-);
 </script>
 
 <template>
@@ -204,17 +196,17 @@ watch(
                 >
                     <v-col cols="auto">
                         <VBtnCard
-                            :size="isMobile ? 40 : 'default'"
-                            :icon="isMobile ? mdiClose : false"
-                            :text="isMobile ? '' : 'Отмена'"
+                            :size="mobile ? 40 : 'default'"
+                            :icon="mobile ? mdiClose : false"
+                            :text="mobile ? '' : 'Отмена'"
                             @click="switchDialog"
                         />
                     </v-col>
                     <v-col cols="auto">
                         <VBtnCard
-                            :size="isMobile ? 40 : 'default'"
-                            :icon="isMobile ? mdiCheck : false"
-                            :text="isMobile ? '' : 'Редактировать'"
+                            :size="mobile ? 40 : 'default'"
+                            :icon="mobile ? mdiCheck : false"
+                            :text="mobile ? '' : 'Редактировать'"
                             :disabled="!checkValidData"
                             @click="editProduct"
                         />

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { mdiWeatherSunny, mdiWeatherSunsetDown, mdiWeatherSunsetUp } from '@mdi/js';
 import { useCalendarStore } from '../stores/Calendar.js';
 import SectionDiet from '../components/SectionDiet.vue';
@@ -10,7 +10,6 @@ const calendarStore = useCalendarStore();
 const formatDate = new Date();
 const dateSelected = ref(formatDate);
 const { name, mobile } = useDisplay();
-const isMobile = ref(mobile.value);
 
 const listDiet = [
     {
@@ -59,10 +58,6 @@ const adaptiveContainer = computed(() => {
             return 750;
     }
 });
-watch(
-    () => mobile.value,
-    () => (isMobile.value = mobile.value),
-);
 </script>
 
 <template>
@@ -70,7 +65,7 @@ watch(
         v-model="dateSelected"
         class="mx-auto bg-transparent mb-3 mb-sm-6"
         hide-header
-        :width="isMobile ? 300 : 460"
+        :width="mobile ? 300 : 460"
         :max="formatDate"
         :min="(formatDate.getFullYear() - 10).toString()"
     />

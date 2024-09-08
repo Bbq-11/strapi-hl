@@ -8,7 +8,6 @@ import { useDisplay } from 'vuetify';
 
 const productStore = useProductStore();
 const { name, mobile } = useDisplay();
-const isMobile = ref(mobile.value);
 
 const inputSearchProduct = ref('');
 const headers = [
@@ -86,11 +85,6 @@ const adaptiveHeight = computed(() => {
             return 800;
     }
 });
-
-watch(
-    () => mobile.value,
-    () => (isMobile.value = mobile.value),
-);
 </script>
 
 <template>
@@ -146,7 +140,7 @@ watch(
                         :isAdd="false"
                     />
                     <v-icon
-                        :size="isMobile ? 20 : 25"
+                        :size="mobile ? 20 : 25"
                         :icon="mdiClose"
                         @click="productStore.removeProduct(item.privateID)"
                     />
@@ -161,7 +155,7 @@ watch(
                     <v-card-title>
                         <v-icon
                             :icon="mdiFoodApple"
-                            :size="isMobile ? 60 : 90"
+                            :size="mobile ? 60 : 90"
                         />
                     </v-card-title>
                     <v-card-text class="text-h6 text-sm-h5">Пусто</v-card-text>

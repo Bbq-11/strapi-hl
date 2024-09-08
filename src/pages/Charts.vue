@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
 import { useCalendarStore } from '../stores/Calendar.js';
 import { usePersonStore } from '../stores/Person.js';
@@ -14,7 +14,6 @@ const calendarStore = useCalendarStore();
 const personStore = usePersonStore();
 const { name, mobile } = useDisplay();
 
-const isMobile = ref(mobile.value);
 const actualDate = new Date();
 const listDates = ref([actualDate]);
 
@@ -41,12 +40,8 @@ const adaptiveWidth = computed(() => {
             return '75%';
     }
 });
-
-watch(
-    () => mobile.value,
-    () => (isMobile.value = mobile.value),
-);
 </script>
+
 <template>
     <v-sheet
         class="bg-transparent mx-auto"
@@ -73,7 +68,7 @@ watch(
                                 Выберите диапозон дат
                             </v-card-title>
                             <v-card-text class="d-flex justify-center pa-0">
-                                <v-sheet :width="isMobile ? 165 : 210">
+                                <v-sheet :width="mobile ? 165 : 210">
                                     <v-date-input
                                         v-model="listDates"
                                         color="primary"
@@ -86,7 +81,7 @@ watch(
                                         ok-text="Выбрать"
                                         autocomplete="off"
                                         hide-details
-                                        :density="isMobile ? 'compact' : 'comfortable'"
+                                        :density="mobile ? 'compact' : 'comfortable'"
                                         :max="actualDate"
                                         :min="(actualDate.getFullYear() - 10).toString()"
                                     />
@@ -140,7 +135,7 @@ watch(
                     class="text-h6 text-sm-h5 text-primary"
                     width="15"
                     :model-value="getPercentageOfProgress"
-                    :size="isMobile ? 200 : 240"
+                    :size="mobile ? 200 : 240"
                 >
                     <template #default>
                         <div class="d-flex-column align-center text-center">

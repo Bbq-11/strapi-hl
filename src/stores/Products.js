@@ -76,7 +76,7 @@ export const useProductStore = defineStore('productStore', () => {
     const postPersonalProduct = (product) => {
         return axios
             .post(
-                'http://localhost:1337/api/personal-products',
+                'http://localhost:1337/api/personal-products/',
                 {
                     data: {
                         ...product,
@@ -89,23 +89,25 @@ export const useProductStore = defineStore('productStore', () => {
                 },
             )
             .then((response) => response)
-            .catch((error) => error);
+            .catch((error) => {
+                throw error.response;
+            });
     };
     const deletePersonalProduct = (productId) => {
         return axios
             .delete(`http://localhost:1337/api/personal-products/${productId}`)
-            .then((response) => {
-                return response;
-            })
+            .then((response) => response)
             .catch((error) => {
-                throw new Error(error);
+                throw error.response;
             });
     };
     const updatePersonalProduct = (product) => {
         return axios
             .put(`http://localhost:1337/api/personal-products/${product.privateID}`, { data: product })
             .then((response) => response)
-            .catch((error) => error);
+            .catch((error) => {
+                throw error.response;
+            });
     };
 
     return {

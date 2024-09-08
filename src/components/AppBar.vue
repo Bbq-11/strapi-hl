@@ -1,12 +1,16 @@
 <script setup>
 import { mdiMenu, mdiWeatherSunsetDown, mdiWeatherSunsetUp } from '@mdi/js';
 import { useDisplay, useTheme } from 'vuetify';
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
+import AlertResponse from './AlertResponse.vue';
+
+import { useProductStore } from '../stores/Products.js';
+
+const productStore = useProductStore();
 
 const theme = useTheme();
 const { mobile } = useDisplay();
 const actualTheme = ref('');
-const isMobile = ref(mobile.value);
 actualTheme.value = localStorage.getItem('theme') || 'light';
 
 function toggleTheme() {
@@ -14,18 +18,16 @@ function toggleTheme() {
     theme.global.name.value = actualTheme.value;
     localStorage.theme = actualTheme.value;
 }
-
-watch(
-    () => mobile.value,
-    () => (isMobile.value = mobile.value),
-);
 </script>
 
 <template>
-    <v-app-bar :density="isMobile ? 'compact' : 'default'">
-        <v-row no-gutters>
+    <v-app-bar :density="mobile ? 'compact' : 'default'">
+        <v-row
+            no-gutters
+            justify="space-between"
+        >
             <v-col cols="auto">
-                <v-menu v-if="isMobile">
+                <v-menu v-if="mobile">
                     <template #activator="{ props }">
                         <v-btn
                             class="text-primary"
@@ -104,21 +106,31 @@ watch(
                     </v-col>
                 </v-row>
             </v-col>
-        </v-row>
-        <v-col
-            class="d-flex justify-end pa-0"
-            cols="auto"
-        >
-            <v-btn
-                color="primary"
-                :class="isMobile ? 'rounded-xl' : 'rounded-lg'"
-                @click="toggleTheme"
+            <v-spacer />
+            <v-col
+                class="mr-8"
+                cols="auto"
             >
-                <v-icon
-                    :size="isMobile ? 25 : 35"
-                    :icon="actualTheme === 'dark' ? mdiWeatherSunsetUp : mdiWeatherSunsetDown"
-                />
-            </v-btn>
-        </v-col>
+                <AlertResponse :response="productStore.res" />
+            </v-col>
+            <v-col
+                class="border-sm pa-0"
+                cols="auto"
+            >
+                <v-btn
+                    class="h-100 pa-0"
+                    color="primary"
+                    :rounded="mobile ? 'circle' : 'lg'"
+                    @click="toggleTheme"
+                >
+                    <v-icon
+                        :size="mobile ? 30 : 35"
+                        :icon="actualTheme === 'dark' ? mdiWeatherSunsetUp : mdiWeatherSunsetDown"
+                    />
+                </v-btn>
+            </v-col>
+        </v-row>
     </v-app-bar>
 </template>
+
+//:class="isMobile ? 'rounded-xl' : 'rounded-lg'"

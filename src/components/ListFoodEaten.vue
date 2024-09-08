@@ -3,11 +3,10 @@ import { mdiClose } from '@mdi/js';
 import { useCalendarStore } from '../stores/Calendar.js';
 import CardEditFoodEaten from './CardEditFoodEaten.vue';
 import { useDisplay } from 'vuetify';
-import { computed, ref, watch } from 'vue';
+import { computed } from 'vue';
 
 const calendarStore = useCalendarStore();
 const { name, mobile } = useDisplay();
-const isMobile = ref(mobile.value);
 
 const props = defineProps({
     day: Date,
@@ -17,7 +16,6 @@ const props = defineProps({
 const adaptiveWidthContainer = computed(() => {
     switch (name.value) {
         case 'xs':
-            return '95%';
         case 'sm':
             return '95%';
         case 'md':
@@ -26,11 +24,6 @@ const adaptiveWidthContainer = computed(() => {
             return 750;
     }
 });
-
-watch(
-    () => mobile.value,
-    () => (isMobile.value = mobile.value),
-);
 </script>
 
 <template>
@@ -46,7 +39,7 @@ watch(
             no-gutters
         >
             <v-col
-                :class="[isMobile ? 'text-center' : 'text-left']"
+                :class="[mobile ? 'text-center' : 'text-left']"
                 cols="12"
                 sm="8"
             >
@@ -59,7 +52,7 @@ watch(
                 <v-btn
                     color="error"
                     variant="tonal"
-                    :size="isMobile ? 30 : 35"
+                    :size="mobile ? 30 : 35"
                     :icon="mdiClose"
                     @click="calendarStore.removeMeal(day, type, item.id)"
                 />
