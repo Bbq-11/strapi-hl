@@ -113,10 +113,7 @@ function toggleTheme() {
             >
                 <AlertResponse :response="productStore.res" />
             </v-col>
-            <v-col
-                class="border-sm pa-0"
-                cols="auto"
-            >
+            <v-col cols="auto">
                 <v-btn
                     class="h-100 pa-0"
                     color="primary"
